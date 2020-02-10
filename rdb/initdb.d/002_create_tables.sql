@@ -61,15 +61,15 @@ CREATE TABLE `m_staff_basic_info`
     `birthday` varchar(10) default 'yyyy-mm-dd' comment '誕生日',
     `telephone_number` varchar(13) default 'xxx-yyyy-zzzz' comment '電話番号',
     `mail_address` varchar(255) default 'mailadress@example.com' comment 'メールアドレス',
-    `department_id` int default 0 comment '部署ID',
-    `position_id` int default 0 comment '役職ID',
+    `department_id` int comment '部署ID',
+    `position_id` int comment '役職ID',
     `grade_id` int default 0 comment 'グレードID',
     `create_at` timestamp not null default current_timestamp comment '登録日',
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
     PRIMARY KEY(`id`),
     CONSTRAINT fk_basic_info_staff_id  -- 制約の名前
-        FOREIGN KEY (staff_id)  -- 外部キーに設定する絡む名
-        REFERENCES m_staff (staff_id)  -- 参照するテーブルと絡む
+        FOREIGN KEY (staff_id)  -- 外部キーに設定するカラム名
+        REFERENCES m_staff (staff_id)  -- 参照するテーブルとカラム
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `m_staff_detail_info`
@@ -80,8 +80,8 @@ CREATE TABLE `m_staff_detail_info`
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
     PRIMARY KEY(`id`),
     CONSTRAINT fk_detail_info_staff_id  -- 制約の名前
-        FOREIGN KEY (staff_id)  -- 外部キーに設定する絡む名
-        REFERENCES m_staff (staff_id)  -- 参照するテーブルと絡む
+        FOREIGN KEY (staff_id)  -- 外部キーに設定するカラム名
+        REFERENCES m_staff (staff_id)  -- 参照するテーブルとカラム
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `t_attendance`
@@ -92,8 +92,8 @@ CREATE TABLE `t_attendance`
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
     PRIMARY KEY(`attendance_id`),
     CONSTRAINT fk_attendance_staff_id  -- 制約の名前
-        FOREIGN KEY (staff_id)  -- 外部キーに設定する絡む名
-        REFERENCES m_staff (staff_id)  -- 参照するテーブルと絡む
+        FOREIGN KEY (staff_id)  -- 外部キーに設定するカラム名
+        REFERENCES m_staff (staff_id)  -- 参照するテーブルとカラム
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- 勤務地、交通費、休憩時間など
@@ -105,6 +105,43 @@ CREATE TABLE `m_attendance_setting`
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
     PRIMARY KEY(`id`),
     CONSTRAINT fk_attendance_setting_staff_id  -- 制約の名前
-        FOREIGN KEY (staff_id)  -- 外部キーに設定する絡む名
-        REFERENCES m_staff (staff_id)  -- 参照するテーブルと絡む
+        FOREIGN KEY (staff_id)  -- 外部キーに設定するカラム名
+        REFERENCES m_staff (staff_id)  -- 参照するテーブルとカラム
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+---- insert ----
+
+-- m_department
+INSERT INTO m_department (department) VALUES
+("開発事業部"),
+("インフラ事業部"),
+("営業部"),
+("人事部"),
+("総務部")
+;
+
+-- m_position
+INSERT INTO m_position (position) VALUES
+("会長"),
+("平社員"),
+("雑用")
+;
+
+-- m_grade
+INSERT INTO m_grade (grade) VALUES
+("Platinum"),
+("Gold"),
+("Silver"),
+("Bronze"),
+("Green")
+;
+
+-- m_staff
+INSERT INTO m_staff (name, name_kana, entered_date, login_id, password) VALUES
+("管理者", "かんりしゃ", "2020-02-11", "admin", "admin")
+;
+
+-- m_staff_basic_info
+INSERT INTO m_staff_basic_info (staff_id, staff_type_id, department_id, position_id, grade_id) VALUES
+(1, 0, 3, 1, 1)
+;
