@@ -1,0 +1,32 @@
+version: '3.5'
+services:
+  rdb:
+    image: mysql:5.7
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./rdb/mysql-data:/var/lib/mysql
+      - ./rdb/initdb.d:/docker-entrypoint-initdb.d
+      - ./rdb/conf.d:/etc/mysql/conf.d
+      - ./rdb/.logs:/var/log/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: apluser
+      MYSQL_PASSWORD: apluser
+      TZ: 'Asia/Tokyo'
+    ports:
+        - "3306:3306"
+
+        #  keycloak:
+        #    image: jboss/keycloak
+        #    environment:
+        #      DB_VENDOR: MYSQL
+        #      DB_ADDR: mysql
+        #      DB_DATABASE: graham_auth_db
+        #      DB_USER: developer
+        #      DB_PASSWORD: developer
+        #      KEYCLOAK_USER: admin
+        #      KEYCLOAK_PASSWORD: admin
+        #    ports:
+        #      - "8080:8080"
+        #    depends_on:
+        #      - mysql
