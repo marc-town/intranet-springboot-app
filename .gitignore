@@ -1,0 +1,4 @@
+.metadata/
+rdb/.logs/
+rdb/mysql-data/
+GsStartupProject/bin/
