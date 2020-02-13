@@ -39,29 +39,29 @@ public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEn
 	 * @param staffId 社員ID(検索条件)
 	 * @return count 更新件数(社員IDに紐づく1件しか更新されない)
 	 */
-	@Modifying
-	@Query("update m_staff_basic_info set "
-			+ "name = :name, "
-			+ "name_kana = :nameKana, "
-			+ "entered_date = :enteredDate, "
-			+ "staff_type_id = :staffTypeId, "
-			+ "birthday = :birthday, "
-			+ "telephone_number = :telephoneNumber, "
-			+ "department_id = :departmentId, "
-			+ "position_id = :positionId, "
-			+ "grade_id = :gradeId "
-			+ "where staff_id = :staffId")
-	public int updateBasicInfo(
-			@Param("name")String name,
-			@Param("nameKana")String nameKana,
-			@Param("enteredDate")Date enteredDate,
-			@Param("staffTypeId")Integer staffTypeId,
-			@Param("birthday")Date birthday,
-			@Param("telephoneNumber")String telephoneNumber,
-			@Param("departmentId")Integer departmentId,
-			@Param("positionId")Integer positionId,
-			@Param("gradeId")Integer gradeId,
-			@Param("staffId")Integer staffId);
+//	@Modifying
+//	@Query("update m_staff_basic_info set "
+//			+ "name = :name, "
+//			+ "name_kana = :nameKana, "
+//			+ "entered_date = :enteredDate, "
+//			+ "staff_type_id = :staffTypeId, "
+//			+ "birthday = :birthday, "
+//			+ "telephone_number = :telephoneNumber, "
+//			+ "department_id = :departmentId, "
+//			+ "position_id = :positionId, "
+//			+ "grade_id = :gradeId "
+//			+ "where staff_id = :staffId")
+//	public int updateBasicInfo(
+//			@Param("name")String name,
+//			@Param("nameKana")String nameKana,
+//			@Param("enteredDate")Date enteredDate,
+//			@Param("staffTypeId")Integer staffTypeId,
+//			@Param("birthday")Date birthday,
+//			@Param("telephoneNumber")String telephoneNumber,
+//			@Param("departmentId")Integer departmentId,
+//			@Param("positionId")Integer positionId,
+//			@Param("gradeId")Integer gradeId,
+//			@Param("staffId")Integer staffId);
 
 	/**
 	 * 社員削除

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ public class StaffService {
 	private StaffBasicInfoRepository staffBasicInfoRepository;
 	@Autowired
 	private StaffDetailInfoRepository staffDetailInfoRepository;
+	
+	private static final Logger LOGGER=LoggerFactory.getLogger(StaffService.class);
 	
 	/**
 	 * 社員一覧取得
@@ -105,11 +109,17 @@ public class StaffService {
 	 */
 	public StaffBasicInfoResponseForm findStaffBasicInfo(int staffId) {
 
+		LOGGER.info("Simple log statement with inputs {}", staffId);
+		LOGGER.info("This is an info message");
+	    LOGGER.warn("This is a warn message");
+	    LOGGER.error("This is an error message");
+		
 		// 社員詳細情報フォーム
 		StaffBasicInfoResponseForm response = new StaffBasicInfoResponseForm();
 
 		// 社員詳細情報の検索結果を取得する
 		response.setBasicInfo(staffBasicInfoRepository.findByStaffId(staffId));
+		System.out.println(response.getBasicInfo());
 
 		return response;
 	}

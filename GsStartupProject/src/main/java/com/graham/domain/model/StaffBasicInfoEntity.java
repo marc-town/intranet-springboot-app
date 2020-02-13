@@ -42,7 +42,7 @@ public class StaffBasicInfoEntity {
 	
 	/** 入社日 */
 	@Column(name = "entered_date")
-	private Date enteredDate;
+	private String enteredDate;
 	
 	/** 種別 */
 	@Column(name = "staff_type_id")
@@ -50,7 +50,7 @@ public class StaffBasicInfoEntity {
 	
 	/** 誕生日 */
 	@Column(name = "birthday")
-	private Date birthday;
+	private String birthday;
 	
 	/** 電話番号 */
 	@Column(name = "telephone_number")

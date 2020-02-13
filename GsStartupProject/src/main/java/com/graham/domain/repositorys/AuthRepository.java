@@ -24,9 +24,9 @@ public interface AuthRepository extends JpaRepository<StaffEntity, Integer> {
 	 * @param staffId
 	 * @return
 	 */
-	@Modifying
-	@Query("update m_staff set login_id = :loginId where staff_id = :staffId")
-	public int updateLoginId(@Param("loginId")String loginId, @Param("staffId")int staffId);
+//	@Modifying
+//	@Query("update m_staff set login_id = :loginId where staff_id = :staffId")
+//	public int updateLoginId(@Param("loginId")String loginId, @Param("staffId")int staffId);
 	
 	/**
 	 * パスワード変更
@@ -35,8 +35,8 @@ public interface AuthRepository extends JpaRepository<StaffEntity, Integer> {
 	 * @param staffId
 	 * @return
 	 */
-	@Modifying
-	@Query("update m_staff set password = :password where staff_id = :staffId")
-	public int updatePassword(@Param("password")String passord, @Param("staffId")int staffId);
+//	@Modifying
+//	@Query("update m_staff set password = :password where staff_id = :staffId")
+//	public int updatePassword(@Param("password")String passord, @Param("staffId")int staffId);
 
 }
