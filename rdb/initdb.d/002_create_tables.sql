@@ -57,7 +57,7 @@ CREATE TABLE `m_staff_basic_info`
     `staff_id` int not null comment '社員ID',
     `name` varchar(100) comment '社員名',
     `name_kana` varchar(100) comment '社員名（かな）',
-    `entered_date` date comment '入社日',
+    `entered_date` varchar(10) default 'yyyy-mm-dd' comment '入社日',
     `staff_type_id` int not null default 1 comment '社員種別ID 0:admin, 1:nomal',
     `birthday` varchar(10) default 'yyyy-mm-dd' comment '誕生日',
     `telephone_number` varchar(13) default 'xxx-yyyy-zzzz' comment '電話番号',
