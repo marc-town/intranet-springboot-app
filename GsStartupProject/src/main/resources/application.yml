@@ -12,11 +12,13 @@ spring:
     hibernate:
       ddl-auto: update
 # =========================================================================
-# logging sql query
+# logging config
 # =========================================================================
 logging:
   level:
+    root: INFO
     org:
+      springframework.web: DEBUG
       hibernate:
         SQL: debug
         type:
@@ -24,4 +26,7 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
-              
+  file: application.log
+  # Logging pattern for file
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'

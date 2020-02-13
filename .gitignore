@@ -1,4 +1,5 @@
 .metadata/
 rdb/.logs/
 rdb/mysql-data/
+GsStartupProject/application.log
 GsStartupProject/bin/
