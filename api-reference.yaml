@@ -1,0 +1,117 @@
+openapi: '3.0.2'
+info:
+  title: GsStartApp
+  description: IntranetApp for staffs
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+    description: プロダクション API
+  - url: http://{host}:{port}/api/v0
+    description: 開発用
+    variables:
+      host:
+        default: localhost
+      port:
+        default: '8080'
+paths:
+  /auth:
+    get:
+      responses:
+        '200':
+          description: OK
+    post:
+      responses:
+        '200':
+          description: OK
+  /staffs:
+    get:
+      responses:
+        '200':
+          description: OK
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mail_address:
+                  type: string
+                  example: "test@example.com"
+                login_id:
+                  type: string
+                  example: "test_user"
+                password:
+                  type: string
+                  example: "test_user123!"
+      responses:
+        '204':
+          description: OK
+  /staffs/{staff_id}:
+    delete:
+      parameters:
+        - in: path
+          name: staff_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: OK
+  /staffs/{staff_id}/basic:
+    get:
+      parameters:
+        - in: path
+          name: staff_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+    put:
+      parameters:
+        - in: path
+          name: staff_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /staffs/{staff_id}/detail:
+    get:
+      parameters:
+        - in: path
+          name: staff_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+    put:
+      parameters:
+        - in: path
+          name: staff_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /attendances:
+    get:
+      parameters:
+        - in: query
+          name: month
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+    post:
+      responses:
+        '200':
+          description: OK
