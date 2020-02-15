@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS `m_staff`;
 CREATE TABLE `m_staff`
 (
     `staff_id` int not null auto_increment comment '社員ID',
-    `mail_address` varchar(255) UNIQUE default 'mailadress@example.com' comment 'メールアドレス',
+    `mail_address` varchar(255) UNIQUE comment 'メールアドレス',
     `login_id` varchar(20) not null UNIQUE comment 'ログイン用ID',
     `password` varchar(50) not null comment 'パスワード',
     `create_at` timestamp not null default current_timestamp comment '登録日',
@@ -56,10 +56,10 @@ CREATE TABLE `m_position`
 CREATE TABLE `m_absence_type`
 (
     `absence_type_id` int not null auto_increment comment 'ID',
-    `absence_name` varchar(255) comment '欠勤種別名',
+    `absence_type_name` varchar(255) comment '欠勤種別名',
     `create_at` timestamp not null default current_timestamp comment '登録日',
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
-    PRIMARY KEY(`absence_type_id`),
+    PRIMARY KEY(`absence_type_id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `m_staff_basic_info`
@@ -118,9 +118,9 @@ CREATE TABLE `t_attendance`
     PRIMARY KEY(`attendance_id`),
     CONSTRAINT fk_attendance_staff_id  -- 制約の名前
         FOREIGN KEY (staff_id)  -- 外部キーに設定するカラム名
-        REFERENCES m_staff (staff_id)  -- 参照するテーブルとカラム
-    CONSTRAINT fk_attendance_absence_type_id  -- 制約の名前
-        FOREIGN KEY (absence_type_id)  -- 外部キーに設定するカラム名
+        REFERENCES m_staff (staff_id),  -- 参照するテーブルとカラム
+    CONSTRAINT fk_attendance_absence_type  -- 制約の名前
+        FOREIGN KEY (absence_type)  -- 外部キーに設定するカラム名
         REFERENCES m_absence_type (absence_type_id)  -- 参照するテーブルとカラム
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
