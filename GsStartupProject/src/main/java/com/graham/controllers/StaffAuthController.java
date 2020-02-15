@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * ログイン情報コントローラ
+ * 認証情報を管理するコントローラ
  * 
  */
 @RestController

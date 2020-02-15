@@ -18,6 +18,10 @@ import com.graham.interfaces.request.StaffRequestForm;
 import com.graham.interfaces.response.StaffBasicInfoResponseForm;
 import com.graham.interfaces.response.StaffResponseForm;
 
+/**
+ * 社員情報管理を行うサービスクラス
+ *
+ */
 @Service
 @Transactional(rollbackFor = Throwable.class)
 public class StaffService {
@@ -34,19 +38,19 @@ public class StaffService {
 	/**
 	 * 社員一覧取得
 	 * 
-	 * @return 取得したDB情報
+	 * @return staffs 取得したDB情報
 	 */
 	public StaffResponseForm index() {
-		StaffResponseForm response = new StaffResponseForm();
-		response.setStaffs(staffRepository.findAll());
-		return response;
+		StaffResponseForm staffs = new StaffResponseForm();
+		staffs.setStaffs(staffRepository.findAll());
+		return staffs;
 	}
 	
 	/**
 	 * 社員情報取得
 	 * 
 	 * @param staffId 社員ID
-	 * @return
+	 * @return staff 社員情報
 	 */
 	public StaffResponseForm show(int staffId) {
 		StaffResponseForm response = new StaffResponseForm();

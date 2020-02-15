@@ -4,10 +4,6 @@ import com.graham.domain.model.StaffBasicInfoEntity;
 
 import lombok.Data;
 
-/**
- * 社員詳細情報 に関するフォーム
- * 
- */
 @Data
 public class StaffBasicInfoResponseForm {
 

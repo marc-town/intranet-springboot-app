@@ -1,7 +1,5 @@
 package com.graham.domain.repositorys;
 
-import java.util.Date;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -37,8 +35,8 @@ public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEn
 	/**
 	 * 社員基本情報 検索
 	 * 
-	 * @param staffId
-	 * @return staff 更新件数（基本的に1件し更新されない）
+	 * @param staffId 社員ID
+	 * @return staff 社員基本情報
 	 */
 	public StaffBasicInfoEntity findByStaffId(int staffId);
 	
