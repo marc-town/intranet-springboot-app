@@ -34,15 +34,6 @@ CREATE TABLE `m_department`
     PRIMARY KEY(`department_id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `m_grade`
-(
-    `grade_id` int not null auto_increment comment 'グレードID',
-    `grade_name` varchar(50) comment 'グレード名',
-    `create_at` timestamp not null default current_timestamp comment '登録日',
-    `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
-    PRIMARY KEY(`grade_id`)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 CREATE TABLE `m_position`
 (
     `position_id` int not null auto_increment comment '役職ID',
@@ -50,6 +41,15 @@ CREATE TABLE `m_position`
     `create_at` timestamp not null default current_timestamp comment '登録日',
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
     PRIMARY KEY(`position_id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `m_grade`
+(
+    `grade_id` int not null auto_increment comment 'グレードID',
+    `grade_name` varchar(50) comment 'グレード名',
+    `create_at` timestamp not null default current_timestamp comment '登録日',
+    `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
+    PRIMARY KEY(`grade_id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
@@ -106,7 +106,7 @@ CREATE TABLE `t_attendance`
     `staff_id` int not null comment '社員ID',
     `start_time` char(5) default '09:00' comment '始業時間',
     `end_time` char(5) default '18:00' comment '就業時間',
-    `absence_type` int comment '欠勤種別',
+    `absence_type_id` int comment '欠勤種別',
     `absence_reason` varchar(255) comment '欠勤理由',
     `working_time` decimal(4, 2) comment '労働時間',
     `night_time` decimal(4, 2) comment '夜間時間',
@@ -119,8 +119,8 @@ CREATE TABLE `t_attendance`
     CONSTRAINT fk_attendance_staff_id  -- 制約の名前
         FOREIGN KEY (staff_id)  -- 外部キーに設定するカラム名
         REFERENCES m_staff (staff_id),  -- 参照するテーブルとカラム
-    CONSTRAINT fk_attendance_absence_type  -- 制約の名前
-        FOREIGN KEY (absence_type)  -- 外部キーに設定するカラム名
+    CONSTRAINT fk_attendance_absence_type_id  -- 制約の名前
+        FOREIGN KEY (absence_type_id)  -- 外部キーに設定するカラム名
         REFERENCES m_absence_type (absence_type_id)  -- 参照するテーブルとカラム
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

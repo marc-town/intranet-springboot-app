@@ -1,7 +1,6 @@
 package com.graham.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.graham.domain.model.StaffBasicInfoEntity;
-import com.graham.domain.model.StaffDetailInfoEntity;
 import com.graham.domain.model.StaffEntity;
 import com.graham.domain.repositorys.StaffBasicInfoRepository;
 import com.graham.domain.repositorys.StaffDetailInfoRepository;
@@ -109,25 +106,25 @@ public class StaffService {
 	/**
 	 * 社員基本情報 を取得する
 	 * 
-	 * @param sessionStaffId セッションスタッフID
-	 * @return 社員詳細情報フォーム
+	 * @param staffId 社員ID
+	 * @return basicInfo 社員基本情報
 	 */
 	public StaffBasicInfoResponseForm findStaffBasicInfo(int staffId) {
 
 		// 社員詳細情報フォーム
-		StaffBasicInfoResponseForm response = new StaffBasicInfoResponseForm();
+		StaffBasicInfoResponseForm basicInfo = new StaffBasicInfoResponseForm();
 
 		// 社員詳細情報の検索結果を取得する
-		response.setBasicInfo(staffBasicInfoRepository.findByStaffId(staffId));
+		basicInfo.setBasicInfo(staffBasicInfoRepository.findByStaffId(staffId));
 
-		return response;
+		return basicInfo;
 	}
 
 	/**
 	 * 社員基本情報 を更新する
 	 * 
 	 * @param staffId  社員ID
-	 * @param staffDetailForm 社員基本情報
+	 * @param request 社員基本情報
 	 */
 	public void updateStaffBasicInfo(int staffId, StaffBasicInfoRequestForm request) {
 		
