@@ -64,7 +64,7 @@ CREATE TABLE `m_absence_type`
 
 CREATE TABLE `m_staff_basic_info`
 (
-    `m_staff_basic_info_id` int not null auto_increment comment 'ID',
+    `staff_basic_info_id` int not null auto_increment comment 'ID',
     `staff_id` int not null comment '社員ID',
     `name` varchar(100) comment '社員名',
     `name_kana` varchar(100) comment '社員名（かな）',
@@ -77,7 +77,7 @@ CREATE TABLE `m_staff_basic_info`
     `grade_id` int default 0 comment '階級ID',
     `create_at` timestamp not null default current_timestamp comment '登録日',
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
-    PRIMARY KEY(`m_staff_basic_info_id`),
+    PRIMARY KEY(`staff_basic_info_id`),
     CONSTRAINT fk_basic_info_staff_id  -- 制約の名前
         FOREIGN KEY (staff_id)  -- 外部キーに設定するカラム名
         REFERENCES m_staff (staff_id)  -- 参照するテーブルとカラム
@@ -185,5 +185,6 @@ INSERT INTO m_staff (login_id, password) VALUES
 
 -- m_staff_basic_info
 INSERT INTO m_staff_basic_info (staff_id, name, name_kana, entered_date, staff_type_id, department_id, position_id, grade_id) VALUES
-(1, "管理者", "かんりしゃ", "2020-02-11", 0, 3, 1, 1)
+(1, "管理者", "かんりしゃ", "2020-02-11", 0, 3, 1, 1),
+(2, "タケノミカヅチ", "たけちゃん", "2020-02-11", 0, 3, 1, 1)
 ;

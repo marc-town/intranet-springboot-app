@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.graham.domain.model.StaffBasicInfoEntity;
+import com.graham.domain.model.StaffDetailInfoEntity;
 import com.graham.domain.model.StaffEntity;
 import com.graham.domain.repositorys.StaffBasicInfoRepository;
 import com.graham.domain.repositorys.StaffDetailInfoRepository;
@@ -70,12 +71,16 @@ public class StaffService {
 		StaffEntity query = setStaffQuery(request);
 		// TODO loginId password生成処理
 		query = staffRepository.save(query);
-		System.out.println(query);
+		
+		int staffId = query.getStaffId();
 		
 		// m_staff_basic_info レコード作成
-//		StaffBasicInfoEntity detailQuery = new StaffBasicInfoEntity();
-//		detailQuery.setStaffId(query.getStaffId());
-//		staffDetailRepository.save(detailQuery);
+		LOGGER.info("insert m_staff_basic_info as staff id = {}", staffId);
+		staffBasicInfoRepository.insertBasicInfo(staffId);
+		
+		// m_staff_detail_info レコード作成
+		LOGGER.info("insert m_staff_detail_info as staff id = {}", staffId);
+		staffDetailInfoRepository.insertDetailInfo(staffId);
 	}
 
 	/**
@@ -109,17 +114,11 @@ public class StaffService {
 	 */
 	public StaffBasicInfoResponseForm findStaffBasicInfo(int staffId) {
 
-		LOGGER.info("Simple log statement with inputs {}", staffId);
-		LOGGER.info("This is an info message");
-	    LOGGER.warn("This is a warn message");
-	    LOGGER.error("This is an error message");
-		
 		// 社員詳細情報フォーム
 		StaffBasicInfoResponseForm response = new StaffBasicInfoResponseForm();
 
 		// 社員詳細情報の検索結果を取得する
 		response.setBasicInfo(staffBasicInfoRepository.findByStaffId(staffId));
-		System.out.println(response.getBasicInfo());
 
 		return response;
 	}
@@ -132,34 +131,29 @@ public class StaffService {
 	 */
 	public void updateStaffBasicInfo(int staffId, StaffBasicInfoRequestForm request) {
 		
-		// 名前
 		String name = request.getName();
-		// なまえ
 		String nameKana = request.getNameKana();
-		// 入社日
-		Date enteredDate = request.getEnteredDate();
-		// 種別
+		String enteredDate = request.getEnteredDate();
 		int staffTypeId = request.getStaffTypeId();
-		// 誕生日
-		Date birthday = request.getBirthday();
-		// 電話番号
+		String birthday = request.getBirthday();
 		String telephoneNumber = request.getTelephoneNumber();
-		// 部署ID
 		int departmentId = request.getDepartmentId();
-		// 役職ID
 		int positionId = request.getPositionId();
-		// 階級ID
 		int gradeId = request.getGradeId();
 
 		// 社員詳細情報 を更新する
-//		staffBasicInfoRepository.updateBasicInfo(
-//				name, nameKana, enteredDate, staffTypeId, birthday,
-//				telephoneNumber,departmentId,positionId,gradeId,staffId);
-		StaffBasicInfoEntity query = new StaffBasicInfoEntity();
-		staffBasicInfoRepository.save(query);
-
+		LOGGER.info("start staffService.updateStaffBasicInfo.updateBasicInfo");
+		staffBasicInfoRepository.updateBasicInfo(
+				name, nameKana, enteredDate, staffTypeId, birthday,
+				telephoneNumber,departmentId,positionId,gradeId,staffId);
 	}
 
+	/**
+	 * リクエストデータからインサートクエリー用パラメータ生成
+	 * 
+	 * @param request
+	 * @return query
+	 */
 	private StaffEntity setStaffQuery(StaffRequestForm request) {
 		StaffEntity query = new StaffEntity();
 		query.setMailAddress(request.getMailAddress());

@@ -5,8 +5,8 @@ import java.util.Date;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.graham.domain.model.StaffBasicInfoEntity;
 
@@ -15,15 +15,41 @@ import com.graham.domain.model.StaffBasicInfoEntity;
  * 
  */
 @Repository
+@Transactional //途中でメソッドが異常終了した時に処理を中断して前の状態に戻す
 public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEntity, Integer> {
+	
+	// 基本情報更新用クエリー
+	final String UPDATE = "update m_staff_basic_info set "
+			+ "name = ?1, "
+			+ "name_kana = ?2, "
+			+ "entered_date = ?3, "
+			+ "staff_type_id = ?4, "
+			+ "birthday = ?5, "
+			+ "telephone_number = ?6, "
+			+ "department_id = ?7, "
+			+ "position_id = ?8, "
+			+ "grade_id = ?9 "
+			+ "where staff_id = ?10";
 
+	// 基本情報登録用クエリー
+	final String INSERT = "insert into m_staff_basic_info (staff_id) values (?1)";
+	
 	/**
 	 * 社員基本情報 検索
 	 * 
 	 * @param staffId
-	 * @return count 更新件数（基本的に1件し更新されない）
+	 * @return staff 更新件数（基本的に1件し更新されない）
 	 */
 	public StaffBasicInfoEntity findByStaffId(int staffId);
+	
+	/**
+	 * 社員基本情報 登録
+	 * 
+	 * @param staffId 社員ID
+	 */
+	@Modifying
+	@Query(value = INSERT, nativeQuery = true)
+	public void insertBasicInfo(Integer staffId);
 	
 	/**
 	 * 社員基本情報 更新
@@ -39,29 +65,19 @@ public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEn
 	 * @param staffId 社員ID(検索条件)
 	 * @return count 更新件数(社員IDに紐づく1件しか更新されない)
 	 */
-//	@Modifying
-//	@Query("update m_staff_basic_info set "
-//			+ "name = :name, "
-//			+ "name_kana = :nameKana, "
-//			+ "entered_date = :enteredDate, "
-//			+ "staff_type_id = :staffTypeId, "
-//			+ "birthday = :birthday, "
-//			+ "telephone_number = :telephoneNumber, "
-//			+ "department_id = :departmentId, "
-//			+ "position_id = :positionId, "
-//			+ "grade_id = :gradeId "
-//			+ "where staff_id = :staffId")
-//	public int updateBasicInfo(
-//			@Param("name")String name,
-//			@Param("nameKana")String nameKana,
-//			@Param("enteredDate")Date enteredDate,
-//			@Param("staffTypeId")Integer staffTypeId,
-//			@Param("birthday")Date birthday,
-//			@Param("telephoneNumber")String telephoneNumber,
-//			@Param("departmentId")Integer departmentId,
-//			@Param("positionId")Integer positionId,
-//			@Param("gradeId")Integer gradeId,
-//			@Param("staffId")Integer staffId);
+	@Modifying
+	@Query(value = UPDATE, nativeQuery = true)
+	public int updateBasicInfo(
+			String name,
+			String nameKana,
+			String enteredDate,
+			Integer staffTypeId,
+			String birthday,
+			String telephoneNumber,
+			Integer departmentId,
+			Integer positionId,
+			Integer gradeId,
+			Integer staffId);
 
 	/**
 	 * 社員削除

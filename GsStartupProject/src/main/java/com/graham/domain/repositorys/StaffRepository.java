@@ -2,10 +2,12 @@ package com.graham.domain.repositorys;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.graham.domain.model.StaffEntity;
 
 @Repository
+@Transactional //途中でメソッドが異常終了した時に処理を中断して前の状態に戻す
 public interface StaffRepository extends
 			JpaRepository<StaffEntity, Integer> {
 	
@@ -15,7 +17,7 @@ public interface StaffRepository extends
 	 * @param staffId 社員ID
 	 * @return staff 社員情報
 	 */
-	StaffEntity findByStaffId(int staffId);
+	public StaffEntity findByStaffId(int staffId);
 	
 	/**
 	 * 社員削除

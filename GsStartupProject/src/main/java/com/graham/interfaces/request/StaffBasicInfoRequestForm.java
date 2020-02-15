@@ -24,13 +24,13 @@ public class StaffBasicInfoRequestForm {
 	private String nameKana;
 	
 	/** 入社日 */
-	private Date enteredDate;
+	private String enteredDate;
 	
 	/** 種別 */
 	private Integer staffTypeId;
 	
 	/** 誕生日 */
-	private Date birthday;
+	private String birthday;
 	
 	/** 電話番号 */
 	private String telephoneNumber;

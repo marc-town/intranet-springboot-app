@@ -1,7 +1,5 @@
 package com.graham.domain.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,8 +12,6 @@ import lombok.Data;
 /**
  * 社員詳細情報 を表現するエンティティ
  * 
- * @author Gaku Nishihira
- *
  */
 @Table(name = "m_staff_basic_info")
 @Data
@@ -24,9 +20,9 @@ public class StaffBasicInfoEntity {
 
 	/** サロゲートキー */
 	@Id
-	@Column(name = "id")
+	@Column(name = "staff_basic_info_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer staffBasicInfoId;
 
 	/** 社員ID */
 	@Column(name = "staff_id")

@@ -2,6 +2,8 @@ package com.graham.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,9 +15,10 @@ import lombok.Data;
 public class StaffDetailInfoEntity {
 
 	@Id
-	@Column(name = "id")
-	private Integer id;
+	@Column(name = "staff_detail_info_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer staffDetailInfoId;
 
 	@Column(name = "staff_id")
-	private String staffId;
+	private Integer staffId;
 }

@@ -2,6 +2,8 @@ package com.graham.controllers;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,6 +37,8 @@ public class StaffController {
 	@Autowired
 	private StaffService staffService;
 	
+	private static final Logger LOGGER=LoggerFactory.getLogger(StaffService.class);
+	
 	/**
 	 * 社員一覧取得（管理者専用）
 	 * 
@@ -42,7 +47,9 @@ public class StaffController {
 	@GetMapping
 	@ResponseBody
 	public StaffResponseForm index() {
+		LOGGER.info("START get staff list");
 		StaffResponseForm staffs = staffService.index();
+		LOGGER.info("SUCCESS get staff list");
 		return staffs;
 	}
 
@@ -54,7 +61,9 @@ public class StaffController {
 	@PostMapping
 	@ResponseBody
 	public void createStaff(@RequestBody StaffRequestForm request) {
+		LOGGER.info("START regist staff with inputs {}", request);
 		staffService.create(request);
+		LOGGER.info("SUCCESS regist staff");
 	}
 	
 	/**
@@ -78,7 +87,7 @@ public class StaffController {
 	 * @param staffId 社員ID
 	 * @param request 更新情報
 	 */
-	@PostMapping("/{staffId}")
+	@PutMapping("/{staffId}")
 	@ResponseBody
 	public void updateStaff(@RequestBody @Valid StaffRequestForm request,
 			@PathVariable("staffId") int staffId) {
@@ -93,7 +102,9 @@ public class StaffController {
 	@DeleteMapping("/{staffId}")
 	@ResponseBody
 	public void deleteStaff(@PathVariable("staffId") int staffId) {
+		LOGGER.info("START delete staff with staffId = {}", staffId);
 		staffService.delete(staffId);
+		LOGGER.info("SUCCESS delete staff with staffId = {}", staffId);
 	}
 	
 	/**
@@ -116,17 +127,12 @@ public class StaffController {
 	 * @param staffDetailRequestForm 社員詳細情報フォーム
 	 */
 	@ResponseBody
-	@PostMapping("/{staffId}/basic_info")
-	public void updateStaffDetailInfo(
-			@PathVariable("staffId") int staffId, 
-			@Validated @RequestBody StaffBasicInfoRequestForm request, 
-			BindingResult result) {
+	@PutMapping("/{staffId}/basic_info")
+	public void updateStaffDetailInfo(@RequestBody StaffBasicInfoRequestForm request,
+			@PathVariable("staffId") int staffId) {
 		
-		// エラーがあるか確認
-		for (ObjectError error : result.getAllErrors()) {
-			System.out.println(error.getDefaultMessage());
-		}
-		
+		LOGGER.info("START update staff_basic_info with staff_id = {} and request {}", staffId, request);
 		staffService.updateStaffBasicInfo(staffId, request);
+		LOGGER.info("SUCCESS update staff_basic_info");
 	}
 }
