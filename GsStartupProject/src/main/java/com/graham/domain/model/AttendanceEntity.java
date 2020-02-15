@@ -46,6 +46,10 @@ public class AttendanceEntity {
 	@Column(name = "end_time", length = 5)
 	private String endTime;
 	
+	/** 休憩時間 */
+	@Column(name = "rest_time")
+	private BigDecimal restTime;
+	
 	/** 欠勤種別 */
 	@Column(name = "absence_type_id")
 	private Integer absenceTypeId;

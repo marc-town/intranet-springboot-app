@@ -16,6 +16,9 @@ public class AttendanceRequestForm {
 	/** 終業時間 */
 	private String endTime;
 	
+	/** 休憩時間 */
+	private BigDecimal restTime;
+	
 	/** 欠勤種別 */
 	private Integer absenceTypeId;
 	

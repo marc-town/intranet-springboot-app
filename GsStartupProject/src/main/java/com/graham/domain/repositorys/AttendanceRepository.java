@@ -30,13 +30,14 @@ public interface AttendanceRepository extends JpaRepository<AttendanceEntity, In
 			"SET\n" + 
 			"  start_time = ?4,\n" + 
 			"  end_time = ?5,\n" + 
-			"  absence_type_id = ?6,\n" + 
-			"  absence_reason = ?7,\n" + 
-			"  working_time = ?8,\n" + 
-			"  night_time = ?9,\n" + 
-			"  operating_expenses = ?10,\n" + 
-			"  section = ?11,\n" + 
-			"  remarks = ?12\n" + 
+			"  rest_time = ?6,\n" + 
+			"  absence_type_id = ?7,\n" + 
+			"  absence_reason = ?8,\n" + 
+			"  working_time = ?9,\n" + 
+			"  night_time = ?10,\n" + 
+			"  operating_expenses = ?11,\n" + 
+			"  section = ?12,\n" + 
+			"  remarks = ?13\n" + 
 			"WHERE\n" + 
 			"  staff_id = ?1\n" + 
 			"  AND `year_month` = ?2\n" + 
@@ -60,6 +61,7 @@ public interface AttendanceRepository extends JpaRepository<AttendanceEntity, In
 	 * @param <String> day 対象日付
 	 * @param <String> startTime 始業時間
 	 * @param <String> endTime 終業時間
+	 * @param <BigDecimal> restTime 休憩時間
 	 * @param <Integer> absenceTypeId 欠勤種別ID
 	 * @param <String> absenceReason 欠勤理由
 	 * @param <BigDecimal> workingTime 労働時間
@@ -71,6 +73,6 @@ public interface AttendanceRepository extends JpaRepository<AttendanceEntity, In
 	@Modifying
 	@Query(value = UPDATE, nativeQuery = true)
 	public void updateAttendance(Integer staffId, String yearMonth, String day,
-			String startTime, String endTime, Integer absenceTypeId, String absenceReason,
+			String startTime, String endTime, BigDecimal restTime, Integer absenceTypeId, String absenceReason,
 			BigDecimal workingTime,BigDecimal nightTime, Integer operatingExpenses, String section, String remarks);
 }
