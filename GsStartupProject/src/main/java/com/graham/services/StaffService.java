@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -40,9 +41,12 @@ public class StaffService {
 	private StaffDetailInfoRepository staffDetailInfoRepository;
 	
 	@Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
     private MessageSource messageSource;
 	
-	private static final Logger LOGGER=LoggerFactory.getLogger(StaffService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StaffService.class);
 	
 	/**
 	 * 社員一覧取得
@@ -68,7 +72,8 @@ public class StaffService {
 			staff.add(staffRepository.findByStaffId(staffId));
 		} catch (Error e) {
 			LOGGER.error("Failed to find staff {}", staffId);
-			GrahamError err = new GrahamError(GrahamHttpStatus.INTERNAL_SERVER_ERROR, "GSOL0002", e.getMessage());
+			GrahamError err = new GrahamError(
+					GrahamHttpStatus.INTERNAL_SERVER_ERROR, "GSOL0002", e.getMessage());
 			throw new GrahamException(err);
 		}
 		if (CollectionUtils.isEmpty(staff)) {
@@ -90,20 +95,32 @@ public class StaffService {
 	 */
 	public void create(StaffRequestForm request) {
 		
-		// m_staff レコード作成
+		// password暗号化
+		request.encrypt(bCryptPasswordEncoder);
+		// 登録用クエリ生成
 		StaffEntity query = setStaffQuery(request);
-		// TODO loginId password生成処理
-		query = staffRepository.save(query);
 		
-		int staffId = query.getStaffId();
-		
-		// m_staff_basic_info レコード作成
-		LOGGER.info("insert m_staff_basic_info as staff id = {}", staffId);
-		staffBasicInfoRepository.insertBasicInfo(staffId);
-		
-		// m_staff_detail_info レコード作成
-		LOGGER.info("insert m_staff_detail_info as staff id = {}", staffId);
-		staffDetailInfoRepository.insertDetailInfo(staffId);
+		int staffId = 0;
+		// m_staff レコード作成
+		try {
+			query = staffRepository.save(query);
+			
+			staffId = query.getStaffId();
+			
+			// m_staff_basic_info レコード作成
+			LOGGER.error(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
+			staffBasicInfoRepository.insertBasicInfo(staffId);
+			
+			// m_staff_detail_info レコード作成
+			LOGGER.error(messageSource.getMessage("info.I_GSOL0102", null, Locale.JAPANESE));
+			staffDetailInfoRepository.insertDetailInfo(staffId);
+		} catch (Error e) {
+			LOGGER.error(messageSource.getMessage(
+					"error.E_GSOL0102", null, Locale.JAPANESE));
+			GrahamError err = new GrahamError(
+					GrahamHttpStatus.INTERNAL_SERVER_ERROR, "GSOL0102", e.getMessage());
+			throw new GrahamException(err);
+		}
 	}
 
 	/**

@@ -37,7 +37,6 @@ public class AttendanceController {
 	 * 
 	 * @param staffId
 	 * @param yearMonth
-	 * 
 	 * @return attendances 勤怠情報
 	 */
 	@GetMapping

@@ -29,12 +29,10 @@ public class StaffEntity {
 	/** ログインID */
 	@Column(name = "login_id")
 	@NotNull(message="Login IDは必須です。")
-	@Size(min = 8, max = 20)
 	private String loginId;
 	
 	/** パスワード */
 	@Column(name = "password")
 	@NotNull(message="パスワードは必須です。")
-	@Size(min = 8, max = 50)
 	private String password;
 }

@@ -10,5 +10,4 @@ import lombok.Data;
 public class StaffResponseForm {
 
 	private List<StaffEntity> staffs;
-
 }

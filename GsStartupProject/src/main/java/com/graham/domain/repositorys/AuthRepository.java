@@ -22,6 +22,14 @@ public interface AuthRepository extends JpaRepository<StaffEntity, Integer> {
 	final String UPDATE_PASSWORD = "update m_staff set password = ?1, where staff_id = ?2";
 	
 	/**
+	 * ログインIDから社員情報を取得
+	 * 
+	 * @param loginId
+	 * @return staff 検索結果に該当した社員情報
+	 */
+	public StaffEntity findByLoginId(String loginId);
+	
+	/**
 	 * ログインID変更
 	 * 
 	 * @param loginId

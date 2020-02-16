@@ -25,7 +25,7 @@ public class AttendanceService {
 	@Autowired
 	private AttendanceRepository attendanceRepository;
 	
-	private static final Logger LOGGER=LoggerFactory.getLogger(AttendanceService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AttendanceService.class);
 	
 	/**
 	 * 1ヶ月分の勤怠情報を取得する

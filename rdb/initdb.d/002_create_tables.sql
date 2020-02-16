@@ -17,8 +17,8 @@ CREATE TABLE `m_staff`
 (
     `staff_id` int not null auto_increment comment '社員ID',
     `mail_address` varchar(255) UNIQUE comment 'メールアドレス',
-    `login_id` varchar(20) not null UNIQUE comment 'ログイン用ID',
-    `password` varchar(50) not null comment 'パスワード',
+    `login_id` varchar(255) not null UNIQUE comment 'ログイン用ID',
+    `password` varchar(255) not null comment 'パスワード',
     `create_at` timestamp not null default current_timestamp comment '登録日',
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
     PRIMARY KEY(`staff_id`)

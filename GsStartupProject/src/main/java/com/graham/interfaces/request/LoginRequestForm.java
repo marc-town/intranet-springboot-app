@@ -5,10 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.Data;
 
 @Data
-public class StaffRequestForm {
-
-	/** メールアドレス */
-	private String mailAddress;
+public class LoginRequestForm {
 
 	/** ログインID */
 	private String loginId;

@@ -1,10 +1,18 @@
 info:
-  staffs:
-  attendances:
+  # /auth系info
+  I_GSOL0001: 'StaffId {0} Login Success'
+  I_GSOL0002: ''
+  # /staffs系info
+  I_GSOL0101: 'Regist Basic Info'
+  I_GSOL0102: 'Regist Detail Info'
+  # /attendances系info
+  I_GSOL0201: ''
 error:
   # /auth系エラーメッセージ
-  GSOL0001: 'ログインID、またはパスワードが間違っています。'
+  E_GSOL0001: 'ログインID、またはパスワードが間違っています。'
+  E_GSOL0002: 'LoginId {0} Not Found'
   # /staffs系エラーメッセージ
-  GSOL0101: 'Staff {0} Not Found'
+  E_GSOL0101: 'Staff {0} Not Found'
+  E_GSOL0102: 'Failed to Regist Staff'
   # /attendances系エラーメッセージ
-  GSOL0201: ''
+  E_GSOL0201: ''
