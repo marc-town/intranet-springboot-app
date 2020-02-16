@@ -1,5 +1,10 @@
 info:
-  controller:
-  service:
+  staffs:
+  attendances:
 error:
-  GSOL0001: 'Staff {0} Not Found'
+  # /auth系エラーメッセージ
+  GSOL0001: 'ログインID、またはパスワードが間違っています。'
+  # /staffs系エラーメッセージ
+  GSOL0101: 'Staff {0} Not Found'
+  # /attendances系エラーメッセージ
+  GSOL0201: ''

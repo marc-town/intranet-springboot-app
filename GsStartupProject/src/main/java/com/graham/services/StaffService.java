@@ -68,13 +68,14 @@ public class StaffService {
 			staff.add(staffRepository.findByStaffId(staffId));
 		} catch (Error e) {
 			LOGGER.error("Failed to find staff {}", staffId);
-			GrahamError err = new GrahamError(GrahamHttpStatus.INTERNAL_SERVER_ERROR, "000111", e.getMessage());
+			GrahamError err = new GrahamError(GrahamHttpStatus.INTERNAL_SERVER_ERROR, "GSOL0002", e.getMessage());
 			throw new GrahamException(err);
 		}
-		if (!CollectionUtils.isEmpty(staff)) {
-			LOGGER.error("Not Found staffId {}", staffId);
+		if (CollectionUtils.isEmpty(staff)) {
+			LOGGER.error(messageSource.getMessage(
+					"error.GSOL0001", new String[]{String.valueOf(staffId)}, Locale.JAPANESE));
 			GrahamError err = new GrahamError(
-					GrahamHttpStatus.NOT_FOUND, "000112", messageSource.getMessage(
+					GrahamHttpStatus.NOT_FOUND, "GSOL0001", messageSource.getMessage(
 							"error.GSOL0001", new String[]{String.valueOf(staffId)}, Locale.JAPANESE));
 			throw new GrahamException(err);
 		}
