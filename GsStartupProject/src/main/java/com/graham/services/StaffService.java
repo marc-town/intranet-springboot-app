@@ -8,7 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import com.graham.common.exception.GrahamError;
+import com.graham.common.exception.GrahamException;
+import com.graham.common.exception.GrahamHttpStatus;
 import com.graham.domain.model.StaffEntity;
 import com.graham.domain.repositorys.StaffBasicInfoRepository;
 import com.graham.domain.repositorys.StaffDetailInfoRepository;
@@ -54,9 +58,19 @@ public class StaffService {
 	 */
 	public StaffResponseForm show(int staffId) {
 		StaffResponseForm response = new StaffResponseForm();
-		List<StaffEntity> staff = new ArrayList<StaffEntity>(){
-			{add(staffRepository.findByStaffId(staffId));}
-		};
+		List<StaffEntity> staff = new ArrayList<StaffEntity>();
+		try {
+			staff.add(staffRepository.findByStaffId(staffId));
+		} catch (Error e) {
+			LOGGER.error("Failed to find staff {}", staffId);
+			GrahamError err = new GrahamError(GrahamHttpStatus.INTERNAL_SERVER_ERROR, "000111", e.getMessage());
+			throw new GrahamException(err);
+		}
+		if (CollectionUtils.isEmpty(staff)) {
+			LOGGER.error("Not Found staffId {}", staffId);
+			GrahamError err = new GrahamError(GrahamHttpStatus.NOT_FOUND, "000112", String.format("社員ID： %sは存在しません。", staffId));
+			throw new GrahamException(err);
+		}
 		response.setStaffs(staff);
 		return response;
 	}
