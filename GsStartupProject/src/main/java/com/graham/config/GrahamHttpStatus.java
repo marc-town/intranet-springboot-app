@@ -1,4 +1,4 @@
-package com.graham.common.exception;
+package com.graham.config;
 
 public final class GrahamHttpStatus {
 

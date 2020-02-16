@@ -2,6 +2,9 @@ package com.graham.common.exception;
 
 import lombok.Getter;
 
+/**
+ * Graham例外
+ */
 @Getter
 public class GrahamException extends RuntimeException {
 	

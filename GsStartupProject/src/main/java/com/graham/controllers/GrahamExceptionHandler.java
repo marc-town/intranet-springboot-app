@@ -14,12 +14,12 @@ import com.graham.common.exception.GrahamException;
 import com.graham.interfaces.response.ErrorResponseForm;
 
 /**
- * コントローラからthrowされるExceptionをハンドルするクラス
+ * throwされたExceptionをハンドルするクラス
  */
 @RestControllerAdvice
 public class GrahamExceptionHandler extends ResponseEntityExceptionHandler {
 
-	// Controller から throw される GrahamException を捕捉
+	// throw された GrahamException を捕捉
     @ExceptionHandler(GrahamException.class)
     public ResponseEntity<Object> handleGrahamException(GrahamException exception, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
