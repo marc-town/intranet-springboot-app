@@ -2,17 +2,19 @@ package com.graham.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.graham.common.exception.GrahamError;
 import com.graham.common.exception.GrahamException;
-import com.graham.common.exception.GrahamHttpStatus;
+import com.graham.config.GrahamHttpStatus;
 import com.graham.domain.model.StaffEntity;
 import com.graham.domain.repositorys.StaffBasicInfoRepository;
 import com.graham.domain.repositorys.StaffDetailInfoRepository;
@@ -36,6 +38,9 @@ public class StaffService {
 	private StaffBasicInfoRepository staffBasicInfoRepository;
 	@Autowired
 	private StaffDetailInfoRepository staffDetailInfoRepository;
+	
+	@Autowired
+    private MessageSource messageSource;
 	
 	private static final Logger LOGGER=LoggerFactory.getLogger(StaffService.class);
 	
@@ -66,9 +71,11 @@ public class StaffService {
 			GrahamError err = new GrahamError(GrahamHttpStatus.INTERNAL_SERVER_ERROR, "000111", e.getMessage());
 			throw new GrahamException(err);
 		}
-		if (CollectionUtils.isEmpty(staff)) {
+		if (!CollectionUtils.isEmpty(staff)) {
 			LOGGER.error("Not Found staffId {}", staffId);
-			GrahamError err = new GrahamError(GrahamHttpStatus.NOT_FOUND, "000112", String.format("社員ID： %sは存在しません。", staffId));
+			GrahamError err = new GrahamError(
+					GrahamHttpStatus.NOT_FOUND, "000112", messageSource.getMessage(
+							"error.GSOL0001", new String[]{String.valueOf(staffId)}, Locale.JAPANESE));
 			throw new GrahamException(err);
 		}
 		response.setStaffs(staff);
