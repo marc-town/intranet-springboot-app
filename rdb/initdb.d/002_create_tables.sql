@@ -10,9 +10,20 @@ DROP TABLE IF EXISTS `m_grade`;
 DROP TABLE IF EXISTS `t_attendance`;
 DROP TABLE IF EXISTS `m_absence_type`;
 DROP TABLE IF EXISTS `m_attendance_setting`;
+DROP TABLE IF EXISTS `c_staff_role`;
 DROP TABLE IF EXISTS `m_staff`;
+DROP TABLE IF EXISTS `m_role`;
 
 ---- create ----
+CREATE TABLE `m_role`
+(
+    `role_id` int not null auto_increment comment '権限ID',
+    `role_name` varchar(255) UNIQUE comment '権限',
+    `create_at` timestamp not null default current_timestamp comment '登録日',
+    `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
+    PRIMARY KEY(`role_id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 CREATE TABLE `m_staff`
 (
     `staff_id` int not null auto_increment comment '社員ID',
@@ -22,6 +33,21 @@ CREATE TABLE `m_staff`
     `create_at` timestamp not null default current_timestamp comment '登録日',
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
     PRIMARY KEY(`staff_id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `c_staff_role`
+(
+    `staff_id` int not null comment '社員ID',
+    `role_id` int not null comment '権限ID',
+    `create_at` timestamp not null default current_timestamp comment '登録日',
+    `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
+    PRIMARY KEY (`staff_id`,`role_id`),
+    CONSTRAINT fk_staff_roles_role_id  -- 制約の名前
+        FOREIGN KEY (role_id)  -- 外部キーに設定するカラム名
+        REFERENCES m_role (role_id),  -- 参照するテーブルとカラム
+    CONSTRAINT fk_staff_roles_staff_id  -- 制約の名前
+        FOREIGN KEY (staff_id)  -- 外部キーに設定するカラム名
+        REFERENCES m_staff (staff_id)  -- 参照するテーブルとカラム
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `m_department`
@@ -69,7 +95,6 @@ CREATE TABLE `m_staff_basic_info`
     `name` varchar(100) comment '社員名',
     `name_kana` varchar(100) comment '社員名（かな）',
     `entered_date` varchar(10) default 'yyyy-mm-dd' comment '入社日',
-    `staff_type_id` int not null default 1 comment '社員種別ID 0:admin, 1:nomal',
     `birthday` varchar(10) default 'yyyy-mm-dd' comment '誕生日',
     `telephone_number` varchar(13) default 'xxx-yyyy-zzzz' comment '電話番号',
     `department_id` int comment '部署ID',
@@ -184,10 +209,14 @@ INSERT INTO m_staff (login_id, password) VALUES
 ("takenomikazuchi", "takenomikazuchi")
 ;
 
+-- m_role
+INSERT IGNORE INTO m_role(role_name) VALUES('ROLE_ADMIN');
+INSERT IGNORE INTO m_role(role_name) VALUES('ROLE_USER');
+
 -- m_staff_basic_info
-INSERT INTO m_staff_basic_info (staff_id, name, name_kana, entered_date, staff_type_id, department_id, position_id, grade_id) VALUES
-(1, "管理者", "かんりしゃ", "2020-02-11", 0, 3, 1, 1),
-(2, "タケノミカヅチ", "たけちゃん", "2020-02-11", 0, 3, 1, 1)
+INSERT INTO m_staff_basic_info (staff_id, name, name_kana, entered_date, department_id, position_id, grade_id) VALUES
+(1, "管理者", "かんりしゃ", "2020-02-11", 3, 1, 1),
+(2, "タケノミカヅチ", "たけちゃん", "2020-02-11", 3, 1, 1)
 ;
 
 INSERT INTO t_attendance (`year_month`, `day`, `staff_id`, `start_time`, `end_time`, `rest_time`, `absence_type_id`, `working_time`) VALUES

@@ -3,7 +3,7 @@ package com.graham.interfaces.response;
 import java.time.ZonedDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.graham.common.exception.GrahamError;
+import com.graham.exception.GrahamError;
 
 import lombok.Setter;
 

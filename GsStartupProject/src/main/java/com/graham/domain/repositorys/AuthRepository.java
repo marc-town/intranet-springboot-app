@@ -8,10 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.graham.domain.model.StaffEntity;
 
-/**
- * ログイン情報
- *
- */
 @Repository
 @Transactional //途中でメソッドが異常終了した時に処理を中断して前の状態に戻す
 public interface AuthRepository extends JpaRepository<StaffEntity, Integer> {
@@ -24,7 +20,7 @@ public interface AuthRepository extends JpaRepository<StaffEntity, Integer> {
 	/**
 	 * ログインIDから社員情報を取得
 	 * 
-	 * @param loginId
+	 * @param username ログインID
 	 * @return staff 検索結果に該当した社員情報
 	 */
 	public StaffEntity findByLoginId(String loginId);
@@ -50,5 +46,4 @@ public interface AuthRepository extends JpaRepository<StaffEntity, Integer> {
 	@Modifying(clearAutomatically = true)
 	@Query(value = UPDATE_PASSWORD, nativeQuery = true)
 	public int updatePassword(String passord, int staffId);
-
 }

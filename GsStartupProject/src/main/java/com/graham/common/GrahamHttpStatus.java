@@ -1,4 +1,4 @@
-package com.graham.config;
+package com.graham.common;
 
 public final class GrahamHttpStatus {
 

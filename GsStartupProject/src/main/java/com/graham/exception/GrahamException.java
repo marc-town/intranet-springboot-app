@@ -1,4 +1,4 @@
-package com.graham.common.exception;
+package com.graham.exception;
 
 import lombok.Getter;
 

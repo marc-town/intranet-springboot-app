@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.Data;
 
 @Data
-public class LoginRequestForm {
+public class JwtRequestForm {
 
 	/** ログインID */
 	private String loginId;

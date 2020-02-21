@@ -11,6 +11,7 @@ error:
   # /auth系エラーメッセージ
   E_GSOL0001: 'ログインID、またはパスワードが間違っています。'
   E_GSOL0002: 'LoginId {0} Not Found'
+  E_GSOL0003: 'Unauthorized error: {0}'
   # /staffs系エラーメッセージ
   E_GSOL0101: 'Staff {0} Not Found'
   E_GSOL0102: 'Failed to Regist Staff'

@@ -12,26 +12,26 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.graham.common.exception.GrahamError;
-import com.graham.common.exception.GrahamException;
-import com.graham.config.GrahamHttpStatus;
-import com.graham.domain.model.StaffEntity;
-import com.graham.domain.repositorys.AuthRepository;
-import com.graham.interfaces.response.LoginResponseForm;
+import com.graham.common.GrahamHttpStatus;
+import com.graham.domain.model.JwtStaffEntity;
+import com.graham.domain.repositorys.JwtUserRepository;
+import com.graham.exception.GrahamError;
+import com.graham.exception.GrahamException;
+import com.graham.security.UserPrincipal;
 
 /**
  * Spring SecurityがDBを参照してユーザー情報を取得するサービス。
  */
 @Service
 @Transactional(rollbackFor = Throwable.class)
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private AuthRepository authRepository;
+	private JwtUserRepository jwtUserRepository;
 	
 	@Autowired
     private MessageSource messageSource;
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JwtUserDetailsServiceImpl.class);
 	
 	/**
 	 * ログインIDから社員情報を取得する
@@ -39,22 +39,28 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * 
 	 * @param loginId ログインID
 	 */
-	public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		LOGGER.info("BEGIN JwtUserDetailsServiceImpl loadUserByUsername");
 		
 		// ログインIDから社員情報を取得
-		StaffEntity staff = authRepository.findByLoginId(loginId);
+		JwtStaffEntity staff = jwtUserRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+		
+		// TODO
+		System.out.println("!!!!! findByUsername result : " + staff);
 		
 		// 社員情報を取得できなかった場合
 		if (staff == null) {
 			LOGGER.error(messageSource.getMessage(
-					"error.GSOL0002", new String[]{String.valueOf(loginId)}, Locale.JAPANESE));
+					"error.GSOL0002", new String[]{String.valueOf(username)}, Locale.JAPANESE));
 			GrahamError err = new GrahamError(
 					GrahamHttpStatus.NOT_FOUND, "GSOL0002", messageSource.getMessage(
-							"error.GSOL0002", new String[]{String.valueOf(loginId)}, Locale.JAPANESE));
+							"error.GSOL0002", new String[]{String.valueOf(username)}, Locale.JAPANESE));
 			throw new GrahamException(err);
 		}
 		
 		// 取得した社員情報をSpringSecurityが認証できる形式で返却する
-		return new LoginResponseForm(staff);
+		return UserPrincipal.build(staff);
 	}
 }

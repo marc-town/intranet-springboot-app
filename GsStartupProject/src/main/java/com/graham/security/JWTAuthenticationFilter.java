@@ -1,7 +1,8 @@
-package com.graham.common.auth;
+package com.graham.security;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -12,6 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,27 +23,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.graham.interfaces.request.LoginRequestForm;
-import com.graham.interfaces.response.LoginResponseForm;
-import com.graham.services.AttendanceService;
+import com.graham.interfaces.request.JwtRequestForm;
+import com.graham.services.JwtUserDetailsServiceImpl;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AttendanceService.class);
+	@Autowired
+    private MessageSource messageSource;
+	private static final Logger LOGGER = LoggerFactory.getLogger(JwtUserDetailsServiceImpl.class);
 	
 	private AuthenticationManager authenticationManager;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.authenticationManager = authenticationManager;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-
+        this.setbCryptPasswordEncoder(bCryptPasswordEncoder);
+        
         // ログイン用のpath
-        setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(SecurityConstants.SIGNIN_URL, "POST"));
+        setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(JwtSecurityConstants.SIGNIN_URL, "POST"));
 
         // ログイン用のID/PWのパラメータ名
-        setUsernameParameter(SecurityConstants.SIGNIN_ID);
-        setPasswordParameter(SecurityConstants.PASSWORD);
+        setUsernameParameter(JwtSecurityConstants.SIGNIN_ID);
+        setPasswordParameter(JwtSecurityConstants.PASSWORD);
 
     }
 
@@ -48,8 +52,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
+		LOGGER.info("BEGIN JWTAuthorizationFilter attemptAuthentication");
+
         try {
-        	LoginRequestForm userForm = new ObjectMapper().readValue(req.getInputStream(), LoginRequestForm.class);
+        	JwtRequestForm userForm = new ObjectMapper().readValue(req.getInputStream(), JwtRequestForm.class);
 
             // 認証情報をセット。
             return authenticationManager.authenticate(
@@ -64,6 +70,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
+	public BCryptPasswordEncoder getbCryptPasswordEncoder() {
+		return bCryptPasswordEncoder;
+	}
+
+	public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+	}
+
 
     // 認証に成功した場合の処理
     @Override
@@ -72,7 +86,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
         // loginIdからtokenを設定してヘッダにセットする
-        String token = TokenCreater.createToken(((LoginResponseForm)auth.getPrincipal()).getUsername());
-        res.addHeader(SecurityConstants.AUTHORIZATION_HEADER_NAME, SecurityConstants.TOKEN_PREFIX + token);
+        String token = JwtTokenProvider.createJwtToken(((UserPrincipal)auth.getPrincipal()).getUsername());
+        // TODO
+        System.out.println(token);
+        res.addHeader(JwtSecurityConstants.AUTHORIZATION_HEADER_NAME, JwtSecurityConstants.TOKEN_PREFIX + token);
     }
 }
