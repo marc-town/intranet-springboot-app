@@ -32,7 +32,7 @@ public class JwtTokenProvider {
 	@Value("${gsol.app.jwtExpirationMs}")
 	private static int jwtExpirationMs;
 	
-	public String generateJwtToken(Authentication authentication){
+	public static String generateJwtToken(Authentication authentication){
 		
 		LOGGER.info("BEGIN JwtTokenProvider generateJwtToken");
 		
@@ -41,7 +41,7 @@ public class JwtTokenProvider {
                 .setSubject(userPrincipal.getUsername()) 
                 // 有効期限30分（ミリ秒で指定）
                 .setExpiration(new Date(System.currentTimeMillis() + JwtSecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, JwtSecurityConstants.SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS512, String.join("", Collections.nCopies(23, JwtSecurityConstants.SECRET_KEY)))
                 .compact();
     }
 	/**
@@ -61,12 +61,14 @@ public class JwtTokenProvider {
 	}
 	
 	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+		LOGGER.info("BEGIN JwtTokenProvider getUserNameFromJwtToken");
+		return Jwts.parser().setSigningKey(String.join("", Collections.nCopies(23, JwtSecurityConstants.SECRET_KEY))).parseClaimsJws(token).getBody().getSubject();
 	}
 
 	public boolean validateJwtToken(String authToken) {
+		LOGGER.info("BEGIN JwtTokenProvider validateJwtToken");
 		try {
-			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+			Jwts.parser().setSigningKey(String.join("", Collections.nCopies(23, JwtSecurityConstants.SECRET_KEY))).parseClaimsJws(authToken);
 			return true;
 		} catch (SignatureException e) {
 			LOGGER.error("Invalid JWT signature: {}", e.getMessage());

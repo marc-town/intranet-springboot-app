@@ -1,7 +1,9 @@
 package com.graham.controllers;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,17 +25,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.graham.common.RoleName;
+import com.graham.domain.model.RoleEntity;
 import com.graham.interfaces.request.JwtRequestForm;
 import com.graham.interfaces.response.JwtResponseForm;
 import com.graham.security.JwtTokenProvider;
 import com.graham.security.UserPrincipal;
+import com.graham.services.StaffService;
 
 /**
  * 認証情報を管理するコントローラ
  * 
  */
 @RestController
-@RequestMapping(value = "/auth")
+@RequestMapping(value = "/api/v1/auth")
 @CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 public class AuthController {
 	
@@ -45,6 +51,8 @@ public class AuthController {
 //	private RoleRepository roleRepository;
 //	@Autowired
 //	private PasswordEncoder encoder;
+	@Autowired
+	private StaffService staffService;
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 	
@@ -59,10 +67,11 @@ public class AuthController {
 	
 	@GetMapping(value = "/private")
 	public String authApi() {
+		LOGGER.info("BEGIN AuthController private");
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // JWTAuthenticationFilter#successfulAuthenticationで設定したusernameを取り出す
-        String userName = (String) (authentication.getPrincipal());
+        Object userName = authentication.getPrincipal();
 		return "" + userName;
 	}
 	
@@ -75,7 +84,7 @@ public class AuthController {
 				new UsernamePasswordAuthenticationToken(request.getLoginId(), request.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtTokenProvider.generateJwtToken(authentication);
+		String jwt = JwtTokenProvider.generateJwtToken(authentication);
 		
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();		
 		List<String> roles = userPrincipal.getAuthorities().stream()
@@ -83,5 +92,11 @@ public class AuthController {
 				.collect(Collectors.toList());
 
 		return new JwtResponseForm(jwt, userPrincipal.getUsername(), roles);
+	}
+	
+	@PostMapping("/signup")
+	public void registerStaff(@Valid @RequestBody JwtRequestForm request) {
+		LOGGER.info("BEGIN AuthController registerStaff");
+		staffService.regist(request);
 	}
 }

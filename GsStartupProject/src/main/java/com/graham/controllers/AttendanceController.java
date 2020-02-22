@@ -23,7 +23,7 @@ import com.graham.services.AttendanceService;
  * 
  */
 @RestController
-@RequestMapping(value = "/attendances")
+@RequestMapping(value = "/api/v1/attendances")
 @CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 public class AttendanceController {
 

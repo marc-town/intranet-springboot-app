@@ -1,54 +1,88 @@
 package com.graham.config;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.graham.security.JWTAuthenticationFilter;
-import com.graham.security.JWTAuthorizationFilter;
 import com.graham.security.JwtAuthEntryPoint;
+import com.graham.security.JwtAuthTokenFilter;
 import com.graham.security.JwtSecurityConstants;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
     private UserDetailsService userDetailsService;
 	@Autowired
 	private JwtAuthEntryPoint unauthorizedHandler;
+	@Bean
+	public JwtAuthTokenFilter authenticationJwtTokenFilter() {
+		return new JwtAuthTokenFilter();
+	}
 
+	@Override
+	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+	}
+
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+		
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .cors()
             .configurationSource(this.corsConfigurationSource())
-            .and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-            .and().authorizeRequests()
-            .antMatchers("/auth/public", JwtSecurityConstants.SIGNUP_URL, JwtSecurityConstants.SIGNIN_URL).permitAll()
-            .anyRequest().authenticated()
-            .and().logout()
-            .and().csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        ;
-        http.addFilter(new JWTAuthenticationFilter(authenticationManager(), bCryptPasswordEncoder()));
-        http.addFilter(new JWTAuthorizationFilter(authenticationManager()));
-    }
+            .and()
+            	/*
+            	 SpringBoot Securityのデフォルトでは、アクセス権限（ROLE）設定したページに未認証状態でアクセスすると403を返す
+            	 そのため403エラーを返却するようにカスタマイズする
+            	 */
+//            	.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+            	.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+            .and()
+            	// 403エラー時にResponseBodyを返却しないように設定
+            	.exceptionHandling().accessDeniedHandler((req, res, ex) -> res.setStatus(HttpServletResponse.SC_FORBIDDEN))
+        	.and()
+            	.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            	.logout()
+            	.logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_OK))
+            	.invalidateHttpSession(true)
+            .and()
+            	.csrf().disable()
+        	.authorizeRequests()
+        		.antMatchers("/api/v1/auth/**").permitAll()
+        		.anyRequest().authenticated();
 
-    @Autowired
-    public void configureAuth(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        ;
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -56,12 +90,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
     
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
     // Vue.jsを起動しているlocalhost:8081からのCORSを有効化
     private CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();

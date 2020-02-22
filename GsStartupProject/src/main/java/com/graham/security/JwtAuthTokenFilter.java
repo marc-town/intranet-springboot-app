@@ -33,6 +33,9 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
 
+	/**
+	 * リクエストヘッダからトークンを取得し検証する
+	 */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -40,8 +43,6 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 			LOGGER.info("BEGIN JwtAuthTokenFilter doFilterInternal");
 			
 			String jwt = parseJwt(request);
-			// TODO
-			System.out.println("!!!!!!!! parseJwt result : "+jwt);
 			if (jwt != null && jwtTokenProvider.validateJwtToken(jwt)) {
 				String username = jwtTokenProvider.getUserNameFromJwtToken(jwt);
 
@@ -59,12 +60,18 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
+	/**
+	 * リクエストヘッダからトークン部分を抜き出す
+	 * 
+	 * @param request リクエスト情報
+	 * @return token ヘッダから抽出したトークン
+	 */
 	private String parseJwt(HttpServletRequest request) {
 		LOGGER.info("BEGIN JwtAuthTokenFilter parseJwt");
 		
-		String headerAuth = request.getHeader("Authorization");
-		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-			return headerAuth.substring(7, headerAuth.length());
+		String headerAuth = request.getHeader(JwtSecurityConstants.AUTHORIZATION_HEADER_NAME);
+		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(JwtSecurityConstants.TOKEN_PREFIX)) {
+			return headerAuth.replace(JwtSecurityConstants.TOKEN_PREFIX, "");
 		}
 
 		return null;

@@ -85,8 +85,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse res,
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
+    	LOGGER.info("BEGIN JWTAuthorizationFilter successfulAuthentication");
         // loginIdからtokenを設定してヘッダにセットする
-        String token = JwtTokenProvider.createJwtToken(((UserPrincipal)auth.getPrincipal()).getUsername());
+        String token = JwtTokenProvider.generateJwtToken(auth);
         // TODO
         System.out.println(token);
         res.addHeader(JwtSecurityConstants.AUTHORIZATION_HEADER_NAME, JwtSecurityConstants.TOKEN_PREFIX + token);

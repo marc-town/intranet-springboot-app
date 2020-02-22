@@ -1,25 +1,34 @@
 package com.graham.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.graham.common.GrahamHttpStatus;
+import com.graham.common.RoleName;
+import com.graham.domain.model.JwtStaffEntity;
+import com.graham.domain.model.RoleEntity;
 import com.graham.domain.model.StaffEntity;
+import com.graham.domain.repositorys.JwtUserRepository;
+import com.graham.domain.repositorys.RoleRepository;
 import com.graham.domain.repositorys.StaffBasicInfoRepository;
 import com.graham.domain.repositorys.StaffDetailInfoRepository;
 import com.graham.domain.repositorys.StaffRepository;
 import com.graham.exception.GrahamError;
 import com.graham.exception.GrahamException;
+import com.graham.interfaces.request.JwtRequestForm;
 import com.graham.interfaces.request.StaffBasicInfoRequestForm;
 import com.graham.interfaces.request.StaffRequestForm;
 import com.graham.interfaces.response.StaffBasicInfoResponseForm;
@@ -39,6 +48,10 @@ public class StaffService {
 	private StaffBasicInfoRepository staffBasicInfoRepository;
 	@Autowired
 	private StaffDetailInfoRepository staffDetailInfoRepository;
+	@Autowired
+	private JwtUserRepository jwtUserRepository;
+	@Autowired
+	private RoleRepository roleRepository;
 	
 	@Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -121,6 +134,65 @@ public class StaffService {
 					GrahamHttpStatus.INTERNAL_SERVER_ERROR, "GSOL0102", e.getMessage());
 			throw new GrahamException(err);
 		}
+	}
+	
+	/**
+	 * 社員登録
+	 * 
+	 * @param staff 登録社員情報
+	 */
+	public void regist(JwtRequestForm request) {
+		
+		LOGGER.info("BEGIN StaffService regist");
+		
+		// ログインIDが被っていないか確認
+		if (jwtUserRepository.existsByUsername(request.getLoginId())) {
+			String message = messageSource.getMessage("error.E_GSOL0004",  new String[]{String.valueOf(request.getLoginId())}, Locale.JAPANESE);
+			LOGGER.error(message);
+			GrahamError err = new GrahamError(GrahamHttpStatus.INTERNAL_SERVER_ERROR, "E_GSOL0004", message);
+			throw new GrahamException(err);
+		}
+
+		// メールアドレスが被っていないか確認
+		if (jwtUserRepository.existsByEmail(request.getEmail())) {
+			String message = messageSource.getMessage("error.E_GSOL0005",  new String[]{String.valueOf(request.getLoginId())}, Locale.JAPANESE);
+			LOGGER.error(message);
+			GrahamError err = new GrahamError(GrahamHttpStatus.INTERNAL_SERVER_ERROR, "E_GSOL0005", message);
+			throw new GrahamException(err);
+		}
+
+		// password暗号化
+		request.encrypt(bCryptPasswordEncoder);
+		
+		// Create new user's account
+		JwtStaffEntity staff = new JwtStaffEntity(request.getLoginId(),request.getEmail(), request.getPassword());
+
+		Set<String> strRoles = request.getRole();
+		Set<RoleEntity> roles = new HashSet<>();
+
+		if (strRoles == null) {
+			RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER)
+					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+			roles.add(userRole);
+		} else {
+			strRoles.forEach(role -> {
+				switch (role) {
+				case "admin":
+					RoleEntity adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					roles.add(adminRole);
+
+					break;
+				default:
+					RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER)
+							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					roles.add(userRole);
+				}
+			});
+		}
+
+		staff.setRoles(roles);
+		jwtUserRepository.save(staff);
 	}
 
 	/**

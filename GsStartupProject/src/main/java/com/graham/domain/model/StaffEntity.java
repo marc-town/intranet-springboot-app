@@ -1,7 +1,6 @@
 package com.graham.domain.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -22,11 +21,9 @@ public class StaffEntity {
 
 	/** ログインID */
 	@Column(name = "login_id")
-	@NotNull(message="Login IDは必須です。")
 	private String loginId;
 	
 	/** パスワード */
 	@Column(name = "password")
-	@NotNull(message="パスワードは必須です。")
 	private String password;
 }

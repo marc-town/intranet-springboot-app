@@ -61,12 +61,6 @@ public class UserPrincipal implements UserDetails {
         List<GrantedAuthority> authorities = staff.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
 				.collect(Collectors.toList());
-     // TODO
-        System.out.println("!!!!! userprincipal staff : " + staff);
-        for (GrantedAuthority authority: authorities) {
-        	// TODO
-        	System.out.println("!!!!! userprincipal authorities : " + authority);
-        }
 
         return new UserPrincipal(
         		staff.getStaffId(),
