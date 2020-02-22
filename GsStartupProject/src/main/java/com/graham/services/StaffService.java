@@ -221,5 +221,19 @@ public class StaffService {
 				name, nameKana, enteredDate, staffTypeId, birthday,
 				telephoneNumber,departmentId,positionId,gradeId,staffId);
 	}
+	
+	/**
+	 * トークンに含まれるログインIDから社員IDを検索し、一致するか確認する
+	 * 
+	 * @param loginId トークンから取得したログインID
+	 * @param expectedStaffId リクエストボディから取得した社員ID
+	 * @return result 判定結果
+	 */
+	public Boolean isCorrectStaff(String loginId, int expectedStaffId) {
+		LOGGER.info("BEGIN AttendanceController isCorrectStaff");
+		int actualStaffId = staffRepository.findStaffIdByLoginId(loginId);
+		LOGGER.info("ActualStaffId: {}, ExpectedStaffId: {}", actualStaffId, expectedStaffId);
+		return actualStaffId == expectedStaffId ? true : false;
+	}
 }
 

@@ -14,6 +14,7 @@ error:
   E_GSOL0003: 'Unauthorized error: {0}'
   E_GSOL0004: 'このログインIDは既に使用されています: {0}'
   E_GSOL0005: 'このメールアドレスは既に使用されています: {0}'
+  E_GSOL0006: 'ログインID：{0}が別社員の情報を覗こうとしました。'
   # /staffs系エラーメッセージ
   E_GSOL0101: 'Staff {0} Not Found'
   E_GSOL0102: 'Failed to Regist Staff'

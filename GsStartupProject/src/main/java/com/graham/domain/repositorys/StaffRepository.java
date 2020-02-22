@@ -1,6 +1,7 @@
 package com.graham.domain.repositorys;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +12,9 @@ import com.graham.domain.model.StaffEntity;
 public interface StaffRepository extends
 			JpaRepository<StaffEntity, Integer> {
 	
+	// ログインIDから社員ID取得クエリ
+	final String FIND_STAFFID_BY_LOGIN_ID = "SELECT staff_id from m_staff where login_id = ?1";
+	
 	/**
 	 * 社員情報取得
 	 * 
@@ -18,6 +22,15 @@ public interface StaffRepository extends
 	 * @return staff 社員情報
 	 */
 	public StaffEntity findByStaffId(int staffId);
+	
+	/**
+	 * ログインIDから社員IDを取得
+	 * 
+	 * @param loginId ログインID
+	 * @return staffId 社員ID
+	 */
+	@Query(value = FIND_STAFFID_BY_LOGIN_ID, nativeQuery = true)
+	public int findStaffIdByLoginId(String loginId);
 	
 	/**
 	 * 社員削除
