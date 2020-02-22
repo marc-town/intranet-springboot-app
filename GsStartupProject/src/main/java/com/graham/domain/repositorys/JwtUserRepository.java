@@ -17,15 +17,15 @@ import com.graham.domain.model.JwtStaffEntity;
 @Transactional //途中でメソッドが異常終了した時に処理を中断して前の状態に戻す
 public interface JwtUserRepository extends JpaRepository<JwtStaffEntity, Integer> {
 
-	Optional<JwtStaffEntity> findByEmail(String email);
+	public Optional<JwtStaffEntity> findByEmail(String email);
 
-    Optional<JwtStaffEntity> findByUsernameOrEmail(String username, String email);
+	public Optional<JwtStaffEntity> findByUsernameOrEmail(String username, String email);
 
-    List<JwtStaffEntity> findByStaffIdIn(List<Long> userIds);
+	public List<JwtStaffEntity> findByStaffIdIn(List<Long> userIds);
     
-	Optional<JwtStaffEntity> findByUsername(String username);
+	public Optional<JwtStaffEntity> findByUsername(String username);
 
-	Boolean existsByUsername(String username);
+	public Boolean existsByUsername(String username);
 
-	Boolean existsByEmail(String email);
+	public Boolean existsByEmail(String email);
 }

@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +29,6 @@ import com.graham.exception.GrahamError;
 import com.graham.exception.GrahamException;
 import com.graham.interfaces.request.JwtRequestForm;
 import com.graham.interfaces.request.StaffBasicInfoRequestForm;
-import com.graham.interfaces.request.StaffRequestForm;
 import com.graham.interfaces.response.StaffBasicInfoResponseForm;
 import com.graham.interfaces.response.StaffResponseForm;
 
@@ -106,41 +104,6 @@ public class StaffService {
 	 * 
 	 * @param staff 登録社員情報
 	 */
-	public void create(StaffRequestForm request) {
-		
-		// password暗号化
-		request.encrypt(bCryptPasswordEncoder);
-		// 登録用クエリ生成
-		StaffEntity query = setStaffQuery(request);
-		
-		int staffId = 0;
-		// m_staff レコード作成
-		try {
-			query = staffRepository.save(query);
-			
-			staffId = query.getStaffId();
-			
-			// m_staff_basic_info レコード作成
-			LOGGER.error(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
-			staffBasicInfoRepository.insertBasicInfo(staffId);
-			
-			// m_staff_detail_info レコード作成
-			LOGGER.error(messageSource.getMessage("info.I_GSOL0102", null, Locale.JAPANESE));
-			staffDetailInfoRepository.insertDetailInfo(staffId);
-		} catch (Error e) {
-			LOGGER.error(messageSource.getMessage(
-					"error.E_GSOL0102", null, Locale.JAPANESE));
-			GrahamError err = new GrahamError(
-					GrahamHttpStatus.INTERNAL_SERVER_ERROR, "GSOL0102", e.getMessage());
-			throw new GrahamException(err);
-		}
-	}
-	
-	/**
-	 * 社員登録
-	 * 
-	 * @param staff 登録社員情報
-	 */
 	public void regist(JwtRequestForm request) {
 		
 		LOGGER.info("BEGIN StaffService regist");
@@ -149,7 +112,7 @@ public class StaffService {
 		if (jwtUserRepository.existsByUsername(request.getLoginId())) {
 			String message = messageSource.getMessage("error.E_GSOL0004",  new String[]{String.valueOf(request.getLoginId())}, Locale.JAPANESE);
 			LOGGER.error(message);
-			GrahamError err = new GrahamError(GrahamHttpStatus.INTERNAL_SERVER_ERROR, "E_GSOL0004", message);
+			GrahamError err = new GrahamError(GrahamHttpStatus.BAD_REQUEST, "E_GSOL0004", message);
 			throw new GrahamException(err);
 		}
 
@@ -157,7 +120,7 @@ public class StaffService {
 		if (jwtUserRepository.existsByEmail(request.getEmail())) {
 			String message = messageSource.getMessage("error.E_GSOL0005",  new String[]{String.valueOf(request.getLoginId())}, Locale.JAPANESE);
 			LOGGER.error(message);
-			GrahamError err = new GrahamError(GrahamHttpStatus.INTERNAL_SERVER_ERROR, "E_GSOL0005", message);
+			GrahamError err = new GrahamError(GrahamHttpStatus.BAD_REQUEST, "E_GSOL0005", message);
 			throw new GrahamException(err);
 		}
 
@@ -170,9 +133,11 @@ public class StaffService {
 		Set<String> strRoles = request.getRole();
 		Set<RoleEntity> roles = new HashSet<>();
 
+		System.out.print("strRoles : " + strRoles);
 		if (strRoles == null) {
 			RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER)
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+			System.out.print("userRole : " + userRole);
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
@@ -192,21 +157,18 @@ public class StaffService {
 		}
 
 		staff.setRoles(roles);
-		jwtUserRepository.save(staff);
+		// m_staff レコード作成
+		LOGGER.error(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
+		staff = jwtUserRepository.save(staff);
+		// m_staff_basic_info レコード作成
+		LOGGER.error(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
+		staffBasicInfoRepository.insertBasicInfo(staff.getStaffId());
+		
+		// m_staff_detail_info レコード作成
+		LOGGER.error(messageSource.getMessage("info.I_GSOL0102", null, Locale.JAPANESE));
+		staffDetailInfoRepository.insertDetailInfo(staff.getStaffId());
 	}
 
-	/**
-	 * 社員情報更新
-	 * 
-	 * @param staffId 社員ID
-	 * @param request 更新情報
-	 */
-	public void update(int staffId, StaffRequestForm request) {
-		StaffEntity query = setStaffQuery(request);
-		query.setStaffId(staffId);
-		staffRepository.save(query);
-	}
-	
 	/**
 	 * 社員削除
 	 * 
@@ -258,20 +220,6 @@ public class StaffService {
 		staffBasicInfoRepository.updateBasicInfo(
 				name, nameKana, enteredDate, staffTypeId, birthday,
 				telephoneNumber,departmentId,positionId,gradeId,staffId);
-	}
-
-	/**
-	 * リクエストデータからインサートクエリー用パラメータ生成
-	 * 
-	 * @param request
-	 * @return query
-	 */
-	private StaffEntity setStaffQuery(StaffRequestForm request) {
-		StaffEntity query = new StaffEntity();
-		query.setMailAddress(request.getMailAddress());
-		query.setLoginId(request.getLoginId());
-		query.setPassword(request.getPassword());
-		return query;
 	}
 }
 

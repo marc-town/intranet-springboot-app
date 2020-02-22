@@ -64,7 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             	 SpringBoot Securityのデフォルトでは、アクセス権限（ROLE）設定したページに未認証状態でアクセスすると403を返す
             	 そのため403エラーを返却するようにカスタマイズする
             	 */
-//            	.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
             	.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
             .and()
             	// 403エラー時にResponseBodyを返却しないように設定

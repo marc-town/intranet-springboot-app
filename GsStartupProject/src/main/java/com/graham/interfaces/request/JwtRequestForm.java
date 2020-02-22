@@ -17,12 +17,10 @@ import lombok.Data;
 public class JwtRequestForm {
 
 	/** ログインID */
-//	@NotBlank(message = "ログインIDは必須です。")
     @Size(min = 8, max = 20)
     private String loginId;
  
 	/** メールアドレス */
-//    @NotBlank(message = "メールアドレスは必須です。")
     @Size(max = 100)
     @Email
     private String email;
@@ -31,7 +29,6 @@ public class JwtRequestForm {
     private Set<String> role;
     
     /** パスワード */
-//    @NotBlank(message = "パスワードは必須です。")
     @Size(min = 8, max = 40)
     private String password;
     

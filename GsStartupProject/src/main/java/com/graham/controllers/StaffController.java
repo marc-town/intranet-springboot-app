@@ -1,7 +1,5 @@
 package com.graham.controllers;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.graham.interfaces.request.JwtRequestForm;
 import com.graham.interfaces.request.StaffBasicInfoRequestForm;
-import com.graham.interfaces.request.StaffRequestForm;
 import com.graham.interfaces.response.StaffBasicInfoResponseForm;
 import com.graham.interfaces.response.StaffResponseForm;
 import com.graham.services.StaffService;
@@ -59,9 +57,10 @@ public class StaffController {
 	 */
 	@PostMapping
 	@ResponseBody
-	public void createStaff(@RequestBody StaffRequestForm request) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public void createStaff(@RequestBody JwtRequestForm request) {
 		LOGGER.info("START regist staff with inputs {}", request);
-		staffService.create(request);
+		staffService.regist(request);
 		LOGGER.info("SUCCESS regist staff");
 	}
 	
@@ -80,26 +79,13 @@ public class StaffController {
 	}
 
 	/**
-	 * 社員情報の更新（管理者専用）
-	 * フロントで呼び出す場面がないので基本的に呼ばれることはない
-	 * 
-	 * @param staffId 社員ID
-	 * @param request 更新情報
-	 */
-	@PutMapping("/{staffId}")
-	@ResponseBody
-	public void updateStaff(@RequestBody @Valid StaffRequestForm request,
-			@PathVariable("staffId") int staffId) {
-		staffService.update(staffId, request);
-	}
-	
-	/**
 	 * 社員削除（管理者専用）
 	 * 
 	 * @param id 退職社員ID
 	 */
 	@DeleteMapping("/{staffId}")
 	@ResponseBody
+	@PreAuthorize("hasRole('ADMIN')")
 	public void deleteStaff(@PathVariable("staffId") int staffId) {
 		LOGGER.info("START delete staff with staffId = {}", staffId);
 		staffService.delete(staffId);
@@ -121,13 +107,14 @@ public class StaffController {
 	}
 
 	/**
-	 * 社員詳細情報 更新
+	 * 社員基本情報 更新
 	 * 
 	 * @param staffId 社員ID
 	 * @param staffDetailRequestForm 社員詳細情報フォーム
 	 */
 	@ResponseBody
 	@PutMapping("/{staffId}/basic_info")
+	@PreAuthorize("hasRole('ADMIN')")
 	public void updateStaffDetailInfo(@RequestBody StaffBasicInfoRequestForm request,
 			@PathVariable("staffId") int staffId) {
 		

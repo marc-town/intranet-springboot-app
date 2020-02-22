@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.graham.domain.model.JwtStaffEntity;
-import com.graham.domain.model.StaffEntity;
 import com.graham.services.JwtUserDetailsServiceImpl;
 
 import lombok.Data;
@@ -75,16 +74,6 @@ public class UserPrincipal implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
     	return authorities;
     }
-
-//    @Override
-//    public String getUsername() {
-//        return username;
-//    }
-//
-//    @Override
-//    public String getPassword() {
-//        return password;
-//    }
 
     @Override
     public boolean isAccountNonExpired() {

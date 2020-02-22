@@ -47,9 +47,6 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 		JwtStaffEntity staff = jwtUserRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 		
-		// TODO
-		System.out.println("!!!!! findByUsername result : " + staff);
-		
 		// 社員情報を取得できなかった場合
 		if (staff == null) {
 			LOGGER.error(messageSource.getMessage(
