@@ -210,8 +210,8 @@ INSERT INTO m_staff (login_id, password) VALUES
 ;
 
 -- m_role
-INSERT IGNORE INTO m_role(role_name) VALUES('ROLE_ADMIN');
-INSERT IGNORE INTO m_role(role_name) VALUES('ROLE_USER');
+INSERT INTO m_role(role_name) VALUES('ROLE_ADMIN');
+INSERT INTO m_role(role_name) VALUES('ROLE_USER');
 
 -- m_staff_basic_info
 INSERT INTO m_staff_basic_info (staff_id, name, name_kana, entered_date, department_id, position_id, grade_id) VALUES
