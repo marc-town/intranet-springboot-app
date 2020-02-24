@@ -1,16 +1,15 @@
 <template src="./navbar.html"></template>
 <script>
-  import { mapActions } from "vuex";
+  import { mapState, mapActions } from "vuex";
   export default {
     components: {},
     props: {
       source: String,
     },
     computed: {
-      drawer: {
-        get () { return this.$store.state.common.drawer },
-        set (val) { this.setStoreDraewer(val) }
-      }
+      ...mapState('common', [
+        "drawer", // this.commo.drawer を this.$store.state.common.drawer にマップ
+      ]),
     },
     watch: {
     },
