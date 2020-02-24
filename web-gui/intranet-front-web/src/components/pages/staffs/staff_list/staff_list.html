@@ -7,9 +7,10 @@
       fab
       fixed
       right
-      @click="dialog = !dialog"
+      v-model="dialog"
+      @click="setDialog(true)"
     >
       <v-icon>mdi-plus</v-icon>
     </v-btn>
-  <regist-staff :dialog="dialog"></regist-staff>
+  <regist-staff></regist-staff>
 </div>

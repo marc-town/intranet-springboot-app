@@ -6,7 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 // import attendance from './attendance_module';
 import auth from './auth_module';
 import common from './common_module';
-// import staff from './staff_module';
+import staff from './staff_module';
 
 Vue.use(Vuex);
 
@@ -15,7 +15,7 @@ export default new Vuex.Store({
     // attendance,
     auth,
     common,
-    // staff,
+    staff,
   },
   plugins: [createPersistedState({
     key: 'gsol-intranet-app',
