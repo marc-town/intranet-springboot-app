@@ -1,10 +1,7 @@
-<template src="./signin.html"></template>
+<template src="./error.html"></template>
 <script>
 export default {
   components: {},
-  props: {
-    source: String,
-  },
   data () {
     return {
     }
@@ -17,6 +14,6 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-  @import "./signin.scss";
+<style >
+  @import "./error.css";
 </style>

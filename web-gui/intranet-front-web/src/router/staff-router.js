@@ -8,7 +8,8 @@ export default {
   children: [
     {
       path: '',
-      component: StaffList
+      component: StaffList,
+      meta: { requiresAuth: true }
     }
   ]
 }
