@@ -1,3 +1,15 @@
 <div class="staff-list">
   <p>staff list</p>
+  <v-btn
+      bottom
+      color="pink"
+      dark
+      fab
+      fixed
+      right
+      @click="dialog = !dialog"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
+  <regist-staff :dialog="dialog"></regist-staff>
 </div>

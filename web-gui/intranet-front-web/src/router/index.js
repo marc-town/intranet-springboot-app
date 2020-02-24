@@ -13,6 +13,9 @@ import Index from '@/components/pages/Index'
 import Login from '@/components/pages/auth/signin/Signin'
 import Error from '@/components/pages/error/Error'
 
+// TODO
+import Template from '@/components/parts/template/Template'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -22,6 +25,7 @@ const router = new Router({
     { path: '/', component: Index },
     { ...AttendanceRoute },
     { ...StaffRoute },
+    { path: '/template', component: Template, meta: { requiresAuth: false } },
     { path: '/login', component: Login, meta: { requiresAuth: false } },
     { path: '/error', component: Error },
     { path: '*', redirect: '/error' }

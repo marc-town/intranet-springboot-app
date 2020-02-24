@@ -15,7 +15,7 @@
         >
           <v-card class="elevation-12">
             <v-toolbar
-              color="red"
+              color="primary"
               dark
               flat
             >
@@ -29,6 +29,7 @@
                   name="login"
                   prepend-icon="person"
                   type="text"
+                  v-model="loginId"
                 />
 
                 <v-text-field
@@ -37,12 +38,13 @@
                   name="password"
                   prepend-icon="lock"
                   type="password"
+                  v-model="password"
                 />
               </v-form>
             </v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn color="red">Login</v-btn>
+              <v-btn color="primary">Login</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>

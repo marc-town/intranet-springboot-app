@@ -1,14 +1,16 @@
-<template src="./signin.html"></template>
+<template src="./regist.html"></template>
 <script>
 export default {
   components: {},
   props: {
     source: String,
+    dialog: {
+      type: Boolean,
+      default: null
+    }
   },
   data () {
     return {
-      loginId: '',
-      password: ''
     }
   },
   mixins: [],
@@ -19,6 +21,6 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
-  @import "./signin.scss";
+<style >
+  @import "./regist.scss";
 </style>
