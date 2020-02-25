@@ -14,6 +14,10 @@
     watch: {
     },
     data: () => ({
+      items: [
+        { title: 'Profile', icon: 'mdi-account-circle', link: '/staffs' },
+        { title: 'Logout', icon: 'mdi-logout-variant', link: '/login' },
+      ],
     }),
     methods: {
       ...mapActions('common', [
