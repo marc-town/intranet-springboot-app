@@ -13,7 +13,7 @@
     data: () => ({
       items: [
         { icon: 'mdi-contacts', text: 'Contacts', link: '/' },
-        { icon: 'mdi-history', text: 'Attendance', link: '/' },
+        { icon: 'mdi-calendar-clock', text: 'Attendance', link: '/attendances' },
         { icon: 'mdi-content-copy', text: 'Duplicates', link: '/' },
         {
           icon: 'mdi-chevron-up',
@@ -37,11 +37,11 @@
             { text: 'Other contacts', link: '/' },
           ],
         },
-        { icon: 'mdi-settings', text: 'Settings', link: '/' },
         { icon: 'mdi-message', text: 'Send feedback', link: '/' },
-        { icon: 'mdi-help-circle', text: 'Help', link: '/' },
         { icon: 'mdi-cellphone-link', text: 'App downloads', link: '/' },
         { icon: 'mdi-keyboard', text: 'Go to the old version', link: '/' },
+        { icon: 'mdi-help-circle', text: 'Help', link: '/' },
+        { icon: 'mdi-settings', text: 'Settings', link: '/' },
       ],
     }),
     methods: {
