@@ -29,6 +29,9 @@
       ...mapActions('staff', [
         'setDialog', // this.setDialog() を this.$sotre.dispatch("setDialog") にマップ
       ]),
+      onCancel: function() {
+        console.log('入力値破棄');
+      },
     }
   }
 </script>
