@@ -58,7 +58,7 @@ public class AuthController {
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-		return new JwtResponseForm(jwt, userPrincipal.getUsername(), roles);
+		return new JwtResponseForm(jwt, userPrincipal.getStaffId(), userPrincipal.getUsername(), roles);
 	}
 	
 	@PostMapping("/signup")
