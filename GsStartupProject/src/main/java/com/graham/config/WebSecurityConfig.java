@@ -89,14 +89,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
     
-    // Vue.jsを起動しているlocalhost:8081からのCORSを有効化
+    // Vue.jsを起動しているlocalhost:1024からのCORSを有効化
     private CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
         // jwt用のhttpヘッダーを登録
         corsConfiguration.addExposedHeader(JwtSecurityConstants.AUTHORIZATION_HEADER_NAME);
-        corsConfiguration.addAllowedOrigin("http://localhost:8081");
+        corsConfiguration.addAllowedOrigin("http://localhost:1024");
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource corsSource = new UrlBasedCorsConfigurationSource();
