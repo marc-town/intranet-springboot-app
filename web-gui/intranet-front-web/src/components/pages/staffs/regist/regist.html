@@ -11,31 +11,38 @@
         <v-row class="mx-2">
           <v-col cols="6">
             <v-text-field
-            prepend-icon="mdi-account"
-            placeholder="Name"/>
+              v-model="staff.name"
+              prepend-icon="mdi-account"
+              placeholder="Name"/>
           </v-col>
           <v-col cols="6">
-            <v-text-field placeholder="Name Kana"/>
+            <v-text-field 
+              v-model="staff.nameKana"
+              placeholder="Name Kana"/>
           </v-col>
           <v-col cols="12">
             <v-text-field
+              v-model="staff.loginId"
               prepend-icon="person"
               placeholder="LoginID"/>
           </v-col>
           <v-col cols="12">
             <v-text-field
+              v-model="staff.email"
               prepend-icon="mdi-mail"
+              :rules="[rules.required, rules.emailMax, rules.emailMatch]"
               placeholder="Email"/>
           </v-col>
           <v-col cols="12">
             <v-text-field
+              v-model="staff.telephoneNumber"
               type="tel"
               prepend-icon="mdi-phone"
-              placeholder="(000) 000 - 0000"/>
+              placeholder="000-000-0000"/>
           </v-col>
           <v-col cols="12">
             <v-text-field
-              v-model="password"
+              v-model="staff.password"
               prepend-icon="mdi-lock"
               :append-icon="visibility ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="[rules.required, rules.min]"
@@ -51,12 +58,12 @@
         <v-spacer />
         <v-btn
           text
-          @click="setDialog(false)"
+          @click="onCancel"
           >Cancel</v-btn>
           <v-btn
           text
           color="primary"
-          @click="setDialog(false)"
+          @click="onSignup"
         >Save</v-btn>
       </v-card-actions>
     </v-card>

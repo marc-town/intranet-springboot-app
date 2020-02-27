@@ -11,16 +11,16 @@
             <v-card-text>
               <v-form ref="loginForm">
                 <v-text-field
+                  v-model="auth.loginId"
                   label="Login ID"
                   name="login"
                   prepend-icon="person"
                   type="text"
-                  v-model="loginId"
                 />
 
                 <v-text-field
-                label="Password"
-                  v-model="password"
+                  label="Password"
+                  v-model="auth.password"
                   prepend-icon="mdi-lock"
                   :append-icon="visibility ? 'mdi-eye' : 'mdi-eye-off'"
                   :rules="[rules.required, rules.min]"

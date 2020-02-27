@@ -14,12 +14,20 @@
     },
     data () {
       return {
-        password: '',
+        staff: {
+          name: '',
+          nameKana: '',
+          loginId: '',
+          emai: '',
+          telephoneNumber: '',
+          password: '',
+        },
         visibility: false,
         rules: {
           required: value => !!value || 'Required.',
           min: v => v.length >= 8 || 'Min 8 characters',
-          emailMatch: () => ('The email and password you entered don\'t match'),
+          emailMax: v => v.length <= 128 || 'Max 128 characters',
+          emailMatch: v => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'email is invalid',
         },
       }
     },
@@ -30,7 +38,11 @@
         'setDialog', // this.setDialog() を this.$sotre.dispatch("setDialog") にマップ
       ]),
       onCancel: function() {
-        console.log('入力値破棄');
+        // TODO 入力値破棄
+        this.setDialog(!this.dialog);
+      },
+      onSignup: function() {
+        this.setDialog(!this.dialog);
       },
     }
   }
