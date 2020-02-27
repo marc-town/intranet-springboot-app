@@ -4,6 +4,7 @@ const auth = {
       token: false,
       staffId: 0,
       loginId: '',
+      role: ''
     }
   },
   mutations: {

@@ -9,7 +9,7 @@ export default {
     {
       path: '',
       component: Attendance,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     }
   ]
 }

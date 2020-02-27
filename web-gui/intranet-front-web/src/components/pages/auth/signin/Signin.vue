@@ -32,9 +32,15 @@ export default {
         this.loading = true
         // APIでログイン認証を行う
         this.$axios.post("/auth/signin", this.auth).then(res => {
-          if (res.data.result) {
+          if (res.data.token) {
             // ログイン情報を store に保存
-            this.$store.dispatch("setLoginInfo", res.data)
+            const auth = {
+              token: res.data.token,
+              staffId: res.data.staffId,
+              loginId: res.data.loginId,
+              role: res.data.role[0]
+            };
+            this.$store.dispatch("setLoginInfo", auth)
             // 元の画面に戻る
             this.$router.push({path: "backuri" in this.$route.query && this.$route.query.backuri.match(/^\//) ? this.$route.query.backuri : '/'})
           } else {

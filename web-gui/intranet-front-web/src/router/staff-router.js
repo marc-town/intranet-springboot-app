@@ -9,7 +9,7 @@ export default {
     {
       path: '',
       component: StaffList,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     }
   ]
 }
