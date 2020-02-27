@@ -1,0 +1,64 @@
+<div class="regist-staff">
+  <v-dialog
+    v-model="dialog"
+    width="800px"
+  >
+    <v-card>
+      <v-card-title class="grey darken-2">
+        Regist Enployee
+      </v-card-title>
+      <v-container>
+        <v-row class="mx-2">
+          <v-col cols="6">
+            <v-text-field
+            prepend-icon="mdi-account"
+            placeholder="Name"/>
+          </v-col>
+          <v-col cols="6">
+            <v-text-field placeholder="Name Kana"/>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              prepend-icon="person"
+              placeholder="LoginID"/>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              prepend-icon="mdi-mail"
+              placeholder="Email"/>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              type="tel"
+              prepend-icon="mdi-phone"
+              placeholder="(000) 000 - 0000"/>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              v-model="password"
+              prepend-icon="mdi-lock"
+              :append-icon="visibility ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[rules.required, rules.min]"
+              :type="visibility ? 'text' : 'password'"
+              hint="At least 8 characters"
+              counter
+              @click:append="visibility = !visibility"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          text
+          @click="setDialog(false)"
+          >Cancel</v-btn>
+          <v-btn
+          text
+          color="primary"
+          @click="setDialog(false)"
+        >Save</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</div>
