@@ -9,7 +9,6 @@ export default {
     {
       path: '',
       component: Attendance,
-      meta: { requiresAuth: true }
     }
   ]
 }

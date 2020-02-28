@@ -1,5 +1,6 @@
 <template src="./signin.html"></template>
 <script>
+  import { mapActions } from "vuex";
   export default {
     components: {},
     props: {
@@ -25,6 +26,9 @@
     },
     watch: {},
     methods: {
+      ...mapActions('auth', [
+        'setLoginInfo',
+      ]),
       onSignin: function() {
         // バリデーションが通った場合
         if (this.$refs.loginForm.validate()) {
@@ -40,9 +44,9 @@
                 loginId: res.data.loginId,
                 role: res.data.role[0]
               };
-              this.$store.dispatch("setLoginInfo", auth)
+              this.setLoginInfo(auth);
               // 元の画面に戻る
-              this.$router.push({path: "backuri" in this.$route.query && this.$route.query.backuri.match(/^\//) ? this.$route.query.backuri : '/'})
+              this.$router.push({path: "backuri" in this.$route.query ? this.$route.query.backuri : '/'})
             } else {
               this.loading = false
               alert(Object.values(res.data.errors).join("\n"))

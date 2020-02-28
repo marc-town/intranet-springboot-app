@@ -1,9 +1,8 @@
 <template src="./index.html"></template>
 <script>
-  import Navbar from '@/components/parts/navbar/Navbar'
-  import { mapState } from "vuex";
+  import { mapState, mapActions } from "vuex";
   export default {
-    components: { Navbar },
+    components: {},
     data () {
       return {
       }
@@ -12,12 +11,21 @@
     computed: {
       ...mapState('auth', [
         "token",
+        "role"
       ]),
     },
     watch: {},
     methods: {
+      ...mapActions('common', [
+        'setDraewer',
+      ]),
     },
     created: function() {
+      this.setDraewer(false);
+      
+    },
+    beforeDestroy: function() {
+      this.setDraewer(true);
     }
   }
 </script>
