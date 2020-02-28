@@ -1,17 +1,17 @@
 const auth = {
+  namespaced: true,
   state: {
-    login: {
-      token: false,
-      staffId: 0,
-      loginId: '',
-      role: ''
-    }
+    token: false,
+    staffId: 0,
+    loginId: '',
+    role: ''
   },
   mutations: {
     SET_LOGIN_INFO: (state, auth) => {
-      state.login.token   = auth.token   // JWT
-      state.login.staffId = auth.staffId // 社員ID
-      state.login.loginId = auth.loginId // ログインID
+      state.token   = auth.token   // JWT
+      state.staffId = auth.staffId // 社員ID
+      state.loginId = auth.loginId // ログインID
+      state.role    = auth.role    // 権限
     }
   },
   actions: {

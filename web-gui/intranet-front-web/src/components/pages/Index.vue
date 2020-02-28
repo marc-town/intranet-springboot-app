@@ -1,18 +1,25 @@
 <template src="./index.html"></template>
 <script>
-export default {
-  components: {},
-  data () {
-    return {
+  import Navbar from '@/components/parts/navbar/Navbar'
+  import { mapState } from "vuex";
+  export default {
+    components: { Navbar },
+    data () {
+      return {
+      }
+    },
+    mixins: [],
+    computed: {
+      ...mapState('auth', [
+        "token",
+      ]),
+    },
+    watch: {},
+    methods: {
+    },
+    created: function() {
     }
-  },
-  mixins: [],
-  computed: {
-  },
-  watch: {},
-  methods: {
   }
-}
 </script>
 <style >
   @import "./index.css";
