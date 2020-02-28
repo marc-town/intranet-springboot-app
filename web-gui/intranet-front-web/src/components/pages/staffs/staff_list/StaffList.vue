@@ -30,7 +30,7 @@
             this.staffs = res.data.staffs;
           })
           .catch(err => {
-            alert(err);
+            alert(`output by staffs: ${err}`);
           })
       },
     },
