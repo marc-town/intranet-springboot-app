@@ -1,31 +1,44 @@
 <template src="./staff_list.html"></template>
 <script>
-  import { mapActions } from "vuex";
-  import RegistStaff from '@/components/pages/staffs/regist/Regist'
+  import { mapState, mapActions } from "vuex";
+  import RegistStaff from '@/components/pages/staffs/modal/regist/Regist'
   export default {
     components: { RegistStaff },
     props: {
       source: String,
     },
     computed: {
-      dialog: {
-        get () { return this.$store.state.staff.dialog },
-        set (val) { this.setDialog(val) }
-      }
+      ...mapState('staff', [
+        'dialog',
+      ])
     },
     data () {
       return {
+        staffs: [],
       }
     },
     mixins: [],
     watch: {},
     methods: {
       ...mapActions('staff', [
-        'setDialog', // this.setDialog() を this.$sotre.dispatch("setDialog") にマップ
+        'setDialog',
       ]),
-    }
+      fetchData: function() {
+        this.$axios.get('/staffs')
+          .then(res => {
+            alert(JSON.stringify(res));
+            this.staffs = res.data.staffs;
+          })
+          .catch(err => {
+            alert(err);
+          })
+      },
+    },
+    created: function() {
+      this.fetchData();
+    },
   }
 </script>
-<style >
-  @import "./staff_list.css";
+<style scoped lang="scss">
+  @import "./staff_list.scss";
 </style>

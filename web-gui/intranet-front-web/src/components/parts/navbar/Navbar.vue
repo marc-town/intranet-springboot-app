@@ -8,22 +8,28 @@
     },
     computed: {
       ...mapState('common', [
-        "drawer", // this.commo.drawer を this.$store.state.common.drawer にマップ
+        "drawer",
+      ]),
+      ...mapState('auth', [
+        "staffId",
       ]),
     },
     watch: {
     },
     data: () => ({
       items: [
-        { title: 'Profile', icon: 'mdi-account-circle', link: '/staffs' },
+        { title: 'Profile', icon: 'mdi-account-circle', link: '' },
         { title: 'Logout', icon: 'mdi-logout-variant', link: '/login' },
       ],
     }),
     methods: {
       ...mapActions('common', [
-        'setDraewer', // this.setDraew() を this.$sotre.dispatch("setDraew") にマップ
+        'setDraewer',
       ]),
     },
+    created: function() {
+      this.items[0].link = `/staffs/${this.staffId}`;
+    }
   }
 </script>
 <style scoped lang="scss">

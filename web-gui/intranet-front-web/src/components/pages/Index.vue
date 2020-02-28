@@ -20,15 +20,26 @@
         'setDraewer',
       ]),
     },
+    // 以下、ライフサイクル系処理
+    beforeCreate: function() {
+    },
     created: function() {
-      this.setDraewer(false);
-      
+    },
+    beforeMount: function() {
+    },
+    mounted: function() {
+    },
+    beforeUpdate: function() {
+    },
+    updated: function() {
     },
     beforeDestroy: function() {
-      this.setDraewer(true);
+    },
+    destroyed: function() {
+
     }
   }
 </script>
-<style >
-  @import "./index.css";
+<style scoped lang="scss">
+  @import "./index.scss";
 </style>

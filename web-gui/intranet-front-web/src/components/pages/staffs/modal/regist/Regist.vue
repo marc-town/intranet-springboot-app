@@ -47,6 +47,6 @@
     }
   }
 </script>
-<style >
+<style scoped lang="scss">
   @import "./regist.scss";
 </style>

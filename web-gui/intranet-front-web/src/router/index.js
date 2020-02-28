@@ -11,7 +11,7 @@ import StaffRoute from './staff-router'
 import Index from '@/components/pages/Index'
 
 import Login from '@/components/pages/auth/signin/Signin'
-import Error from '@/components/pages/error/Error'
+import ErrorPage from '@/components/pages/error/Error'
 
 import Template from '@/components/parts/template/Template'
 
@@ -25,7 +25,7 @@ const router = new Router({
     { ...AttendanceRoute },
     { ...StaffRoute },
     { path: '/login', component: Login, meta: { isPublic: true } },
-    { path: '/error', component: Error },
+    { path: '/error', component: ErrorPage },
     { path: '*', redirect: '/error' }
   ]
 })
