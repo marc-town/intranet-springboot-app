@@ -22,6 +22,14 @@
           telephoneNumber: '',
           password: '',
         },
+        defaultStaff: {
+          name: '',
+          nameKana: '',
+          loginId: '',
+          emai: '',
+          telephoneNumber: '',
+          password: '',
+        },
         visibility: false,
         rules: {
           required: value => !!value || 'Required.',
@@ -37,12 +45,15 @@
       ...mapActions('staff', [
         'setDialog', // this.setDialog() を this.$sotre.dispatch("setDialog") にマップ
       ]),
-      onCancel: function() {
-        // TODO 入力値破棄
-        this.setDialog(!this.dialog);
-      },
       onSignup: function() {
         this.setDialog(!this.dialog);
+        this.close()
+      },
+      close: function() {
+        this.setDialog(!this.dialog);
+        setTimeout(() => {
+          this.staff = Object.assign({}, this.defaultStaff)
+        }, 300)
       },
     }
   }
