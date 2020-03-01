@@ -67,20 +67,6 @@ public class StaffController {
 	}
 	
 	/**
-	 * 社員取得
-	 * フロントで呼び出す場面がないので基本的に呼ばれることはない
-	 * 
-	 * @param staff_id 社員ID
-	 * @return staff 社員情報
-	 */
-	@GetMapping("/{staffId}")
-	@ResponseBody
-	public StaffResponseForm showStaff(@PathVariable("staffId") int staffId) {
-		StaffResponseForm staff = staffService.show(staffId);
-		return staff;
-	}
-
-	/**
 	 * 社員削除（管理者専用）
 	 * 
 	 * @param id 退職社員ID
