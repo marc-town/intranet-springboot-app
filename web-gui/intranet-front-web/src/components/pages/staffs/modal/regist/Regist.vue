@@ -46,8 +46,18 @@
         'setDialog', // this.setDialog() を this.$sotre.dispatch("setDialog") にマップ
       ]),
       onSignup: function() {
-        this.setDialog(!this.dialog);
-        this.close()
+        alert(`called onSignup ${JSON.stringify(this.staff)}`)
+        this.$axios.post('/staffs', this.staff)
+          .then(res => {
+            alert(JSON.stringify(res));
+          })
+          .catch(err => {
+            alert(`output by regist: ${err}`);
+          })
+          .finaly(() => {
+            this.setDialog(!this.dialog);
+            this.close();
+          })
       },
       close: function() {
         this.setDialog(!this.dialog);
