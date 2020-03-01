@@ -17,7 +17,7 @@ const axios = Axios.create({
 axios.interceptors.request.use(
   config => {
     const sessionData = JSON.parse(sessionStorage.getItem('gsol-intranet-app'));
-    const token = sessionData.auth.token;
+    const token = sessionStorage.length == 0 ? false : sessionData.auth.token;
     if (token) {
       config.headers['Authorization'] = `Bearer ${ token }`
     }
