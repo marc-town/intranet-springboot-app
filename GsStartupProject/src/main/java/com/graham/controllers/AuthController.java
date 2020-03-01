@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.graham.interfaces.request.JwtRequestForm;
 import com.graham.interfaces.response.JwtResponseForm;
+import com.graham.security.JwtSecurityConstants;
 import com.graham.security.JwtTokenProvider;
 import com.graham.security.UserPrincipal;
 import com.graham.services.StaffService;
@@ -58,7 +59,7 @@ public class AuthController {
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-		return new JwtResponseForm(jwt, userPrincipal.getStaffId(), userPrincipal.getUsername(), roles);
+		return new JwtResponseForm(jwt, userPrincipal.getStaffId(), userPrincipal.getUsername(), roles, JwtSecurityConstants.EXPIRATION_TIME);
 	}
 	
 	@PostMapping("/signup")
