@@ -13,16 +13,21 @@ public class JwtResponseForm {
 	@JsonProperty("token")
 	private String token;
 	
+	/** 社員ID */
+	@JsonProperty("staffId")
+	private int staffId;
+	
 	/** ログインID */
-	@JsonProperty("login_id")
+	@JsonProperty("loginId")
 	private String loginId;
 	
 	/** 権限 */
 	@JsonProperty("role")
 	private List<String> role;
 	
-	public JwtResponseForm(String token, String loginId, List<String> roles) {
+	public JwtResponseForm(String token, int staffId, String loginId, List<String> roles) {
 		this.token = token;
+		this.staffId = staffId;;
 		this.loginId = loginId;
 		this.role = roles;
 	}
