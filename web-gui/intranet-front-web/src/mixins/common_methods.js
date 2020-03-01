@@ -1,11 +1,11 @@
 export default {
   isAdmin: function(role) {
-    role === 'ROLE_ADMIN' ? true : false;
+    return role === 'ROLE_ADMIN';
   },
   isMiddle: function(role) {
-    role === 'ROLE_MIDDLE' ? true : false;
+    return role === 'ROLE_MIDDLE';
   },
   isUser: function(role) {
-    role === 'ROLE_USER' ? true : false;
+    return role === 'ROLE_USER';
   },
 }

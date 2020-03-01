@@ -98,8 +98,8 @@ CREATE TABLE `m_staff_basic_info`
     `birthday` varchar(10) default 'yyyy-mm-dd' comment '誕生日',
     `telephone_number` varchar(13) default 'xxx-yyyy-zzzz' comment '電話番号',
     `department_id` int comment '部署ID',
-    `position_id` int comment '役職ID',
-    `grade_id` int default 0 comment '階級ID',
+    `position_id` int default 3 comment '役職ID',
+    `grade_id` int default 5 comment '階級ID',
     `create_at` timestamp not null default current_timestamp comment '登録日',
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
     PRIMARY KEY(`staff_basic_info_id`),
@@ -211,6 +211,7 @@ INSERT INTO m_staff (login_id, password) VALUES
 
 -- m_role
 INSERT INTO m_role(role_name) VALUES('ROLE_ADMIN');
+INSERT INTO m_role(role_name) VALUES('ROLE_MIDDLE');
 INSERT INTO m_role(role_name) VALUES('ROLE_USER');
 
 -- m_staff_basic_info
