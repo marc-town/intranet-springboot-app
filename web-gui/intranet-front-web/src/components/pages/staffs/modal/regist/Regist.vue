@@ -43,7 +43,7 @@
     watch: {},
     methods: {
       ...mapActions('staff', [
-        'setDialog', // this.setDialog() を this.$sotre.dispatch("setDialog") にマップ
+        'setDialog',
       ]),
       onSignup: function() {
         alert(`called onSignup ${JSON.stringify(this.staff)}`)
