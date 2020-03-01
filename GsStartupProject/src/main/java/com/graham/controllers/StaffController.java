@@ -1,5 +1,7 @@
 package com.graham.controllers;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.graham.interfaces.request.JwtRequestForm;
+import com.graham.interfaces.request.SignupRequestForm;
 import com.graham.interfaces.request.StaffBasicInfoRequestForm;
 import com.graham.interfaces.response.StaffBasicInfoResponseForm;
 import com.graham.interfaces.response.StaffResponseForm;
@@ -58,7 +60,7 @@ public class StaffController {
 	@PostMapping
 	@ResponseBody
 	@PreAuthorize("hasRole('ADMIN')")
-	public void createStaff(@RequestBody JwtRequestForm request) {
+	public void createStaff(@Valid @RequestBody SignupRequestForm request) {
 		LOGGER.info("START regist staff with inputs {}", request);
 		staffService.regist(request);
 		LOGGER.info("SUCCESS regist staff");

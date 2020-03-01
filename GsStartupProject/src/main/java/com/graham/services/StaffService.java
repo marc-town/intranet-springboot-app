@@ -27,7 +27,7 @@ import com.graham.domain.repositorys.StaffDetailInfoRepository;
 import com.graham.domain.repositorys.StaffRepository;
 import com.graham.exception.GrahamError;
 import com.graham.exception.GrahamException;
-import com.graham.interfaces.request.JwtRequestForm;
+import com.graham.interfaces.request.SignupRequestForm;
 import com.graham.interfaces.request.StaffBasicInfoRequestForm;
 import com.graham.interfaces.response.StaffBasicInfoResponseForm;
 import com.graham.interfaces.response.StaffResponseForm;
@@ -104,7 +104,7 @@ public class StaffService {
 	 * 
 	 * @param staff 登録社員情報
 	 */
-	public void regist(JwtRequestForm request) {
+	public void regist(SignupRequestForm request) {
 		
 		LOGGER.info("BEGIN StaffService regist");
 		
@@ -158,14 +158,18 @@ public class StaffService {
 
 		staff.setRoles(roles);
 		// m_staff レコード作成
-		LOGGER.error(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
+		LOGGER.info(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
 		staff = jwtUserRepository.save(staff);
+		
 		// m_staff_basic_info レコード作成
-		LOGGER.error(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
-		staffBasicInfoRepository.insertBasicInfo(staff.getStaffId());
+		LOGGER.info(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
+		String name = request.getName();
+		String nameKana = request.getNameKana();
+		String tel = request.getTelephoneNumber();
+		staffBasicInfoRepository.insertBasicInfo(staff.getStaffId(), name, nameKana, tel);
 		
 		// m_staff_detail_info レコード作成
-		LOGGER.error(messageSource.getMessage("info.I_GSOL0102", null, Locale.JAPANESE));
+		LOGGER.info(messageSource.getMessage("info.I_GSOL0102", null, Locale.JAPANESE));
 		staffDetailInfoRepository.insertDetailInfo(staff.getStaffId());
 	}
 

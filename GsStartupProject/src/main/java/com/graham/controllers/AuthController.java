@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.graham.interfaces.request.JwtRequestForm;
+import com.graham.interfaces.request.SignupRequestForm;
 import com.graham.interfaces.response.JwtResponseForm;
 import com.graham.security.JwtSecurityConstants;
 import com.graham.security.JwtTokenProvider;
@@ -63,7 +64,7 @@ public class AuthController {
 	}
 	
 	@PostMapping("/signup")
-	public void registerStaff(@Valid @RequestBody JwtRequestForm request) {
+	public void registerStaff(@Valid @RequestBody SignupRequestForm request) {
 		LOGGER.info("BEGIN AuthController registerStaff");
 		staffService.regist(request);
 	}

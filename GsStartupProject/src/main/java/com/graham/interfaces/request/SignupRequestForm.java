@@ -28,7 +28,7 @@ public class SignupRequestForm {
     private String loginId;
  
 	/** メールアドレス */
-    @Size(max = 100)
+    @Size(max = 128)
     @Email
     private String email;
     
