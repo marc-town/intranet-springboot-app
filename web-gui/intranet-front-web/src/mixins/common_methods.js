@@ -1,8 +1,11 @@
 export default {
-  isAdmin: function() {
-    console.log('admin権限確認処理');
+  isAdmin: function(role) {
+    role === 'ROLE_ADMIN' ? true : false;
   },
-  isUser: function() {
-    console.log('権限確認処理');
+  isMiddle: function(role) {
+    role === 'ROLE_MIDDLE' ? true : false;
+  },
+  isUser: function(role) {
+    role === 'ROLE_USER' ? true : false;
   },
 }

@@ -1,16 +1,51 @@
 <div class="staff-list">
-  <p>staff list</p>
-  <v-btn
-      bottom
-      color="pink"
-      dark
-      fab
-      fixed
-      right
-      v-model="dialog"
-      @click="setDialog(true)"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+  <v-data-table
+    :headers="headers"
+    :items="desserts"
+    sort-by="calories"
+    :search="search"
+    class="elevation-1">
+    <template>
+      <v-data-table item-key="name" class="elevation-1" loading loading-text="Loading... Please wait"></v-data-table>
+    </template>
+    <template v-slot:top>
+      <v-toolbar flat color="white">
+        <v-toolbar-title>Employees</v-toolbar-title>
+        <v-divider
+          class="mx-4"
+          inset
+          vertical>
+        </v-divider>
+        <v-spacer />
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details>
+        </v-text-field>
+        <v-spacer />
+        <v-btn
+          color="primary"
+          dark class="mb-2"
+          @click="setDialog(true)">
+          Regist Staff
+        </v-btn>  
+      </v-toolbar>
+    </template>
+    <template v-slot:item.action="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="onEdit(item)">
+        mdi-pencil
+      </v-icon>
+      <v-icon
+        small
+        @click="onDelete(item)">
+        mdi-delete
+      </v-icon>
+    </template>
+  </v-data-table>
   <regist-staff></regist-staff>
 </div>

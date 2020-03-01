@@ -41,7 +41,7 @@
         { icon: 'mdi-cellphone-link', text: 'App downloads', link: '/' },
         { icon: 'mdi-keyboard', text: 'Go to the old version', link: '/' },
         { icon: 'mdi-help-circle', text: 'Help', link: '/' },
-        { icon: 'mdi-settings', text: 'Settings', link: '/' },
+        { icon: 'mdi-settings', text: 'Settings', link: '/staffs' },
       ],
     }),
     methods: {

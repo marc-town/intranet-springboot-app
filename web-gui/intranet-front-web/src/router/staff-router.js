@@ -1,6 +1,8 @@
 import Template from '@/components/parts/template/Template'
 
 import StaffList from '@/components/pages/staffs/staff_list/StaffList'
+import BasicInfo from '@/components/pages/staffs/basic_info/BasicInfo'
+import DetailInfo from '@/components/pages/staffs/detail_info/DetailInfo'
 
 export default {
   path: '/staffs',
@@ -9,7 +11,14 @@ export default {
     {
       path: '',
       component: StaffList,
-      meta: { requiresAuth: false }
-    }
+    },
+    {
+      path: ':id',
+      component: BasicInfo,
+    },
+    {
+      path: ':id/profile',
+      component: DetailInfo,
+    },
   ]
 }
