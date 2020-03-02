@@ -1,18 +1,12 @@
 <template src="./staff_list.html"></template>
 <script>
-  import { mapState, mapActions } from "vuex";
+  import { mapActions } from "vuex";
   import RegistStaff from '@/components/pages/staffs/modal/regist/Regist'
+  import DeleteStaff from '@/components/pages/staffs/modal/delete/Delete'
   import commonMethod from '@/mixins/common_methods'
   export default {
-    components: { RegistStaff },
-    props: {
-      source: String,
-    },
-    computed: {
-      ...mapState('staff', [
-        'dialog',
-      ])
-    },
+    components: { RegistStaff, DeleteStaff },
+    computed: {},
     data () {
       return {
         staffs: [],
@@ -33,7 +27,9 @@
     watch: {},
     methods: {
       ...mapActions('staff', [
-        'setDialog',
+        'setStaffId',
+        'setRegistDialog',
+        'setDeleteDialog',
       ]),
 
       fetchData: function() {
@@ -49,14 +45,10 @@
       initialize: function() {
         this.fetchData();
       },
-      onEdit: function(item) {
-        this.editedIndex = this.staffs.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-      onDelete: function(item) {
-        const index = this.staffs.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.staffs.splice(index, 1)
+      onDelete: function(id) {
+        this.setStaffId(id);
+        this.setDeleteDialog(true);
+        // confirm('Are you sure you want to delete this item?')
       },
       getColor: function(value) {
         if (this.isAdmin(value)) return 'red';

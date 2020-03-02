@@ -28,7 +28,7 @@
         <v-btn
           color="primary"
           dark class="mb-2"
-          @click="setDialog(true)">
+          @click="setRegistDialog(true)">
           Regist Staff
         </v-btn>  
       </v-toolbar>
@@ -44,17 +44,17 @@
         style="cursor: pointer;">
         <v-icon
           small
-          class="mr-2"
-          @click="onEdit(item)">
+          class="mr-2">
           mdi-pencil
         </v-icon>
       </router-link>
       <v-icon
         small
-        @click="onDelete(item)">
+        @click="onDelete(item.staffId)">
         mdi-delete
       </v-icon>
     </template>
   </v-data-table>
   <regist-staff></regist-staff>
+  <delete-staff></delete-staff>
 </div>

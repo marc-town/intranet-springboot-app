@@ -7,8 +7,8 @@
       source: String,
     },
     computed: {
-      dialog: {
-        get () { return this.$store.state.staff.dialog },
+      registDialog: {
+        get () { return this.$store.state.staff.registDialog },
         set (val) { this.setDialog(val) }
       }
     },
@@ -43,10 +43,9 @@
     watch: {},
     methods: {
       ...mapActions('staff', [
-        'setDialog',
+        'setRegistDialog',
       ]),
       onSignup: function() {
-        alert(`called onSignup ${JSON.stringify(this.staff)}`)
         this.$axios.post('/staffs', this.staff)
           .then(res => {
             alert(JSON.stringify(res));
@@ -54,13 +53,12 @@
           .catch(err => {
             alert(`output by regist: ${err}`);
           })
-          .finaly(() => {
-            this.setDialog(!this.dialog);
+          .finally(() => {
             this.close();
           })
       },
       close: function() {
-        this.setDialog(!this.dialog);
+        this.setRegistDialog(!this.registDialog);
         setTimeout(() => {
           this.staff = Object.assign({}, this.defaultStaff)
         }, 300)
