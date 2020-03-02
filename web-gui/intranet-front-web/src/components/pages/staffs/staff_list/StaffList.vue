@@ -2,6 +2,7 @@
 <script>
   import { mapState, mapActions } from "vuex";
   import RegistStaff from '@/components/pages/staffs/modal/regist/Regist'
+  import commonMethod from '@/mixins/common_methods'
   export default {
     components: { RegistStaff },
     props: {
@@ -25,9 +26,10 @@
           { text: 'Role', value: 'role' },
           { text: 'Actions', value: 'action', sortable: false },
         ],
+        role: '',
       }
     },
-    mixins: [],
+    mixins: [ commonMethod ],
     watch: {},
     methods: {
       ...mapActions('staff', [
@@ -56,6 +58,11 @@
         const index = this.staffs.indexOf(item)
         confirm('Are you sure you want to delete this item?') && this.staffs.splice(index, 1)
       },
+      getColor: function(value) {
+        if (this.isAdmin(value)) return 'red';
+        else if (this.isMiddle(value)) return 'primary';
+        else if (this.isUser(value)) return '';
+      }
     },
     created: function() {
       this.initialize()

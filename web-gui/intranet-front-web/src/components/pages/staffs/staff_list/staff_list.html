@@ -33,13 +33,22 @@
         </v-btn>  
       </v-toolbar>
     </template>
+    <template v-slot:item.role="{ item }">
+      <v-chip :color="getColor(item.role)" dark>{{ item.role }}</v-chip>
+    </template>
     <template v-slot:item.action="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="onEdit(item)">
-        mdi-pencil
-      </v-icon>
+      <router-link
+        class="hidden-sm-and-down"
+        :to="{ name: 'basic-info', params: { id: item.staffId }}"
+        tag="span"
+        style="cursor: pointer;">
+        <v-icon
+          small
+          class="mr-2"
+          @click="onEdit(item)">
+          mdi-pencil
+        </v-icon>
+      </router-link>
       <v-icon
         small
         @click="onDelete(item)">

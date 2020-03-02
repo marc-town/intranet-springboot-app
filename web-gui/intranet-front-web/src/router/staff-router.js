@@ -10,14 +10,17 @@ export default {
   children: [
     {
       path: '',
+      name: 'staff-list',
       component: StaffList,
     },
     {
       path: ':id',
+      name: 'basic-info',
       component: BasicInfo,
     },
     {
       path: ':id/profile',
+      name: 'detail-info',
       component: DetailInfo,
     },
   ]
