@@ -63,6 +63,7 @@
           this.staff = Object.assign({}, this.defaultStaff)
         }, 300)
       },
+      created: function() {}
     }
   }
 </script>

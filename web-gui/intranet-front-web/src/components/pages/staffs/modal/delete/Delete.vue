@@ -34,9 +34,6 @@
       },
       close: function() {
         this.setDeleteDialog(!this.deleteDialog);
-        setTimeout(() => {
-          this.staff = Object.assign({}, this.defaultStaff)
-        }, 300)
       },
     }
   }

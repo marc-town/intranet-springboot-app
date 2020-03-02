@@ -34,7 +34,7 @@
       </v-toolbar>
     </template>
     <template v-slot:item.role="{ item }">
-      <v-chip :color="getColor(item.role)" dark>{{ item.role }}</v-chip>
+      <v-chip :color="getColor(item.role)" dark>{{ role[item.role] }}</v-chip>
     </template>
     <template v-slot:item.action="{ item }">
       <router-link
@@ -43,13 +43,20 @@
         tag="span"
         style="cursor: pointer;">
         <v-icon
-          small
+        medium
           class="mr-2">
           mdi-pencil
         </v-icon>
       </router-link>
       <v-icon
-        small
+        v-if="isOwnAccount(item.staffId)"
+        medium
+        disabled>
+        mdi-delete
+      </v-icon>
+      <v-icon
+        v-else
+        medium
         @click="onDelete(item.staffId)">
         mdi-delete
       </v-icon>

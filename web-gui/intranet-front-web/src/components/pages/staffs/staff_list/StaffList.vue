@@ -6,7 +6,11 @@
   import commonMethod from '@/mixins/common_methods'
   export default {
     components: { RegistStaff, DeleteStaff },
-    computed: {},
+    computed: {
+      authStaffId: {
+        get () { return this.$store.state.auth.staffId },
+      }
+    },
     data () {
       return {
         staffs: [],
@@ -20,7 +24,11 @@
           { text: 'Role', value: 'role' },
           { text: 'Actions', value: 'action', sortable: false },
         ],
-        role: '',
+        role: {
+          'ROLE_ADMIN': 'ADMIN',
+          'ROLE_MIDDLE': 'MIDDLE',
+          'ROLE_USER': 'USER',
+        },
       }
     },
     mixins: [ commonMethod ],
@@ -48,7 +56,9 @@
       onDelete: function(id) {
         this.setStaffId(id);
         this.setDeleteDialog(true);
-        // confirm('Are you sure you want to delete this item?')
+      },
+      isOwnAccount: function(id) {
+        return id === this.authStaffId;
       },
       getColor: function(value) {
         if (this.isAdmin(value)) return 'red';
