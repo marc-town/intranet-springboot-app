@@ -1,6 +1,16 @@
 {
   "ja": {
     "title": "Graham Solution",
+    "staffs": {
+      "staff_list": {
+        "title": "社員一覧"
+      },
+      "delete": {
+        "title": "無能でしたか？",
+        "cancel": "CANCEL",
+        "delete": "DELETE"
+      }
+    },
     "message": {
 
     }

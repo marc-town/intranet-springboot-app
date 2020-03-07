@@ -25,18 +25,6 @@ Vue.config.productionTip = false
 import http from './http';
 Vue.prototype.$axios = http;
 
-// // axios setting
-// const axiosBase = require("axios")
-// const customAxios = axiosBase.create({
-//   baseURL: process.env.VUE_APP_API_URL,
-//   headers: {
-//     'Content-Type': 'application/json'
-//   },
-//   responseType: 'json',
-//   responseEncoding: 'utf8'
-// })
-// Vue.prototype.$axios = customAxios
-
 new Vue({
   router,
   store,

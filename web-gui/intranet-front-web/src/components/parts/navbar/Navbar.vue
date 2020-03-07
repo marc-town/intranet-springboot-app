@@ -16,19 +16,28 @@
     },
     watch: {
     },
-    data: () => ({
-      items: [
-        { title: 'Profile', icon: 'mdi-account-circle', link: '' },
-        { title: 'Logout', icon: 'mdi-logout-variant', link: '/login' },
-      ],
-    }),
+    data () {
+      return {
+        items: [
+          { title: 'Profile', icon: 'mdi-account-circle' },
+          { title: 'Logout', icon: 'mdi-logout-variant' },
+        ],
+      }
+    },
     methods: {
       ...mapActions('common', [
         'setDraewer',
       ]),
+      ...mapActions('auth', [
+        'resetLoginInfo',
+      ]),
+      onLogout: function() {
+        this.resetLoginInfo();
+        sessionStorage.removeItem('gsol-intranet-app');
+        this.$router.push('login');
+      },
     },
     created: function() {
-      this.items[0].link = `/staffs/${this.staffId}`;
     }
   }
 </script>

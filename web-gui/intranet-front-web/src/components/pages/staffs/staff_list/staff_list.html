@@ -1,13 +1,11 @@
 <div class="staff-list">
   <v-data-table
     :headers="headers"
-    :items="desserts"
-    sort-by="calories"
+    :items="staffs"
+    sort-by="staffId"
     :search="search"
+    :loading="loading"
     class="elevation-1">
-    <template>
-      <v-data-table item-key="name" class="elevation-1" loading loading-text="Loading... Please wait"></v-data-table>
-    </template>
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>Employees</v-toolbar-title>
@@ -28,24 +26,42 @@
         <v-btn
           color="primary"
           dark class="mb-2"
-          @click="setDialog(true)">
+          @click="setRegistDialog(true)">
           Regist Staff
         </v-btn>  
       </v-toolbar>
     </template>
+    <template v-slot:item.role="{ item }">
+      <v-chip :color="getColor(item.role)" dark>{{ role[item.role] }}</v-chip>
+    </template>
     <template v-slot:item.action="{ item }">
+      <router-link
+        class="hidden-sm-and-down"
+        :to="`/staffs/${item.staffId}/profile`"
+        tag="span"
+        style="cursor: pointer;">
+        <v-icon
+        medium
+          class="mr-2">
+          mdi-pencil
+        </v-icon>
+      </router-link>
       <v-icon
-        small
-        class="mr-2"
-        @click="onEdit(item)">
-        mdi-pencil
+        v-if="isOwnAccount(item.staffId)"
+        medium
+        disabled>
+        mdi-delete
       </v-icon>
       <v-icon
-        small
-        @click="onDelete(item)">
+        v-else
+        medium
+        @click="onDelete(item.staffId, item.name)">
         mdi-delete
       </v-icon>
     </template>
   </v-data-table>
-  <regist-staff></regist-staff>
+
+  <!-- Dialog Component 定義領域 -->
+  <regist-staff v-on:from-child="doneRegist""></regist-staff>
+  <delete-staff v-on:from-child="doneDelete""></delete-staff>
 </div>

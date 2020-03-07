@@ -1,7 +1,5 @@
 package com.graham.interfaces.request;
 
-import java.util.Set;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -28,7 +26,7 @@ public class SignupRequestForm {
     private String loginId;
  
 	/** メールアドレス */
-    @Size(max = 100)
+    @Size(max = 128)
     @Email
     private String email;
     
@@ -41,7 +39,7 @@ public class SignupRequestForm {
     private String password;
     
     /** 権限 */
-    private Set<String> role;
+    private Integer role;
     
     
     /**

@@ -98,8 +98,8 @@ CREATE TABLE `m_staff_basic_info`
     `birthday` varchar(10) default 'yyyy-mm-dd' comment '誕生日',
     `telephone_number` varchar(13) default 'xxx-yyyy-zzzz' comment '電話番号',
     `department_id` int comment '部署ID',
-    `position_id` int comment '役職ID',
-    `grade_id` int default 0 comment '階級ID',
+    `position_id` int default 3 comment '役職ID',
+    `grade_id` int default 5 comment '階級ID',
     `create_at` timestamp not null default current_timestamp comment '登録日',
     `update_at` timestamp not null default current_timestamp on update current_timestamp comment '更新日',
     PRIMARY KEY(`staff_basic_info_id`),
@@ -205,19 +205,20 @@ INSERT INTO m_absence_type (absence_type_name) VALUES
 
 -- m_staff
 INSERT INTO m_staff (login_id, password) VALUES
-("admin", "admin"),
-("takenomikazuchi", "takenomikazuchi")
+("admin8080", "$2a$10$1lzFAtVn9asC5rIoPUJd7eG.qTFqBRKSMQQgYJT04fh272FQO/Q2S")
 ;
 
 -- m_role
 INSERT INTO m_role(role_name) VALUES('ROLE_ADMIN');
+INSERT INTO m_role(role_name) VALUES('ROLE_MIDDLE');
 INSERT INTO m_role(role_name) VALUES('ROLE_USER');
 
 -- m_staff_basic_info
 INSERT INTO m_staff_basic_info (staff_id, name, name_kana, entered_date, department_id, position_id, grade_id) VALUES
-(1, "管理者", "かんりしゃ", "2020-02-11", 3, 1, 1),
-(2, "タケノミカヅチ", "たけちゃん", "2020-02-11", 3, 1, 1)
+(1, "管理者", "かんりしゃ", "2020-02-11", 3, 1, 1)
 ;
+
+INSERT INTO c_staff_role (staff_id, role_id) VALUES(1, 1);
 
 INSERT INTO t_attendance (`year_month`, `day`, `staff_id`, `start_time`, `end_time`, `rest_time`, `absence_type_id`, `working_time`) VALUES
 ("202002", "01", 1, null, null, 0, null, 0),

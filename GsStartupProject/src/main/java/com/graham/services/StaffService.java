@@ -1,6 +1,5 @@
 package com.graham.services;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -13,7 +12,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import com.graham.common.GrahamHttpStatus;
 import com.graham.common.RoleName;
@@ -27,7 +25,7 @@ import com.graham.domain.repositorys.StaffDetailInfoRepository;
 import com.graham.domain.repositorys.StaffRepository;
 import com.graham.exception.GrahamError;
 import com.graham.exception.GrahamException;
-import com.graham.interfaces.request.JwtRequestForm;
+import com.graham.interfaces.request.SignupRequestForm;
 import com.graham.interfaces.request.StaffBasicInfoRequestForm;
 import com.graham.interfaces.response.StaffBasicInfoResponseForm;
 import com.graham.interfaces.response.StaffResponseForm;
@@ -65,46 +63,16 @@ public class StaffService {
 	 * @return staffs 取得したDB情報
 	 */
 	public StaffResponseForm index() {
-		StaffResponseForm staffs = new StaffResponseForm();
-		staffs.setStaffs(staffRepository.findAll());
-		return staffs;
+		List<StaffEntity> entity = staffRepository.findAllStaff();
+		return new StaffResponseForm(entity);
 	}
 	
-	/**
-	 * 社員情報取得
-	 * 
-	 * @param staffId 社員ID
-	 * @return staff 社員情報
-	 */
-	public StaffResponseForm show(int staffId) {
-		StaffResponseForm response = new StaffResponseForm();
-		List<StaffEntity> staff = new ArrayList<StaffEntity>();
-		try {
-			staff.add(staffRepository.findByStaffId(staffId));
-		} catch (Error e) {
-			LOGGER.error("Failed to find staff {}", staffId);
-			GrahamError err = new GrahamError(
-					GrahamHttpStatus.INTERNAL_SERVER_ERROR, "GSOL0002", e.getMessage());
-			throw new GrahamException(err);
-		}
-		if (CollectionUtils.isEmpty(staff)) {
-			LOGGER.error(messageSource.getMessage(
-					"error.GSOL0001", new String[]{String.valueOf(staffId)}, Locale.JAPANESE));
-			GrahamError err = new GrahamError(
-					GrahamHttpStatus.NOT_FOUND, "GSOL0001", messageSource.getMessage(
-							"error.GSOL0001", new String[]{String.valueOf(staffId)}, Locale.JAPANESE));
-			throw new GrahamException(err);
-		}
-		response.setStaffs(staff);
-		return response;
-	}
-
 	/**
 	 * 社員登録
 	 * 
 	 * @param staff 登録社員情報
 	 */
-	public void regist(JwtRequestForm request) {
+	public void regist(SignupRequestForm request) {
 		
 		LOGGER.info("BEGIN StaffService regist");
 		
@@ -130,42 +98,52 @@ public class StaffService {
 		// Create new user's account
 		JwtStaffEntity staff = new JwtStaffEntity(request.getLoginId(),request.getEmail(), request.getPassword());
 
-		Set<String> strRoles = request.getRole();
+		final int ADMIN  = 1;
+		final int MIDDLE = 2;
+		final int USER   = 3;
+		int role = request.getRole();
+		RoleEntity roleEntity = null;
 		Set<RoleEntity> roles = new HashSet<>();
 
-		System.out.print("strRoles : " + strRoles);
-		if (strRoles == null) {
-			RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			System.out.print("userRole : " + userRole);
-			roles.add(userRole);
-		} else {
-			strRoles.forEach(role -> {
-				switch (role) {
-				case "admin":
-					RoleEntity adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(adminRole);
-
-					break;
-				default:
-					RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(userRole);
-				}
-			});
+		switch (role) {
+			case ADMIN:
+				roleEntity = roleRepository.findByName(RoleName.ROLE_ADMIN)
+						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+				roles.add(roleEntity);
+	
+				break;
+			case MIDDLE:
+				roleEntity = roleRepository.findByName(RoleName.ROLE_MIDDLE)
+						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+				roles.add(roleEntity);
+	
+				break;
+			case USER:
+				roleEntity = roleRepository.findByName(RoleName.ROLE_USER)
+						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+				roles.add(roleEntity);
+	
+				break;
+			default:
+				RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER)
+						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+				roles.add(userRole);
 		}
 
 		staff.setRoles(roles);
 		// m_staff レコード作成
-		LOGGER.error(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
+		LOGGER.info(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
 		staff = jwtUserRepository.save(staff);
+		
 		// m_staff_basic_info レコード作成
-		LOGGER.error(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
-		staffBasicInfoRepository.insertBasicInfo(staff.getStaffId());
+		LOGGER.info(messageSource.getMessage("info.I_GSOL0101", null, Locale.JAPANESE));
+		String name = request.getName();
+		String nameKana = request.getNameKana();
+		String tel = request.getTelephoneNumber();
+		staffBasicInfoRepository.insertBasicInfo(staff.getStaffId(), name, nameKana, tel);
 		
 		// m_staff_detail_info レコード作成
-		LOGGER.error(messageSource.getMessage("info.I_GSOL0102", null, Locale.JAPANESE));
+		LOGGER.info(messageSource.getMessage("info.I_GSOL0102", null, Locale.JAPANESE));
 		staffDetailInfoRepository.insertDetailInfo(staff.getStaffId());
 	}
 
@@ -175,9 +153,9 @@ public class StaffService {
 	 * @param staffId 退職社員ID
 	 */
 	public void delete(int staffId) {
-		staffRepository.deleteByStaffId(staffId);
 		staffBasicInfoRepository.deleteByStaffId(staffId);
 		staffDetailInfoRepository.deleteByStaffId(staffId);
+		jwtUserRepository.deleteByStaffId(staffId);
 	}
 	
 	/**
@@ -231,7 +209,7 @@ public class StaffService {
 	 */
 	public Boolean isCorrectStaff(String loginId, int expectedStaffId) {
 		LOGGER.info("BEGIN AttendanceController isCorrectStaff");
-		int actualStaffId = staffRepository.findStaffIdByLoginId(loginId);
+		int actualStaffId = jwtUserRepository.findStaffIdByLoginId(loginId);
 		LOGGER.info("ActualStaffId: {}, ExpectedStaffId: {}", actualStaffId, expectedStaffId);
 		return actualStaffId == expectedStaffId ? true : false;
 	}

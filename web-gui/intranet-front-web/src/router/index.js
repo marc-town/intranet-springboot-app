@@ -31,7 +31,10 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(page => page.meta.isPublic) || store.state.auth.token) {
+  const token = store.state.auth.token;
+  const isPublic = to.matched.some(page => page.meta.isPublic);
+  // const isExpire = store.state.auth.expire > (new Date()).getTime();
+  if (isPublic || token) {
     next()
   } else {
     next({path: '/login', query: {backuri: to.fullPath}})

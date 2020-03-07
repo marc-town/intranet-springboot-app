@@ -15,27 +15,17 @@
         to="/"
         tag="span"
         style="cursor: pointer;">
-        {{ $t("title") }}
+        {{ $t( "title" ) }}
       </router-link>
     </v-toolbar-title>
-    <!-- 今後支えるかも
-    <v-text-field
-      flat
-      solo-inverted
-      hide-details
-      prepend-inner-icon="mdi-magnify"
-      label="Search"
-      class="hidden-sm-and-down"
-    /> 
-    -->
     <v-spacer />
     <v-toolbar-items>
-      <v-btn icon>
+      <!-- <v-btn icon>
         <v-icon>mdi-apps</v-icon>
       </v-btn>
       <v-btn icon>
         <v-icon>mdi-bell</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-menu open-on-hover bottom offset-y>
         <template v-slot:activator="{ on }">
           <v-btn icon large v-on="on">
@@ -47,14 +37,17 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item
-            v-for="(item, index) in items"
-            :key="index"
-            :to="item.link">
+          <v-list-item :to="`/staffs/${staffId}`">
             <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
+              <v-icon>{{ items[0].icon }}</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title>{{ items[0].title }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="onLogout">
+            <v-list-item-icon>
+              <v-icon>{{ items[1].icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ items[1].title }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>

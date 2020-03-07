@@ -1,5 +1,7 @@
 package com.graham.controllers;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.graham.interfaces.request.JwtRequestForm;
+import com.graham.interfaces.request.SignupRequestForm;
 import com.graham.interfaces.request.StaffBasicInfoRequestForm;
 import com.graham.interfaces.response.StaffBasicInfoResponseForm;
 import com.graham.interfaces.response.StaffResponseForm;
@@ -42,7 +44,7 @@ public class StaffController {
 	 */
 	@GetMapping
 	@ResponseBody
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('MIDDLE') or hasRole('ADMIN')")
 	public StaffResponseForm index() {
 		LOGGER.info("START get staff list");
 		StaffResponseForm staffs = staffService.index();
@@ -58,26 +60,12 @@ public class StaffController {
 	@PostMapping
 	@ResponseBody
 	@PreAuthorize("hasRole('ADMIN')")
-	public void createStaff(@RequestBody JwtRequestForm request) {
+	public void createStaff(@Valid @RequestBody SignupRequestForm request) {
 		LOGGER.info("START regist staff with inputs {}", request);
 		staffService.regist(request);
 		LOGGER.info("SUCCESS regist staff");
 	}
 	
-	/**
-	 * 社員取得
-	 * フロントで呼び出す場面がないので基本的に呼ばれることはない
-	 * 
-	 * @param staff_id 社員ID
-	 * @return staff 社員情報
-	 */
-	@GetMapping("/{staffId}")
-	@ResponseBody
-	public StaffResponseForm showStaff(@PathVariable("staffId") int staffId) {
-		StaffResponseForm staff = staffService.show(staffId);
-		return staff;
-	}
-
 	/**
 	 * 社員削除（管理者専用）
 	 * 

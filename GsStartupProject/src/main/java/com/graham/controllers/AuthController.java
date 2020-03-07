@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.graham.interfaces.request.JwtRequestForm;
+import com.graham.interfaces.request.SignupRequestForm;
 import com.graham.interfaces.response.JwtResponseForm;
+import com.graham.security.JwtSecurityConstants;
 import com.graham.security.JwtTokenProvider;
 import com.graham.security.UserPrincipal;
 import com.graham.services.StaffService;
@@ -58,11 +60,11 @@ public class AuthController {
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-		return new JwtResponseForm(jwt, userPrincipal.getStaffId(), userPrincipal.getUsername(), roles);
+		return new JwtResponseForm(jwt, userPrincipal.getStaffId(), userPrincipal.getUsername(), roles, JwtSecurityConstants.EXPIRATION_TIME);
 	}
 	
 	@PostMapping("/signup")
-	public void registerStaff(@Valid @RequestBody JwtRequestForm request) {
+	public void registerStaff(@Valid @RequestBody SignupRequestForm request) {
 		LOGGER.info("BEGIN AuthController registerStaff");
 		staffService.regist(request);
 	}

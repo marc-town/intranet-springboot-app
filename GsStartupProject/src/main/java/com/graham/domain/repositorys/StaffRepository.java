@@ -1,5 +1,7 @@
 package com.graham.domain.repositorys;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,31 +14,23 @@ import com.graham.domain.model.StaffEntity;
 public interface StaffRepository extends
 			JpaRepository<StaffEntity, Integer> {
 	
-	// ログインIDから社員ID取得クエリ
-	final String FIND_STAFFID_BY_LOGIN_ID = "SELECT staff_id from m_staff where login_id = ?1";
+	// 社員一覧取得用クエリ
+	final String FIND_ALL = "SELECT\n" + 
+			"  sbi.staff_id AS staff_id,\n" + 
+			"  sbi.name AS name,\n" + 
+			"  d.department_name AS department,\n" + 
+			"  p.position_name AS position,\n" + 
+			"  g.grade_name AS grade,\n" + 
+			"  r.role_name AS role\n" + 
+			"FROM\n" + 
+			"  m_staff_basic_info sbi\n" + 
+			"  INNER JOIN c_staff_role sr ON sbi.staff_id = sr.staff_id\n" + 
+			"  INNER JOIN m_role r ON sr.role_id = r.role_id\n" + 
+			"  LEFT OUTER JOIN m_department d ON sbi.department_id = d.department_id\n" + 
+			"  LEFT OUTER JOIN m_position p ON sbi.position_id = p.position_id\n" + 
+			"  LEFT OUTER JOIN m_grade g ON sbi.grade_id = g.grade_id";
 	
-	/**
-	 * 社員情報取得
-	 * 
-	 * @param staffId 社員ID
-	 * @return staff 社員情報
-	 */
-	public StaffEntity findByStaffId(int staffId);
+	@Query(value = FIND_ALL, nativeQuery = true)
+	public List<StaffEntity> findAllStaff();
 	
-	/**
-	 * ログインIDから社員IDを取得
-	 * 
-	 * @param loginId ログインID
-	 * @return staffId 社員ID
-	 */
-	@Query(value = FIND_STAFFID_BY_LOGIN_ID, nativeQuery = true)
-	public int findStaffIdByLoginId(String loginId);
-	
-	/**
-	 * 社員削除
-	 * この処理は社員削除の際に呼び出される。
-	 * 
-	 * @param staffId 退職社員ID
-	 */
-	public void deleteByStaffId(int staffId);
 }

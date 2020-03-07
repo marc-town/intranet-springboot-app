@@ -22,12 +22,10 @@
                   label="Password"
                   v-model="auth.password"
                   prepend-icon="mdi-lock"
-                  :append-icon="visibility ? 'mdi-eye' : 'mdi-eye-off'"
                   :rules="[rules.required, rules.min]"
-                  :type="visibility ? 'text' : 'password'"
+                  :type="'password'"
                   hint="At least 8 characters"
                   counter
-                  @click:append="visibility = !visibility"
                 />
               </v-form>
             </v-card-text>

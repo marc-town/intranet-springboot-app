@@ -1,8 +1,7 @@
 <div class="regist-staff">
   <v-dialog
-    v-model="dialog"
-    width="800px"
-  >
+    v-model="registDialog"
+    width="800px">
     <v-card>
       <v-card-title class="grey darken-2">
         Regist Enployee
@@ -30,7 +29,6 @@
             <v-text-field
               v-model="staff.email"
               prepend-icon="mdi-mail"
-              :rules="[rules.required, rules.emailMax, rules.emailMatch]"
               placeholder="Email"/>
           </v-col>
           <v-col cols="12">
@@ -45,12 +43,21 @@
               v-model="staff.password"
               prepend-icon="mdi-lock"
               :append-icon="visibility ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[rules.required, rules.min]"
               :type="visibility ? 'text' : 'password'"
               hint="At least 8 characters"
               counter
               @click:append="visibility = !visibility"
             ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-radio-group prepend-icon="mdi-one-up" v-model="staff.role" row>
+              <v-radio
+                v-for="r in roles"
+                :key="r.id"
+                :label="r.name"
+                v-bind:value="r.id"
+              ></v-radio>
+            </v-radio-group>
           </v-col>
         </v-row>
       </v-container>
