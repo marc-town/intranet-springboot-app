@@ -218,6 +218,8 @@ INSERT INTO m_staff_basic_info (staff_id, name, name_kana, entered_date, departm
 (1, "管理者", "かんりしゃ", "2020-02-11", 3, 1, 1)
 ;
 
+INSERT INTO c_staff_role (staff_id, role_id) VALUES(1, 1);
+
 INSERT INTO t_attendance (`year_month`, `day`, `staff_id`, `start_time`, `end_time`, `rest_time`, `absence_type_id`, `working_time`) VALUES
 ("202002", "01", 1, null, null, 0, null, 0),
 ("202002", "02", 1, null, null, 0, null, 0),
