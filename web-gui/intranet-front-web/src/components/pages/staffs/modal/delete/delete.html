@@ -1,3 +1,18 @@
 <div class="delete-staff">
-  <p>delete staff</p>
+  <v-row justify="center">
+    <v-dialog
+      v-model="deleteDialog"
+      max-width="290">
+      <v-card>
+        <v-card-title class="headline">{{ $t( "staffs.delete.title" ) }}</v-card-title>
+        <v-card-text>社員ID: {{ selectedStaffId }}</v-card-text>
+        <v-card-text>名前: {{ selectedStaffName }}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="close">{{ $t( "staffs.delete.cancel" ) }}</v-btn>
+          <v-btn color="info darken-1" @click="onDelete">{{ $t( "staffs.delete.delete" ) }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
 </div>

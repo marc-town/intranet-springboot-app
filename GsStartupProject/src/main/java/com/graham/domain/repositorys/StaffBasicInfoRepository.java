@@ -30,7 +30,15 @@ public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEn
 			+ "where staff_id = ?10";
 
 	// 基本情報登録用クエリー
-	final String INSERT = "insert into m_staff_basic_info (staff_id) values (?1)";
+	final String INSERT = "INSERT INTO\n" + 
+			"  m_staff_basic_info (\n" + 
+			"    staff_id\n" + 
+			"    , name\n" + 
+			"    , name_kana\n" + 
+			"    , telephone_number\n" + 
+			"  )\n" + 
+			"VALUES\n" + 
+			"  (?1, ?2, ?3, ?4)";
 	
 	/**
 	 * 社員基本情報 検索
@@ -38,16 +46,19 @@ public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEn
 	 * @param staffId 社員ID
 	 * @return staff 社員基本情報
 	 */
-	public StaffBasicInfoEntity findByStaffId(int staffId);
+	public StaffBasicInfoEntity findByStaffId(Integer staffId);
 	
 	/**
 	 * 社員基本情報 登録
 	 * 
 	 * @param staffId 社員ID
+	 * @param name 名前
+	 * @param nameKana なまえ
+	 * @param tel 電話番号
 	 */
 	@Modifying
 	@Query(value = INSERT, nativeQuery = true)
-	public void insertBasicInfo(Integer staffId);
+	public void insertBasicInfo(Integer staffId, String name, String nameKana, String tel);
 	
 	/**
 	 * 社員基本情報 更新

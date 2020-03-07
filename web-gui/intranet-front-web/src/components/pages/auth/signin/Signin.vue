@@ -9,7 +9,6 @@
     data () {
       return {
         loading: false,
-        visibility: false,
         rules: {
           required: value => !!value || 'Required.',
           min: v => v.length >= 8 || 'Min 8 characters',
@@ -42,7 +41,8 @@
                 token: res.data.token,
                 staffId: res.data.staffId,
                 loginId: res.data.loginId,
-                role: res.data.role[0]
+                role: res.data.role[0],
+                expire: res.data.expire
               };
               this.setLoginInfo(auth);
               // 元の画面に戻る

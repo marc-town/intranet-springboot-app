@@ -1,5 +1,6 @@
 // axios setting
 import Axios from 'axios';
+import router from '../router'
 
 const axios = Axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -23,8 +24,8 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  error => {
-    Promise.reject(error)
+  err => {
+    Promise.reject(err)
   });
 
 /*
@@ -34,15 +35,25 @@ axios.interceptors.response.use(
   response => {
     return response;
   },
-  error => {
+  err => {
     // 認証エラー時の処理
-    if (error.response.status === 401) {
-      alert(`output by interceptors: ${JSON.stringify(error)}`)
+    if (err.response.status === 401) {
+      alert(`output by interceptors: ${JSON.stringify(err)}`)
+      router.push('/login')
+    // 認可エラー時の処理
+    } else if (err.response.status === 403) {
+      alert(`output by interceptors: ${JSON.stringify(err)}`)
+      router.push('/error')  
+    // NotFound時の処理
+    } else if (err.response.status === 404) {
+      alert(`output by interceptors: ${JSON.stringify(err)}`)
+      router.push('/error')
     // システムエラー時の処理
-    } else if (error.response.status === 500) {
-      alert(`output by interceptors: ${JSON.stringify(error)}`)
+    } else if (err.response.status === 500) {
+      alert(`output by interceptors: ${JSON.stringify(err)}`)
+      router.push('/error')
     }
-    return Promise.reject(error)
+    return Promise.reject(err)
   });
 
 export default axios;

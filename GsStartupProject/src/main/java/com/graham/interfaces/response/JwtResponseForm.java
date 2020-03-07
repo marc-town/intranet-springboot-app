@@ -25,10 +25,15 @@ public class JwtResponseForm {
 	@JsonProperty("role")
 	private List<String> role;
 	
-	public JwtResponseForm(String token, int staffId, String loginId, List<String> roles) {
+	/** 社員ID */
+	@JsonProperty("expire")
+	private long expire;
+	
+	public JwtResponseForm(String token, int staffId, String loginId, List<String> roles, long expire) {
 		this.token = token;
 		this.staffId = staffId;;
 		this.loginId = loginId;
 		this.role = roles;
+		this.expire = expire;
 	}
 }
