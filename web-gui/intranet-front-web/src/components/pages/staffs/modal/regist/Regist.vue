@@ -61,6 +61,7 @@
           })
           .finally(() => {
             this.close();
+            this.$emit('from-child')
           })
       },
       close: function() {

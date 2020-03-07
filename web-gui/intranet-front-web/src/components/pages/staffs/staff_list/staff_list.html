@@ -37,7 +37,7 @@
     <template v-slot:item.action="{ item }">
       <router-link
         class="hidden-sm-and-down"
-        :to="{ name: 'basic-info', params: { id: item.staffId }}"
+        :to="`/staffs/${item.staffId}/profile`"
         tag="span"
         style="cursor: pointer;">
         <v-icon
@@ -55,11 +55,13 @@
       <v-icon
         v-else
         medium
-        @click="onDelete(item.staffId)">
+        @click="onDelete(item.staffId, item.name)">
         mdi-delete
       </v-icon>
     </template>
   </v-data-table>
-  <regist-staff></regist-staff>
-  <delete-staff></delete-staff>
+
+  <!-- Dialog Component 定義領域 -->
+  <regist-staff v-on:from-child="doneRegist""></regist-staff>
+  <delete-staff v-on:from-child="doneDelete""></delete-staff>
 </div>

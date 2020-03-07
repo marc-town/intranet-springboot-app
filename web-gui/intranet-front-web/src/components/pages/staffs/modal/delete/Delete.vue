@@ -31,10 +31,11 @@
           })
           .finally(() => {
             this.close();
+            this.$emit('from-child')
           })
       },
       close: function() {
-        this.setDeleteDialog(!this.deleteDialog);
+        this.setDeleteDialog(false);
       },
     },
     // 以下、ライフサイクル系処理

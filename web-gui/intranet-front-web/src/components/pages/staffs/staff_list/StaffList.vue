@@ -36,13 +36,17 @@
     watch: {},
     methods: {
       ...mapActions('staff', [
-        'setStaffId',
+        'setSelectedStaffId',
+        'setSelectedStaffName',
         'setRegistDialog',
         'setDeleteDialog',
       ]),
       initialize: function() {
         this.loading = true;
         this.fetchData();
+      },
+      reload() {
+        this.$router.go({path: this.$router.currentRoute.path, force: true});
       },
       fetchData: function() {
         this.$axios.get('/staffs')
@@ -54,9 +58,16 @@
             alert(`output by staffs: ${err}`);
           })
       },
-      onDelete: function(id) {
-        this.setStaffId(id);
+      onDelete: function(id, name) {
+        this.setSelectedStaffId(id);
+        this.setSelectedStaffName(name);
         this.setDeleteDialog(true);
+      },
+      doneRegist: function() {
+        this.reload();
+      },
+      doneDelete: function() {
+        this.reload();
       },
       isOwnAccount: function(id) {
         return id === this.authStaffId;
