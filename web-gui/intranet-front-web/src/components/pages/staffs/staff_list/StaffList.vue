@@ -13,6 +13,7 @@
     },
     data () {
       return {
+        loading: false,
         staffs: [],
         search: '',
         headers: [
@@ -39,19 +40,19 @@
         'setRegistDialog',
         'setDeleteDialog',
       ]),
-
+      initialize: function() {
+        this.loading = true;
+        this.fetchData();
+      },
       fetchData: function() {
         this.$axios.get('/staffs')
           .then(res => {
             this.staffs = res.data.staffs;
+            this.loading = false;
           })
           .catch(err => {
             alert(`output by staffs: ${err}`);
           })
-      },
-
-      initialize: function() {
-        this.fetchData();
       },
       onDelete: function(id) {
         this.setStaffId(id);

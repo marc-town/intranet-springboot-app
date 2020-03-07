@@ -7,24 +7,23 @@
       :headers="headers"
       :items="attendances"
       hide-default-footer
-      items-per-page=100
+      :items-per-page="31"
+      :loading="loading"
       class="elevation-1">
-      <template>
-        <v-data-table item-key="name" class="elevation-1" loading loading-text="Loading... Please wait"></v-data-table>
-      </template>
-      <template v-slot:item.action="{ item }">
-        <v-icon
-          small
-          class="mr-2"
-          @click="onEdit(item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon
-          small
-          @click="onDelete(item)">
-          mdi-delete
-        </v-icon>
-      </template>
+      <v-form>
+        <v-container>
+          <v-row>
+            <template v-slot:item.remarks="{ item }">
+              <v-col cols="12" sm="6" md="3">
+                <v-text-field
+                  label="Solo"
+                  solo
+                ></v-text-field>
+              </v-col>
+            </template>
+          </v-row>
+        </v-container>
+      </v-form>
     </v-data-table>
   </v-card>
 </div>

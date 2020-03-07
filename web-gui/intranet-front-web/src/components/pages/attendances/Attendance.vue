@@ -5,21 +5,22 @@
     components: {},
     data () {
       return {
+        loading: false,
         edited: [],
         attendances: [],
         headers: [
-          { text: '日付', value: 'day', },
-          { text: '曜日', value: 'date' },
-          { text: '開始', value: 'startTime' },
-          { text: '終了', value: 'endTime' },
-          { text: '休憩', value: 'restTime' },
-          { text: '欠勤', value: 'absenceTypeId' },
-          { text: '欠勤理由', value: 'absenceReason' },
-          { text: '労働時間', value: 'workingTime' },
-          { text: '夜間時間', value: 'nightTime' },
-          { text: '営業費', value: 'operatingExpenses' },
-          { text: '区間', value: 'section' },
-          { text: '備考', value: 'remarks' },
+          { text: '日付', value: 'day', sortable: false },
+          { text: '曜日', value: 'date', sortable: false },
+          { text: '開始', value: 'startTime', sortable: false },
+          { text: '終了', value: 'endTime', sortable: false },
+          { text: '休憩', value: 'restTime', sortable: false },
+          { text: '欠勤', align: 'center', value: 'absenceTypeId', sortable: false },
+          { text: '欠勤理由', value: 'absenceReason', sortable: false },
+          { text: '労働時間', align: 'center', value: 'workingTime', sortable: false  },
+          { text: '夜間時間', align: 'center', value: 'nightTime', sortable: false  },
+          { text: '営業費', value: 'operatingExpenses', sortable: false  },
+          { text: '区間', value: 'section', sortable: false  },
+          { text: '備考', value: 'remarks', sortable: false  },
         ],
         days: [ 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN' ],
         // 西暦
@@ -44,7 +45,8 @@
     },
     watch: {},
     methods: {
-      init: function() {
+      initialize: function() {
+        this.loading = true;
         const date = new Date()
         this.currentYear = date.getFullYear()
         this.currentMonth = date.getMonth() + 1
@@ -59,11 +61,10 @@
         // const uri = `/attendances/?${ yearMonth }`;
         const uri = '/attendances/?yearMonth=202002'
         const body = { 'staffId': this.staffId };
-        alert(uri);
         this.$axios.post(uri, body)
           .then(res => {
-            alert(`!!! attendances ${JSON.stringify(res)}`);
             this.attendances = res.data.attendances;
+            this.loading = false;
           })
           .catch(err => {
             alert(`output by staffs: ${err}`);
@@ -71,7 +72,7 @@
       },
     },
     created: function() {
-      this.init();
+      this.initialize();
     }
   }
 </script>
