@@ -9,21 +9,26 @@
       hide-default-footer
       :items-per-page="31"
       :loading="loading"
-      class="elevation-1">
-      <v-form>
-        <v-container>
-          <v-row>
-            <template v-slot:item.remarks="{ item }">
-              <v-col cols="12" sm="6" md="3">
-                <v-text-field
-                  label="Solo"
-                  solo
-                ></v-text-field>
-              </v-col>
-            </template>
-          </v-row>
-        </v-container>
-      </v-form>
+      class="elevation-1"
+    >
+      <template v-slot:body="{ items }">
+        <tbody>
+          <tr v-for="(item, index) in items" :key="index">
+            <td>{{ item.day }}</td>
+            <td>{{ getDate(index) }}</td>
+            <td>{{ item.startTime }}</td>
+            <td>{{ item.endTime }}</td>
+            <td>{{ item.restTime }}</td>
+            <td>{{ item.absenceTypeId }}</td>
+            <td>{{ item.absenceReason }}</td>
+            <td>{{ item.workingTime }}</td>
+            <td>{{ item.nightTime }}</td>
+            <td>{{ item.operatingExpenses }}</td>
+            <td>{{ item.section }}</td>
+            <td>{{ item.remarks }}</td>
+          </tr>
+        </tbody>
+      </template>
     </v-data-table>
   </v-card>
 </div>

@@ -9,20 +9,20 @@
         edited: [],
         attendances: [],
         headers: [
-          { text: '日付', value: 'day', sortable: false },
-          { text: '曜日', value: 'date', sortable: false },
+          { text: '日付', value: 'day', sortable: false, width: '56' },
+          { text: '曜日', value: 'date', sortable: false, width: '56' },
           { text: '開始', value: 'startTime', sortable: false },
           { text: '終了', value: 'endTime', sortable: false },
           { text: '休憩', value: 'restTime', sortable: false },
-          { text: '欠勤', align: 'center', value: 'absenceTypeId', sortable: false },
+          { text: '欠勤', value: 'absenceTypeId', align: 'center', sortable: false },
           { text: '欠勤理由', value: 'absenceReason', sortable: false },
-          { text: '労働時間', align: 'center', value: 'workingTime', sortable: false  },
-          { text: '夜間時間', align: 'center', value: 'nightTime', sortable: false  },
-          { text: '営業費', value: 'operatingExpenses', sortable: false  },
-          { text: '区間', value: 'section', sortable: false  },
-          { text: '備考', value: 'remarks', sortable: false  },
+          { text: '労働時間', value: 'workingTime', align: 'center', sortable: false },
+          { text: '夜間時間', value: 'nightTime', align: 'center', sortable: false },
+          { text: '営業費', value: 'operatingExpenses', sortable: false },
+          { text: '区間', value: 'section', sortable: false },
+          { text: '備考', value: 'remarks', sortable: false },
         ],
-        days: [ 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN' ],
+        days: [ '日', '月', '火', '水', '木', '金', '土' ],
         // 西暦
         currentYear: '',
         // 対象月
@@ -69,6 +69,10 @@
           .catch(err => {
             alert(`output by staffs: ${err}`);
           })
+      },
+      getDate: function(index) {
+        const dayNumber = (this.days.length + this.startDay + index) % this.days.length;
+        return this.days[dayNumber];
       },
     },
     created: function() {
