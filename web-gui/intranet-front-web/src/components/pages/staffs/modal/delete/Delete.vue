@@ -5,7 +5,8 @@
     components: {},
     computed: {
       ...mapState('staff', [
-        'staffId',
+        'selectedStaffId',
+        'selectedStaffName',
         'deleteDialog',
       ])
     },
@@ -35,6 +36,23 @@
       close: function() {
         this.setDeleteDialog(!this.deleteDialog);
       },
+    },
+    // 以下、ライフサイクル系処理
+    beforeCreate: function() {
+    },
+    created: function() {
+    },
+    beforeMount: function() {
+    },
+    mounted: function() {
+    },
+    beforeUpdate: function() {
+    },
+    updated: function() {
+    },
+    beforeDestroy: function() {
+    },
+    destroyed: function() {
     }
   }
 </script>
