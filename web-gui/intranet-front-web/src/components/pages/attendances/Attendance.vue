@@ -57,8 +57,8 @@
         this.fetchData();
       },
       fetchData: function() {
-        // const yearMonth = `${ this.currentYear }${ this.currentMonth }`;
-        // const uri = `/attendances/?${ yearMonth }`;
+        // const yearMonth = `${ this.currentYear }${ this.zeroPadding(Number(this.currentMonth), 2) }`;
+        // const uri = `/attendances/?yearMonth=${ yearMonth }`;
         const uri = '/attendances/?yearMonth=202002'
         const body = { 'staffId': this.staffId };
         this.$axios.post(uri, body)
@@ -73,6 +73,9 @@
       getDate: function(index) {
         const dayNumber = (this.days.length + this.startDay + index) % this.days.length;
         return this.days[dayNumber];
+      },
+      zeroPadding: function(num, len) {
+        return ( Array(len).join('0') + num ).slice( -len );
       },
     },
     created: function() {
