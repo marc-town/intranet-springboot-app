@@ -64,13 +64,6 @@ public class StaffService {
 	 */
 	public StaffResponseForm index() {
 		List<StaffEntity> entity = staffRepository.findAllStaff();
-		entity.stream()
-			.forEach(staff -> {
-				if (staff.getName() == null) { staff.setName("無名"); }
-				if (staff.getDepartment() == null) { staff.setDepartment("無所属"); }
-				if (staff.getPosition() == null) { staff.setPosition("一般社員"); }
-				if (staff.getGrade() == null) { staff.setGrade("Green"); }
-			});
 		return new StaffResponseForm(entity);
 	}
 	

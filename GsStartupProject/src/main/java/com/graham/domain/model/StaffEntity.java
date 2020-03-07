@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "m_staff_basic_info")
 public class StaffEntity {
 	
 	/** 社員ID */

@@ -44,7 +44,7 @@ public class StaffController {
 	 */
 	@GetMapping
 	@ResponseBody
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('MIDDLE') or hasRole('ADMIN')")
 	public StaffResponseForm index() {
 		LOGGER.info("START get staff list");
 		StaffResponseForm staffs = staffService.index();
