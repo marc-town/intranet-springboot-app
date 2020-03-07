@@ -21,7 +21,7 @@
         'setDeleteDialog',
       ]),
       onDelete: function() {
-        const uri = `/staffs/${this.staffId}`;
+        const uri = `/staffs/${this.selectedStaffId}`;
         this.$axios.delete(uri)
           .then(res => {
             alert(JSON.stringify(res));
