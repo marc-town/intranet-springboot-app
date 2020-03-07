@@ -1,13 +1,17 @@
 const staff = {
   namespaced: true,
   state: {
-    staffId: 0,
+    selectedStaffId: 0,
+    selectedStaffName: '',
     registDialog: false,
     deleteDialog: false,
   },
   mutations: {
-    SET_STAFF_ID: (state, value) => {
-      state.staffId = value
+    SET_SELECTED_STAFF_ID: (state, value) => {
+      state.selectedStaffId = value
+    },
+    SET_SELECTED_STAFF_NAME: (state, value) => {
+      state.selectedStaffName = value
     },
     SET_REGIST_DIALOG: (state, value) => {
       state.registDialog = value
@@ -17,8 +21,11 @@ const staff = {
     },
   },
   actions: {
-    setStaffId({ commit }, value) {
-      commit("SET_STAFF_ID", value)
+    setSelectedStaffId({ commit }, value) {
+      commit("SET_SELECTED_STAFF_ID", value)
+    },
+    setSelectedStaffName({ commit }, value) {
+      commit("SET_SELECTED_STAFF_NAME", value)
     },
     setRegistDialog({ commit }, value) {
       commit("SET_REGIST_DIALOG", value)
