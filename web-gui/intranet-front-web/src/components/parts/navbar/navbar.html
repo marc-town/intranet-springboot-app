@@ -15,27 +15,17 @@
         to="/"
         tag="span"
         style="cursor: pointer;">
-        {{ $t("title") }}
+        {{ $t( "title" ) }}
       </router-link>
     </v-toolbar-title>
-    <!-- 今後支えるかも
-    <v-text-field
-      flat
-      solo-inverted
-      hide-details
-      prepend-inner-icon="mdi-magnify"
-      label="Search"
-      class="hidden-sm-and-down"
-    /> 
-    -->
     <v-spacer />
     <v-toolbar-items>
-      <v-btn icon>
+      <!-- <v-btn icon>
         <v-icon>mdi-apps</v-icon>
       </v-btn>
       <v-btn icon>
         <v-icon>mdi-bell</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-menu open-on-hover bottom offset-y>
         <template v-slot:activator="{ on }">
           <v-btn icon large v-on="on">

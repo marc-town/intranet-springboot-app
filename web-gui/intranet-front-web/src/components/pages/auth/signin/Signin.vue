@@ -44,7 +44,6 @@
                 role: res.data.role[0],
                 expire: res.data.expire
               };
-              alert(`signin.vue auth ${JSON.stringify(auth)}`)
               this.setLoginInfo(auth);
               // 元の画面に戻る
               this.$router.push({path: "backuri" in this.$route.query ? this.$route.query.backuri : '/'})

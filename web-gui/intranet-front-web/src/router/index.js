@@ -34,7 +34,6 @@ router.beforeEach((to, from, next) => {
   const token = store.state.auth.token;
   const isPublic = to.matched.some(page => page.meta.isPublic);
   // const isExpire = store.state.auth.expire > (new Date()).getTime();
-  alert(`${store.state.auth.expire} > ${(new Date()).getTime()}`);
   if (isPublic || token) {
     next()
   } else {
