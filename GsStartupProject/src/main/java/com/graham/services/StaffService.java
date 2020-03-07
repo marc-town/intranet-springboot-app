@@ -105,30 +105,36 @@ public class StaffService {
 		// Create new user's account
 		JwtStaffEntity staff = new JwtStaffEntity(request.getLoginId(),request.getEmail(), request.getPassword());
 
-		Set<String> strRoles = request.getRole();
+		final int ADMIN  = 1;
+		final int MIDDLE = 2;
+		final int USER   = 3;
+		int role = request.getRole();
+		RoleEntity roleEntity = null;
 		Set<RoleEntity> roles = new HashSet<>();
 
-		System.out.print("strRoles : " + strRoles);
-		if (strRoles == null) {
-			RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			System.out.print("userRole : " + userRole);
-			roles.add(userRole);
-		} else {
-			strRoles.forEach(role -> {
-				switch (role) {
-				case "admin":
-					RoleEntity adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(adminRole);
-
-					break;
-				default:
-					RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(userRole);
-				}
-			});
+		switch (role) {
+			case ADMIN:
+				roleEntity = roleRepository.findByName(RoleName.ROLE_ADMIN)
+						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+				roles.add(roleEntity);
+	
+				break;
+			case MIDDLE:
+				roleEntity = roleRepository.findByName(RoleName.ROLE_MIDDLE)
+						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+				roles.add(roleEntity);
+	
+				break;
+			case USER:
+				roleEntity = roleRepository.findByName(RoleName.ROLE_USER)
+						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+				roles.add(roleEntity);
+	
+				break;
+			default:
+				RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER)
+						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+				roles.add(userRole);
 		}
 
 		staff.setRoles(roles);

@@ -205,8 +205,7 @@ INSERT INTO m_absence_type (absence_type_name) VALUES
 
 -- m_staff
 INSERT INTO m_staff (login_id, password) VALUES
-("admin", "admin"),
-("takenomikazuchi", "takenomikazuchi")
+("admin8080", "$2a$10$1lzFAtVn9asC5rIoPUJd7eG.qTFqBRKSMQQgYJT04fh272FQO/Q2S")
 ;
 
 -- m_role
@@ -216,8 +215,7 @@ INSERT INTO m_role(role_name) VALUES('ROLE_USER');
 
 -- m_staff_basic_info
 INSERT INTO m_staff_basic_info (staff_id, name, name_kana, entered_date, department_id, position_id, grade_id) VALUES
-(1, "管理者", "かんりしゃ", "2020-02-11", 3, 1, 1),
-(2, "タケノミカヅチ", "たけちゃん", "2020-02-11", 3, 1, 1)
+(1, "管理者", "かんりしゃ", "2020-02-11", 3, 1, 1)
 ;
 
 INSERT INTO t_attendance (`year_month`, `day`, `staff_id`, `start_time`, `end_time`, `rest_time`, `absence_type_id`, `working_time`) VALUES
