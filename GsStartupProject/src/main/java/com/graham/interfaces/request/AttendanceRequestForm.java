@@ -7,9 +7,6 @@ import lombok.Data;
 @Data
 public class AttendanceRequestForm {
 
-	/** 社員ID */
-	private int staffId;
-	
 	/** 日付 */
 	private String day;
 	

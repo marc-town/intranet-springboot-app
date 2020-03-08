@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,15 +50,14 @@ public class AttendanceController {
 	 * @param yearMonth 対象年月
 	 * @return attendances 勤怠情報
 	 */
-	@PostMapping
+	@GetMapping("/{staffId}")
 	@ResponseBody
 	public AttendanceResponseForm index(
 			Authentication authentication,
-			@RequestBody AttendanceRequestForm request,
+			@PathVariable("staffId") int staffId,
 			@RequestParam("yearMonth") String yearMonth) {
 		
 		LOGGER.info("BEGIN AttendanceController index");
-		int staffId = request.getStaffId();
 		// 別社員の情報だった場合
 		if (!staffService.isCorrectStaff(authentication.getName(), staffId)) {
 			String message = messageSource.getMessage(
@@ -71,14 +71,15 @@ public class AttendanceController {
 		return attendances;
 	}
 	
-	@PutMapping
+	@PutMapping("/{staffId}")
 	@ResponseBody
 	public void update(
+			@PathVariable("staffId") int staffId,
 			@RequestParam("yearMonth") String yearMonth,
 			@RequestBody List<AttendanceRequestForm> requests) {
 		
-		LOGGER.info("CALLED AttendanceController update");
-		attendanceService.updateAttendance(requests.get(0).getStaffId(), yearMonth, requests);
+		LOGGER.info("BEGIN AttendanceController update");
+		attendanceService.updateAttendance(staffId, yearMonth, requests);
 		LOGGER.info("SUCCESS update attendance");
 	}
 }
