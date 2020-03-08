@@ -2,8 +2,9 @@
 <script>
   import Navbar from '@/components/parts/navbar/Navbar'
   import Sidebar from '@/components/parts/sidebar/Sidebar'
+  import ErrorModal from '@/components/pages/error/modal/ErrorModal'
   export default {
-    components: { Navbar, Sidebar },
+    components: { Navbar, Sidebar, ErrorModal },
     props: {
       source: String,
     },
