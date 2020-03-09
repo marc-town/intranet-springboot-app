@@ -106,7 +106,7 @@
             startTime: defaultStartTime,
             endTime: defaultEndTime,
             restTime: defaultRestTime,
-            absenceTypeId: 0,
+            absenceTypeId: null,
             absenceReason: null,
             operatingExpenses: null,
             section: null,

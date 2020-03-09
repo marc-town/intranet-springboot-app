@@ -55,8 +55,10 @@ public class AttendanceService {
 	public void updateAttendance(int staffId, String yearMonth, List<AttendanceRequestForm> requests) {
 		
 		LOGGER.info("called AttendanceService.attendanceIndex staffId = {}, yearMonth = {}, requestBody = {}", staffId, yearMonth, requests);
+		
 		// 更新対象月の日数分繰り返し更新
 		for (AttendanceRequestForm request: requests) {
+			
 			String day = request.getDay();
 			String startTime = request.getStartTime();
 			String endTime = request.getEndTime();
@@ -70,7 +72,18 @@ public class AttendanceService {
 			String remarks = request.getRemarks();
 			
 			LOGGER.info("Iterate AttendanceService.attendanceIndex day = {}, request = {}", day, request);
-			attendanceRepository.updateAttendance(staffId, yearMonth, day, startTime, endTime, restTime, absenceTypeId, absenceReason, workingTime, nightTime, operatingExpenses, section, remarks);
+			// 既に勤怠情報が登録されているか確認する
+			Integer existsAttendances = attendanceRepository.existsByStaffIdAndYearMonthDay(staffId, yearMonth, day);
+			
+			// 登録されていなかった場合（月初）
+			if (existsAttendances == 0) {
+				LOGGER.info("Iterate AttendanceService.attendanceIndex insert new record");
+				attendanceRepository.insertAttendance(yearMonth, day, staffId, startTime, endTime, restTime, absenceTypeId, absenceReason, workingTime, nightTime, operatingExpenses, section, remarks);
+			// 登録済みだった場合
+			} else {
+				LOGGER.info("Iterate AttendanceService.attendanceIndex update record");
+				attendanceRepository.updateAttendance(staffId, yearMonth, day, startTime, endTime, restTime, absenceTypeId, absenceReason, workingTime, nightTime, operatingExpenses, section, remarks);				
+			}
 		}
 	}
 }
