@@ -155,7 +155,6 @@
           })
           .catch(err => {
             alert(`output by staffs: ${err}`);
-            this.setErrorDialog(true);
           })
           .finally(() => {
             this.loading = false;
