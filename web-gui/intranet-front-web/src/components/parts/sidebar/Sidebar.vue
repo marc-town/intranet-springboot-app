@@ -12,8 +12,10 @@
     },
     data: () => ({
       items: [
-        // { icon: 'mdi-contacts', text: 'Contacts', link: '/' },
         { icon: 'mdi-calendar-clock', text: 'Attendance', link: '/attendances' },
+        { icon: 'mdi-file-document-box', text: 'Tech Blog', link: '/tech-blog' },
+        { icon: 'mdi-calendar-month', text: 'Schedule', link: '/schedules' },
+        { icon: 'mdi-settings', text: 'Settings', link: '/staffs' },
         // { icon: 'mdi-content-copy', text: 'Duplicates', link: '/' },
         // {
         //   icon: 'mdi-chevron-up',
@@ -41,7 +43,6 @@
         // { icon: 'mdi-cellphone-link', text: 'App downloads', link: '/' },
         // { icon: 'mdi-keyboard', text: 'Go to the old version', link: '/' },
         // { icon: 'mdi-help-circle', text: 'Help', link: '/' },
-        { icon: 'mdi-settings', text: 'Settings', link: '/staffs' },
       ],
     }),
     methods: {

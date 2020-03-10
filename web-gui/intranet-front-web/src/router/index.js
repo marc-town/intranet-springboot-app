@@ -5,6 +5,8 @@ import store from '@/store/index.js'
 
 // import routers
 import AttendanceRoute from './attendance-router'
+import BlogRoute from './blog-router'
+import ScheduleRoute from './schedule-router'
 import StaffRoute from './staff-router'
 
 // import components
@@ -23,6 +25,8 @@ const router = new Router({
   routes: [
     { path: '/', component: Template, children: [{ path: '', component: Index }] },
     { ...AttendanceRoute },
+    { ...BlogRoute },
+    { ...ScheduleRoute },
     { ...StaffRoute },
     { path: '/login', component: Login, meta: { isPublic: true } },
     { path: '/error', component: ErrorPage },
