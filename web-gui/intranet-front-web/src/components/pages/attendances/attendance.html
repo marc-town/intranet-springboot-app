@@ -61,7 +61,7 @@
             <td>{{ item.absenceTypeId }}</td>
             <td><input type="text" v-model="item.absenceReason" style="width: 70px;"></td>
             <td>{{ getWorkingTime(item.startTime, item.endTime, item.restTime) }}</td>
-            <td>{{ item.nightTime }}</td>
+            <td>{{ getNightTime(item.startTime, item.endTime, item.restTime) }}</td>
             <td><input type="text" v-model="item.operatingExpenses" style="width: 70px;"></td>
             <td><input type="text" v-model="item.section" style="width: 70px;"></td>
             <td><input type="text" v-model="item.remarks" style="width: 70px;"></td>

@@ -130,20 +130,33 @@
       },
       getWorkingTime: function(startTime, endTime, restTime) {
         if (startTime && endTime) {
-          const startHourAndMinutes = startTime.split(':');
-          const endHourAndMinutes = endTime.split(':');
-          const startHour = Number(startHourAndMinutes[0]) * 60;
-          const startMinutes = Number(startHourAndMinutes[1]);
-          const endHour = Number(endHourAndMinutes[0]) * 60;
-          const endMinutes = Number(endHourAndMinutes[1]);
-  
-          const start = startHour + startMinutes;
-          let end = endHour + endMinutes;
-          if (startHour > endHour) end += 24 * 60;
+          const start = this.calculateMinutesTime(startTime);
+          let end = this.calculateMinutesTime(endTime);
+          // if (startHour > endHour) end += 24 * 60;
           const workingTime = (end - start) / 60 - restTime;
           return workingTime;
         }
         return 0;
+      },
+      getNightTime: function(startTime, endTime, restTime) {
+        // 出勤時刻 < 29:00 かつ 退勤時刻 > 22:00
+        // 退勤時間または29:00で値の小さい方 - 出勤時間または22:00で値の小さい方
+        if (startTime && endTime) {
+          const start = this.calculateMinutesTime(startTime);
+          const end = this.calculateMinutesTime(endTime);
+          const nightHead = this.calculateMinutesTime('22:00');
+          const nightTail = this.calculateMinutesTime('29:00');
+          if (start < nightTail && end > nightHead) {
+            return (Math.min(end, nightTail) - Math.min(start, nightHead)) / 60 - restTime;
+          }
+        }
+        return 0;
+      },
+      calculateMinutesTime: function(time) {
+        const hourAndMinutes = time.split(':');
+        const hour = Number(hourAndMinutes[0]) * 60;
+        const minutes = Number(hourAndMinutes[1]);
+        return hour + minutes;
       },
       onSave: function() {
         this.loading = true;
