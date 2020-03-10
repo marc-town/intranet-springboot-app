@@ -58,7 +58,11 @@
             <td><input type="text" v-model="item.startTime" style="width: 35px;"></td>
             <td><input type="text" v-model="item.endTime" style="width: 35px;"></td>
             <td><input type="text" v-model="item.restTime" style="width: 20px;"></td>
-            <td>{{ item.absenceTypeId }}</td>
+            <td>
+              <select v-model="item.absenceTypeId">
+                <option v-for="type in absenceTypes" v-bind:value="type.id">{{ type.name }}</option>
+              </select>
+            </td>
             <td><input type="text" v-model="item.absenceReason" style="width: 70px;"></td>
             <td>{{ getWorkingTime(item.startTime, item.endTime, item.restTime) }}</td>
             <td>{{ getNightTime(item.startTime, item.endTime, item.restTime) }}</td>
