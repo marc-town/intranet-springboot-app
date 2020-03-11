@@ -105,14 +105,11 @@
         const defaultRestTime = this.getDefaultRestTime();
         for (let i = 0; i < this.endDayCount; i++) {
           const day = i + 1;
-          const dayNum = (this.days.length + this.startDay + i) % this.days.length;
-          const date = this.days[dayNum];
           const info = {
             day: day,
-            date: date,
-            startTime: defaultStartTime,
-            endTime: defaultEndTime,
-            restTime: defaultRestTime,
+            startTime: this.isHoliday(day) ? null : defaultStartTime,
+            endTime: this.isHoliday(day) ? null : defaultEndTime,
+            restTime: this.isHoliday(day) ? null : defaultRestTime,
             absenceTypeId: null,
             absenceReason: null,
             operatingExpenses: null,
@@ -122,9 +119,11 @@
           this.attendances.push(info);
         }
       },
-      getDate: function(index) {
-        const dayNumber = (this.days.length + this.startDay + index) % this.days.length;
-        return this.days[dayNumber];
+      getDate: function(day) {
+        const currentDay = `${this.currentYear}/${this.currentMonth}/${this.zeroPadding(Number(day), 2)}`;
+        const date = new Date(currentDay);
+        const weekday = date.getDay();
+        return this.days[weekday];
       },
       getDefaultStartTime: function() {
         return '09:00';
