@@ -58,7 +58,7 @@
             :class="isHoliday(item.day) ? 'holiday' : ''"
           >
             <td>{{ item.day }}</td>
-            <td>{{ getDate(item.day) }}</td>
+            <td :style="{color: (isHoliday(item.day) ? getDayColor(item.day) : '' ) }">{{ getDate(item.day) }}</td>
             <td><input type="text" v-model="item.startTime" style="width: 35px;"></td>
             <td><input type="text" v-model="item.endTime" style="width: 35px;"></td>
             <td><input type="text" v-model="item.restTime" style="width: 20px;"></td>

@@ -207,7 +207,16 @@
         } else {
           return false;
         }
-      }
+      },
+      getDayColor: function(day) {
+        if (!day) return false;
+        const currentDay = `${this.currentYear}/${this.currentMonth}/${this.zeroPadding(Number(day), 2)}`;
+        const date = new Date(currentDay);
+        const weekday = date.getDay();
+        if (weekday === 6) return 'blue';
+        else if (this.isHoliday) return 'red';
+        else return '';
+      },
     },
     created: function() {
       this.initialize();
