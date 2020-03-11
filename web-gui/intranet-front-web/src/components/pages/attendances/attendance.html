@@ -52,7 +52,11 @@
       </template>
       <template v-slot:body="{ items }">
         <tbody>
-          <tr v-for="(item, index) in items" :key="index">
+          <tr
+            v-for="(item, index) in items"
+            :key="index" 
+            :class="isHoliday(item.day) ? 'holiday' : ''"
+          >
             <td>{{ item.day }}</td>
             <td>{{ getDate(index) }}</td>
             <td><input type="text" v-model="item.startTime" style="width: 35px;"></td>

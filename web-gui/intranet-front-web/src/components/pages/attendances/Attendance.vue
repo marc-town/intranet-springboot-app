@@ -1,6 +1,7 @@
 <template src="./attendance.html"></template>
 <script>
   import { mapState, mapActions } from "vuex";
+  import JapaneseHolidays from '@/plugins/japanese-holidays'
   export default {
     components: {},
     data () {
@@ -193,12 +194,28 @@
       isCurrentMonth: function(month) {
         return month == this.zeroPadding(Number(this.currentMonth), 2);
       },
+      isHoliday: function(day) {
+        if (!day) return false;
+        const currentDay = `${this.currentYear}/${this.currentMonth}/${this.zeroPadding(Number(day), 2)}`;
+        const defaultHolidays = [ '土', '日' ];
+        const date = new Date(currentDay);
+        const weekday = date.getDay();
+        const holidayName = JapaneseHolidays.getHolidayName(date);
+        if (defaultHolidays.includes(this.days[weekday])) {
+          return true;
+        } else if (holidayName) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     },
     created: function() {
       this.initialize();
+      this.isHoliday();
     }
   }
 </script>
-<style >
-  @import "./attendance.css";
+<style scoped lang="scss">
+  @import "./attendance.scss";
 </style>
