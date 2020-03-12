@@ -12,8 +12,8 @@
         headers: [
           { text: '日付', value: 'day', sortable: false, width: '56' },
           { text: '曜日', value: 'date', sortable: false, width: '56' },
-          { text: '開始', value: 'startTime', sortable: false },
-          { text: '終了', value: 'endTime', sortable: false },
+          { text: '出社時間', value: 'startTime', sortable: false },
+          { text: '退勤時間', value: 'endTime', sortable: false },
           { text: '休憩', value: 'restTime', sortable: false },
           { text: '欠勤', value: 'absenceTypeId', align: 'center', sortable: false, width: '50' },
           { text: '欠勤理由', value: 'absenceReason', sortable: false },
@@ -138,7 +138,7 @@
         if (startTime && endTime) {
           const start = this.calculateMinutesTime(startTime);
           let end = this.calculateMinutesTime(endTime);
-          // if (startHour > endHour) end += 24 * 60;
+          if (start > end) end += 24 * 60;
           const workingTime = (end - start) / 60 - restTime;
           return workingTime;
         }
