@@ -74,6 +74,9 @@
       ...mapActions('error', [
         'setErrorDialog',
       ]),
+      ...mapActions('snackbar', [
+        'setSnackbar',
+      ]),
       initialize: function() {
         this.loading = true;
         const date = new Date();
@@ -170,7 +173,13 @@
         const uri = `/attendances/${this.staffId}/?yearMonth=${ yearMonth }`;
         this.$axios.put(uri, this.attendances)
           .then(() => {
-            alert('保存しました');
+            const options = {
+              snackbar: true,
+              color: 'info',
+              message: '保存しました',
+              timeout: 5000,
+            }
+            this.setSnackbar(options);
           })
           .catch(err => {
             alert(`output by staffs: ${err}`);

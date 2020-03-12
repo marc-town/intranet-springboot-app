@@ -11,6 +11,9 @@
         "delete": "DELETE"
       }
     },
+    "snackbar": {
+      "close": "Close"
+    },
     "message": {
 
     }

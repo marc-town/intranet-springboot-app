@@ -2,9 +2,10 @@
 <script>
   import Navbar from '@/components/parts/navbar/Navbar'
   import Sidebar from '@/components/parts/sidebar/Sidebar'
+  import Snackbar from '@/components/parts/snackbar/Snackbar'
   import ErrorModal from '@/components/pages/error/modal/ErrorModal'
   export default {
-    components: { Navbar, Sidebar, ErrorModal },
+    components: { Navbar, Sidebar, Snackbar, ErrorModal },
     props: {
       source: String,
     },

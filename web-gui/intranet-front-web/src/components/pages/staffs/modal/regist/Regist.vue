@@ -47,16 +47,31 @@
       ...mapActions('staff', [
         'setRegistDialog',
       ]),
+      ...mapActions('snackbar', [
+        'setSnackbar',
+      ]),
       initialize: function() {
         this.staff.password = this.generatePassword();
       },
       onSignup: function() {
         this.$axios.post('/staffs', this.staff)
-          .then(res => {
-            alert(JSON.stringify(res));
+          .then(() => {
+            const options = {
+              snackbar: true,
+              color: 'info',
+              message: '登録が完了しました',
+              timeout: 5000,
+            }
+            this.setSnackbar(options);
           })
           .catch(err => {
-            alert(`output by regist: ${err}`);
+            const options = {
+              snackbar: true,
+              color: 'error',
+              message: JSON.stringify(err),
+              timeout: 5000,
+            }
+            this.setSnackbar(options);
           })
           .finally(() => {
             this.close();
