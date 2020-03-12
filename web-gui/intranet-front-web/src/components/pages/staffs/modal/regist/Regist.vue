@@ -23,14 +23,6 @@
           password: '',
           role: 3,
         },
-        defaultStaff: {
-          name: '',
-          nameKana: '',
-          loginId: '',
-          emai: '',
-          telephoneNumber: '',
-          password: '',
-        },
         roles: [
           { 'id': 1, 'name': 'ADMIN'},
           { 'id': 2, 'name': 'MIDDLE'},
@@ -46,11 +38,18 @@
       }
     },
     mixins: [],
-    watch: {},
+    watch: {
+      registDialog: function(val) {
+        if (val) this.staff.password = this.generatePassword();
+      },
+    },
     methods: {
       ...mapActions('staff', [
         'setRegistDialog',
       ]),
+      initialize: function() {
+        this.staff.password = this.generatePassword();
+      },
       onSignup: function() {
         this.$axios.post('/staffs', this.staff)
           .then(res => {
@@ -64,13 +63,36 @@
             this.$emit('from-child')
           })
       },
+      generatePassword: function() {
+        const letters = 'abcdefghijklmnopqrstuvwxyz';
+        var numbers = '0123456789';
+        var string  = letters + letters.toUpperCase() + numbers + '@!?#$';
+
+        var len = 13;
+        var password = '';
+
+        for (var i = 0; i < len; i++) {
+          password += string.charAt(Math.floor(Math.random() * string.length));
+        }
+
+        return password;
+      },
+      setDefault: function() {
+          this.staff.name = '';
+          this.staff.nameKana = '';
+          this.staff.loginId = '';
+          this.staff.emai = '';
+          this.staff.telephoneNumber = '';
+          this.staff.password = '';
+          this.staff.role = 3;
+          this.visibility = false;
+      },
       close: function() {
         this.setRegistDialog(!this.registDialog);
-        setTimeout(() => {
-          this.staff = Object.assign({}, this.defaultStaff)
-        }, 300)
+        this.setDefault();
       },
-      created: function() {}
+      created: function() {
+      },
     }
   }
 </script>
