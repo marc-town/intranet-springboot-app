@@ -9,7 +9,7 @@ RUN npm install
 RUN npm run build
 
 ### production環境 ###
-FROM nginx:latest AS production-stage
+FROM nginx:stable-alpine AS production-stage
 
 # 環境変数
 ENV LANG C.UTF-8
