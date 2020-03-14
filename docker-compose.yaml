@@ -1,17 +1,34 @@
 version: '3.5'
 services:
+  web-api:
+    build:
+      context: GsStartupProject
+    container_name: api-server
+    ports:
+      - "8080:8080"
+    entrypoint: "java -Dspring.profiles.active=docker -jar app.jar"
+    depends_on:
+      - rdb
+
   web-gui:
     build:
       context: web-gui
+      args:
+        - API_PATH=http://web-api:8080
     container_name: web-server
+    links:
+      - web-api
     ports:
       - "80:80"
     environment:
       TZ: "Asia/Tokyo"
+      NODE_ENV: development
     volumes:
       - ./.logs/front-end:/var/log/nginx
+
   rdb:
     image: mysql:5.7
+    container_name: dbserver
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     volumes:
       - ./rdb/mysql-data:/var/lib/mysql
@@ -23,5 +40,7 @@ services:
       MYSQL_USER: apluser
       MYSQL_PASSWORD: apluser
       TZ: 'Asia/Tokyo'
+    expose:
+      - 3306
     ports:
         - "3306:3306"

@@ -6,6 +6,8 @@ WORKDIR /app
 COPY ./intranet-front-web ./
 WORKDIR /app/vue
 RUN npm install
+ARG API_PATH
+ENV VUE_APP_API_ORIGIN=${API_PATH}
 RUN npm run build
 
 ### production環境 ###
