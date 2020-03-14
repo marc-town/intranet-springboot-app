@@ -14,12 +14,13 @@ services:
     build:
       context: web-gui
       args:
-        - API_PATH=http://web-api:8080
+          - API_PATH=http://localhost:8080/api/v1/
     container_name: web-server
     links:
       - web-api
     ports:
       - "80:80"
+      - "443:443"
     environment:
       TZ: "Asia/Tokyo"
       NODE_ENV: development
