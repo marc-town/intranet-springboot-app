@@ -1,0 +1,11 @@
+<div class="snackbar">
+  <v-snackbar
+    v-model="snackbar"
+    :color="color"
+    :timeout="timeout"
+    :top="y === 'top'"
+  >
+    {{ message }}
+    <v-btn dark text @click="close">{{ $t( "snackbar.close" ) }}</v-btn>
+  </v-snackbar>
+</div>

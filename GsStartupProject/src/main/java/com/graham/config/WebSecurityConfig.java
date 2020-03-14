@@ -96,7 +96,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
         // jwt用のhttpヘッダーを登録
         corsConfiguration.addExposedHeader(JwtSecurityConstants.AUTHORIZATION_HEADER_NAME);
-        corsConfiguration.addAllowedOrigin("http://localhost:1024");
+        corsConfiguration.addAllowedOrigin("http://localhost");
+        corsConfiguration.addAllowedOrigin("http://localhost:8081");
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource corsSource = new UrlBasedCorsConfigurationSource();

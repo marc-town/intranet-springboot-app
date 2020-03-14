@@ -6,10 +6,12 @@ WORKDIR /app
 COPY ./intranet-front-web ./
 WORKDIR /app/vue
 RUN npm install
+ARG API_PATH
+ENV VUE_APP_API_URL=${API_PATH}
 RUN npm run build
 
 ### production環境 ###
-FROM nginx:latest AS production-stage
+FROM nginx:stable-alpine AS production-stage
 
 # 環境変数
 ENV LANG C.UTF-8
@@ -23,7 +25,7 @@ RUN mkdir -p /var/log/nginx/log\
     && mkdir /home/www\
     && mkdir /home/www/html
 COPY --from=build-stage /app/dist /home/www/html
-EXPOSE 80 443
+#EXPOSE 80 443
 
 # Nginx起動
 CMD ["nginx", "-g", "daemon off;","-c","/etc/nginx/nginx.conf"]

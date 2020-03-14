@@ -8,12 +8,7 @@
     class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Employees</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical>
-        </v-divider>
+        <v-toolbar-title>{{ $t( "staffs.staff_list.title" ) }}</v-toolbar-title>
         <v-spacer />
         <v-text-field
           v-model="search"
@@ -28,7 +23,7 @@
           dark class="mb-2"
           @click="setRegistDialog(true)">
           Regist Staff
-        </v-btn>  
+        </v-btn>
       </v-toolbar>
     </template>
     <template v-slot:item.role="{ item }">
@@ -37,7 +32,7 @@
     <template v-slot:item.action="{ item }">
       <router-link
         class="hidden-sm-and-down"
-        :to="`/staffs/${item.staffId}/profile`"
+        :to="`/staffs/${item.staffId}`"
         tag="span"
         style="cursor: pointer;">
         <v-icon
@@ -47,14 +42,8 @@
         </v-icon>
       </router-link>
       <v-icon
-        v-if="isOwnAccount(item.staffId)"
         medium
-        disabled>
-        mdi-delete
-      </v-icon>
-      <v-icon
-        v-else
-        medium
+        :disabled="isOwnAccount(item.staffId)"
         @click="onDelete(item.staffId, item.name)">
         mdi-delete
       </v-icon>
