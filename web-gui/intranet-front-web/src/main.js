@@ -9,6 +9,7 @@ import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
+// 多言語化
 import VueI18n from 'vue-i18n'
 import messages from './i18n/messages.json'
 Vue.use(VueI18n);
@@ -22,6 +23,7 @@ Vue.use(VeeValidate)
 
 Vue.config.productionTip = false
 
+// Axiosのカスタマイズ
 import http from './http';
 Vue.prototype.$axios = http;
 

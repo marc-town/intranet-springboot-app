@@ -20,14 +20,29 @@
       ...mapActions('staff', [
         'setDeleteDialog',
       ]),
+      ...mapActions('snackbar', [
+        'setSnackbar',
+      ]),
       onDelete: function() {
         const uri = `/staffs/${this.selectedStaffId}`;
         this.$axios.delete(uri)
-          .then(res => {
-            alert(JSON.stringify(res));
+          .then(() => {
+            const options = {
+              snackbar: true,
+              color: 'info',
+              message: `${ this.selectedStaffName }を抹消しました`,
+              timeout: 5000,
+            }
+            this.setSnackbar(options);
           })
           .catch(err => {
-            alert(`output by delete modal: ${err}`);
+            const options = {
+              snackbar: true,
+              color: 'error',
+              message: JSON.stringify(err),
+              timeout: 5000,
+            }
+            this.setSnackbar(options);
           })
           .finally(() => {
             this.close();

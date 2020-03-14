@@ -1,3 +1,38 @@
 <div class="basic-info">
-  <p>basic info</p>
+  <v-card>
+    <v-card-title>
+      基本設定
+    </v-card-title>
+    <v-container>
+      <v-form ref="form">
+        <v-row class="mx-10">
+          <!-- <v-col>
+            <v-text-field
+              v-model.number="minValue"
+              label="min value"/>
+            <v-text-field
+              :rules="minValueRules"
+              label="好きな値を入力 (over min value)"/>
+          </v-col> -->
+          <v-col cols="6">
+            <label for="staff-name">名前</label>
+            <input type="text" name="staff-name">
+            <!-- <v-text-field　name="staff-name" prepend-icon="mdi-account"　placeholder="Name"/> -->
+          </v-col>
+          <v-col cols="6">
+            <label for="staff-name-kana">なまえ</label>
+            <v-text-field  name="staff-name-kana" placeholder="Name Kana"/>
+          </v-col>
+          <v-col cols="7">
+            <label for="entered-date">入社日</label>
+            <v-text-field name="entered-date" prepend-icon="mdi-account"/>
+          </v-col>
+          <v-col cols="7">
+            <label for="birthday">誕生日</label>
+            <v-text-field name="birthday" prepend-icon="mdi-account"/>
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-container>
+  </v-card>
 </div>

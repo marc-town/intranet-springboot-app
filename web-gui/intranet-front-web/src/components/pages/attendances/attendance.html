@@ -11,21 +11,68 @@
       :loading="loading"
       class="elevation-1"
     >
+      <template v-slot:top>
+        <v-toolbar flat color="white">
+          <v-toolbar-title>{{ currentMonth }}月</v-toolbar-title>
+          <v-spacer />
+          <v-btn
+            text small color="primary" 
+            @click="changeYearMonth(preYear, `01`)">
+            <<{{ preYear }}
+          </v-btn>
+          <v-spacer />
+          <v-btn
+            v-for="(month, index) in months"
+            :key="index"
+            :disabled="isCurrentMonth(month)"
+            text small color="primary"
+            @click="changeYearMonth(currentYear, month)"
+            >{{ month }}
+          </v-btn>
+          <v-spacer />
+          <v-btn
+            text small color="primary"
+            @click="changeYearMonth(nextYear, `01`)">
+            {{ nextYear }}>>
+          </v-btn>
+          <v-spacer />
+          <v-btn
+            color="primary"
+            dark class="mb-2"
+            @click="onSave">
+            保存
+          </v-btn>
+          <!-- <v-btn
+            color="primary"
+            dark class="mb-2"
+            @click="onSubmit">
+            提出
+          </v-btn> -->
+        </v-toolbar>
+      </template>
       <template v-slot:body="{ items }">
         <tbody>
-          <tr v-for="(item, index) in items" :key="index">
+          <tr
+            v-for="(item, index) in items"
+            :key="index" 
+            :class="isHoliday(item.day) ? 'holiday' : ''"
+          >
             <td>{{ item.day }}</td>
-            <td>{{ getDate(index) }}</td>
-            <td>{{ item.startTime }}</td>
-            <td>{{ item.endTime }}</td>
-            <td>{{ item.restTime }}</td>
-            <td>{{ item.absenceTypeId }}</td>
-            <td>{{ item.absenceReason }}</td>
-            <td>{{ item.workingTime }}</td>
-            <td>{{ item.nightTime }}</td>
-            <td>{{ item.operatingExpenses }}</td>
-            <td>{{ item.section }}</td>
-            <td>{{ item.remarks }}</td>
+            <td :style="{color: (isHoliday(item.day) ? getDayColor(item.day) : '' ) }">{{ getDate(item.day) }}</td>
+            <td><input type="text" v-model="item.startTime" style="width: 35px;"></td>
+            <td><input type="text" v-model="item.endTime" style="width: 35px;"></td>
+            <td><input type="text" v-model="item.restTime" style="width: 20px;"></td>
+            <td>
+              <select v-model="item.absenceTypeId">
+                <option v-for="type in absenceTypes" v-bind:value="type.id">{{ type.name }}</option>
+              </select>
+            </td>
+            <td><input type="text" v-model="item.absenceReason" style="width: 70px;"></td>
+            <td>{{ getWorkingTime(item.startTime, item.endTime, item.restTime) }}</td>
+            <td>{{ getNightTime(item.startTime, item.endTime, item.restTime) }}</td>
+            <td><input type="text" v-model="item.operatingExpenses" style="width: 70px;"></td>
+            <td><input type="text" v-model="item.section" style="width: 70px;"></td>
+            <td><input type="text" v-model="item.remarks" style="width: 70px;"></td>
           </tr>
         </tbody>
       </template>
