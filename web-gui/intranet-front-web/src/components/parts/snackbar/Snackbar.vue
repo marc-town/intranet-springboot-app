@@ -9,12 +9,15 @@
     },
     computed: {
       ...mapState('snackbar', [
-        'snackbar',
         'color',
         'message',
         'timeout',
         'y',
       ]),
+      snackbar: {
+        get () { return this.$store.state.snackbar.snackbar },
+        set (val) { this.close(val) },
+      }
     },
     mixins: [],
     watch: {},

@@ -1,36 +1,222 @@
 <div class="basic-info">
   <v-card>
     <v-card-title>
-      基本設定
+      社員基本情報
     </v-card-title>
     <v-container>
       <v-form ref="form">
         <v-row class="mx-10">
-          <!-- <v-col>
-            <v-text-field
-              v-model.number="minValue"
-              label="min value"/>
-            <v-text-field
-              :rules="minValueRules"
-              label="好きな値を入力 (over min value)"/>
-          </v-col> -->
+          <v-col cols="11" class="display-1">
+            {{ displayInfo.name }}
+            <v-chip class="title" :color="getGradeColor(displayInfo.grade)" label dark>{{ displayInfo.grade }}</v-chip>
+          </v-col>
+          <v-col cols="1">
+            <v-btn v-if="isAdmin(role)" color="primary" @click="editMode = !editMode">{{ editMode ? '中止' : '編集'}}</v-btn>
+          </v-col>
+        </v-row>
+        <v-row class="mx-10">
+          <v-col cols="12">
+            部署: {{ displayInfo.department ? displayInfo.department : '未所属' }}
+          </v-col>
+          <v-col cols="12">
+            役職: {{ displayInfo.position }}
+          </v-col>
+          <v-col cols="12">
+            勤続年数: {{ affiliationYears }}年
+          </v-col>
+          <v-col cols="12">
+            <v-chip :color="getRoleColor(displayInfo.role)" dark>{{ displayInfo.role }}</v-chip>
+          </v-col>
+        </v-row>
+        <v-row class="mx-10">
           <v-col cols="6">
-            <label for="staff-name">名前</label>
-            <input type="text" name="staff-name">
-            <!-- <v-text-field　name="staff-name" prepend-icon="mdi-account"　placeholder="Name"/> -->
+            <!-- 編集可能 -->
+            <v-text-field
+              v-if="editMode"
+              v-model="displayInfo.name"
+              placeholder="名前"
+              label="大切な社員の名前"
+              outlined
+              prepend-icon="mdi-account"/>
+            <!-- 編集不可 -->
+            <v-text-field
+              v-else
+              v-model="displayInfo.name"
+              placeholder="名前"
+              label="大切な社員の名前"
+              readonly
+              outlined
+              prepend-icon="mdi-account"/>
           </v-col>
+        </v-row>
+        <v-row class="mx-10">
           <v-col cols="6">
-            <label for="staff-name-kana">なまえ</label>
-            <v-text-field  name="staff-name-kana" placeholder="Name Kana"/>
+            <!-- 編集可能 -->
+            <v-text-field
+              v-if="editMode"
+              v-model="displayInfo.nameKana"
+              placeholder="なまえ"
+              label="大切な社員の名前（ふりがな）"
+              outlined
+              prepend-icon="mdi-account"/>
+            <!-- 編集不可 -->
+            <v-text-field
+              v-else
+              v-model="displayInfo.nameKana"
+              placeholder="なまえ"
+              label="大切な社員の名前（ふりがな）"
+              readonly
+              outlined
+              prepend-icon="mdi-account"/>
           </v-col>
-          <v-col cols="7">
-            <label for="entered-date">入社日</label>
-            <v-text-field name="entered-date" prepend-icon="mdi-account"/>
+        </v-row>
+        <v-row class="mx-10">
+          <!-- 編集可能 -->
+          <v-col cols="6" v-if="editMode">
+            <v-dialog
+              ref="enteredDialog"
+              v-model="enteredModal"
+              :return-value.sync="displayInfo.enteredDate"
+              persistent
+              width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="displayInfo.enteredDate"
+                  label="記念すべき入社日"
+                  prepend-icon="event"
+                  outlined
+                  readonly
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker v-model="displayInfo.enteredDate" scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="enteredModal = false">Cancel</v-btn>
+                <v-btn color="primary" @click="$refs.enteredDialog.save(displayInfo.enteredDate)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
           </v-col>
-          <v-col cols="7">
-            <label for="birthday">誕生日</label>
-            <v-text-field name="birthday" prepend-icon="mdi-account"/>
+          <!-- 編集不可 -->
+          <v-col cols="6" v-else>
+            <v-text-field
+              v-model="displayInfo.enteredDate"
+              label="記念すべき入社日"
+              prepend-icon="event"
+              outlined
+              readonly
+            />
           </v-col>
+        </v-row>
+        <v-row class="mx-10">
+          <!-- 編集可能 -->
+          <v-col cols="6" v-if="editMode">
+            <v-dialog
+              ref="birthdayDialog"
+              v-model="birthdayModal"
+              :return-value.sync="displayInfo.birthday"
+              persistent
+              width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="displayInfo.birthday"
+                  label="誕生日"
+                  prepend-icon="mdi-cake"
+                  outlined
+                  readonly
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker v-model="displayInfo.birthday" scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="birthdayModal = false">Cancel</v-btn>
+                <v-btn color="primary" @click="$refs.birthdayDialog.save(displayInfo.birthday)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
+          </v-col>
+          <!-- 編集不可 -->
+          <v-col cols="6" v-else>
+            <v-text-field
+              v-model="displayInfo.birthday""
+              label="誕生日"
+              prepend-icon="mdi-cake"
+              outlined
+              readonly
+            />
+          </v-col>
+        </v-row>
+        <v-row class="mx-10">
+          <v-col cols="6">
+            <!-- 編集可能 -->
+            <v-text-field
+              v-if="editMode"
+              v-model="displayInfo.telephoneNumber"
+              placeholder="xxx-yyyy-zzzz"
+              label="電話番号"
+              hide-details
+              outlined
+              prepend-icon="mdi-cellphone"/>
+            <!-- 編集不可 -->
+            <v-text-field
+              v-else
+              v-model="displayInfo.telephoneNumber"
+              placeholder="xxx-yyyy-zzzz"
+              label="電話番号"
+              readonly
+              outlined
+              prepend-icon="mdi-cellphone"/>
+          </v-col>
+        </v-row>
+        <v-row v-if="editMode" class="mx-10">
+          <v-col cols="12">
+            <v-radio-group v-model="form.role" prepend-icon="mdi-one-up" row>
+              <v-radio
+                v-for="r in roles"
+                :key="r.id"
+                :label="r.name"
+                v-bind:value="r.id"
+              ></v-radio>
+            </v-radio-group>
+          </v-col>
+        </v-row>
+        <v-row v-if="editMode" class="mx-10">
+          <v-col cols="4">
+            <v-select
+              v-model="form.departmentId"
+              :items="departments"
+              label="部署"
+              prepend-icon="mdi-cards-heart"
+              item-text="name"
+              item-value="id"
+              outlined
+            ></v-select>
+          </v-col>
+          <v-col cols="4">
+            <v-select
+              v-model="form.positionId"
+              :items="positions"
+              label="役職"
+              prepend-icon="mdi-cards-club"
+              item-text="name"
+              item-value="id"
+              outlined
+            ></v-select>
+          </v-col>
+          <v-col cols="4">
+            <v-select
+              v-model="form.gradeId"
+              :items="grades"
+              label="階級"
+              prepend-icon="mdi-cards-diamond"
+              item-text="name"
+              item-value="id"
+              outlined
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-row class="mx-10">
+          <v-btn v-if="editMode" block color="primary" @click="onSave">保存</v-btn>
         </v-row>
       </v-form>
     </v-container>

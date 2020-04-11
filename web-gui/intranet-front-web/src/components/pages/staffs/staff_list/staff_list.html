@@ -26,17 +26,20 @@
         </v-btn>
       </v-toolbar>
     </template>
+    <template v-slot:item.grade="{ item }">
+      <v-chip :color="getGradeColor(item.grade)" label dark>{{ item.grade }}</v-chip>
+    </template>
     <template v-slot:item.role="{ item }">
-      <v-chip :color="getColor(item.role)" dark>{{ role[item.role] }}</v-chip>
+      <v-chip :color="getRoleColor(item.role)" dark>{{ role[item.role] }}</v-chip>
     </template>
     <template v-slot:item.action="{ item }">
       <router-link
         class="hidden-sm-and-down"
-        :to="`/staffs/${item.staffId}`"
+        :to="{ name: 'basic-info', params: { id: `${ item.staffId }` }}"
         tag="span"
         style="cursor: pointer;">
         <v-icon
-        medium
+          medium
           class="mr-2">
           mdi-pencil
         </v-icon>

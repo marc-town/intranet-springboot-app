@@ -1,17 +1,31 @@
 <template src="./attendance.html"></template>
 <script>
   import { mapState, mapActions } from "vuex";
+  import SubmitDialog from '@/components/pages/attendances/modal/submit/Submit'
   import JapaneseHolidays from '@/plugins/japanese-holidays'
   export default {
-    components: {},
+    components: { SubmitDialog },
+    props: {
+      source: String,
+    },
     data () {
       return {
         loading: false,
         edited: [],
+        summary: {
+          staffId: 0,
+          currentYear: '',
+          currentMonth: '',
+          regularWorkingDays: 0,
+          regularWorkingTime: 0,
+          totalWorkingTime: 0,
+          totalNightTime: 0,
+          totalOverTime: 0,
+        },
         attendances: [],
         headers: [
-          { text: '日付', value: 'day', sortable: false, width: '56' },
-          { text: '曜日', value: 'date', sortable: false, width: '56' },
+          { text: '日付', value: 'day', sortable: false, width: '40' },
+          { text: '曜日', value: 'date', sortable: false, width: '40' },
           { text: '出社時間', value: 'startTime', sortable: false },
           { text: '退勤時間', value: 'endTime', sortable: false },
           { text: '休憩', value: 'restTime', sortable: false },
@@ -59,20 +73,20 @@
       },
     },
     watch: {
-      // attendances: {
-      //   handler: function(val) {
-      //     console.log(`watch: ${JSON.stringify(val)}`);
-      //   },
-      //   deep: true
-      // },
-      '$route' (to) {
-        this.currentYear = Number(to.query.year);
-        this.currentMonth = Number(to.query.month);
+      attendances: {
+        handler: function(val) {
+          if (val.length) this.setSummary();
+        },
+        deep: true
       },
+      // '$route' (to) {
+      //   this.currentYear = Number(to.query.year);
+      //   this.currentMonth = Number(to.query.month);
+      // },
     },
     methods: {
-      ...mapActions('error', [
-        'setErrorDialog',
+      ...mapActions('attendance', [
+        'setAttendance',
       ]),
       ...mapActions('snackbar', [
         'setSnackbar',
@@ -90,7 +104,7 @@
       },
       fetchData: function() {
         const yearMonth = `${ this.currentYear }${ this.zeroPadding(Number(this.currentMonth), 2) }`;
-        const uri = `/attendances/${this.staffId}/?yearMonth=${ yearMonth }`;
+        const uri = `/attendances/${this.staffId}?yearMonth=${ yearMonth }`;
         this.$axios.get(uri)
           .then(res => {
             this.attendances = res.data.attendances;
@@ -98,16 +112,14 @@
             this.loading = false;
           })
           .catch(err => {
-            alert(`output by staffs: ${err}`);
-            this.setErrorDialog(true);
+            console.log(JSON.stringify(err));
           })
       },
       getInitialAttendance: function() {
         const defaultStartTime = this.getDefaultStartTime();
         const defaultEndTime = this.getDefaultEndTime();
         const defaultRestTime = this.getDefaultRestTime();
-        for (let i = 0; i < this.endDayCount; i++) {
-          const day = i + 1;
+        for (let day = 1; day <= this.endDayCount; day++) {
           const info = {
             day: day,
             startTime: this.isHoliday(day) ? null : defaultStartTime,
@@ -121,6 +133,51 @@
           };
           this.attendances.push(info);
         }
+      },
+      setSummary: function() {
+        const regularWorkingDays = this.getRegularWorkingDays();
+        const regularWorkingTime = this.getRegularWorkingTime();
+        const totalWorkingTime = this.getTotalWorkingTime();
+        const totalNightTime = this.getTotalNightTime()
+        const totalOverTime = this.getTotalOverTime(regularWorkingTime, totalWorkingTime)
+        this.summary.staffId = this.staffId;
+        this.summary.currentYear = this.currentYear;
+        this.summary.currentMonth = this.currentMonth;
+        this.summary.regularWorkingDays = regularWorkingDays;
+        this.summary.regularWorkingTime = regularWorkingTime;
+        this.summary.totalWorkingTime = totalWorkingTime ? totalWorkingTime : 0;
+        this.summary.totalNightTime = totalNightTime ? totalNightTime : 0;
+        this.summary.totalOverTime = totalOverTime ? totalOverTime : 0;
+      },
+      getRegularWorkingDays: function() {
+        let workingDaysCount = 0;
+        for (let day = 1; day <= this.endDayCount; day++) {
+          if (!this.isHoliday(day)) workingDaysCount += 1;
+        }
+        return workingDaysCount;
+      },
+      getRegularWorkingTime: function() {
+        const workingDays = this.getRegularWorkingDays();
+        return workingDays * 8;
+      },
+      getTotalWorkingTime: function() {
+        let totalWorkingTime = 0;
+        for (let attendance of this.attendances) {
+          totalWorkingTime += attendance.workingTime
+        }
+        return totalWorkingTime;
+      },
+      getTotalNightTime: function() {
+        let totalNightTime = 0;
+        for (let attendance of this.attendances) {
+          totalNightTime += attendance.nightTime
+        }
+        return totalNightTime;
+      },
+      getTotalOverTime: function(regularWorkingTime, totalWorkingTime) {
+        const totalOverTime = totalWorkingTime - regularWorkingTime;
+        if (totalOverTime < 0) return 0;
+        return totalOverTime;
       },
       getDate: function(day) {
         const currentDay = `${this.currentYear}/${this.currentMonth}/${this.zeroPadding(Number(day), 2)}`;
@@ -137,17 +194,16 @@
       getDefaultRestTime: function() {
         return '1';
       },
-      getWorkingTime: function(startTime, endTime, restTime) {
+      setWorkingTime: function(index, startTime, endTime, restTime) {
         if (startTime && endTime) {
           const start = this.calculateMinutesTime(startTime);
           let end = this.calculateMinutesTime(endTime);
           if (start > end) end += 24 * 60;
           const workingTime = (end - start) / 60 - restTime;
-          return workingTime;
+          this.attendances[index].workingTime = workingTime;
         }
-        return 0;
       },
-      getNightTime: function(startTime, endTime, restTime) {
+      setNightTime: function(index, startTime, endTime, restTime) {
         // 出勤時刻 < 29:00 かつ 退勤時刻 > 22:00
         // 退勤時間または29:00で値の小さい方 - 出勤時間または22:00で値の小さい方
         if (startTime && endTime) {
@@ -156,10 +212,9 @@
           const nightHead = this.calculateMinutesTime('22:00');
           const nightTail = this.calculateMinutesTime('29:00');
           if (start < nightTail && end > nightHead) {
-            return (Math.min(end, nightTail) - Math.min(start, nightHead)) / 60 - restTime;
+            this.attendances[index].nightTime = (Math.min(end, nightTail) - Math.min(start, nightHead)) / 60 - restTime;
           }
         }
-        return 0;
       },
       calculateMinutesTime: function(time) {
         const hourAndMinutes = time.split(':');
@@ -170,7 +225,7 @@
       onSave: function() {
         this.loading = true;
         const yearMonth = `${ this.currentYear }${ this.zeroPadding(Number(this.currentMonth), 2) }`;
-        const uri = `/attendances/${this.staffId}/?yearMonth=${ yearMonth }`;
+        const uri = `/attendances/${this.staffId}?yearMonth=${ yearMonth }`;
         this.$axios.put(uri, this.attendances)
           .then(() => {
             const options = {
@@ -182,18 +237,23 @@
             this.setSnackbar(options);
           })
           .catch(err => {
-            alert(`output by staffs: ${err}`);
+            alert(`output by attendance: ${err}`);
           })
           .finally(() => {
             this.loading = false;
           })
       },
       onSubmit: function() {
-        alert('on submit');
+        this.onSave();
+        this.setAttendance(this.summary);
       },
       changeYearMonth: function(year, month) {
         this.currentYear = Number(year);
         this.currentMonth = Number(month);
+        this.startDate = new Date(this.currentYear, this.currentMonth - 1, 1);
+        this.endDate = new Date(this.currentYear, this.currentMonth, 0);
+        this.endDayCount = this.endDate.getDate();
+        this.startDay = this.startDate.getDay();
         this.fetchData();
       },
       zeroPadding: function(num, len) {
@@ -229,7 +289,6 @@
     },
     created: function() {
       this.initialize();
-      this.isHoliday();
     }
   }
 </script>

@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 import createPersistedState from 'vuex-persistedstate'
 
-// import attendance from './attendance_module';
+import attendance from './attendance_module';
 import auth from './auth_module';
 import common from './common_module';
 import error from './error_module';
@@ -14,7 +14,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    // attendance,
+    attendance,
     auth,
     common,
     error,

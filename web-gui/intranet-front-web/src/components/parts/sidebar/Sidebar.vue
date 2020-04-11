@@ -1,6 +1,7 @@
 <template src="./sidebar.html"></template>
 <script>
   import { mapState } from "vuex";
+  import commonMethod from '@/mixins/common_methods'
   export default {
     props: {
       source: String,
@@ -9,44 +10,48 @@
       ...mapState('common', [
         "drawer", // this.commo.drawer を this.$store.state.common.drawer にマップ
       ]),
+      ...mapState('auth', [
+        "role",
+      ]),
+      loginStaffId: {
+        get () { return this.$store.state.auth.staffId },
+        // set (val) { this.setDialog(val) }
+      }
     },
+    watch: {
+    },
+    mixins: [ commonMethod ],
     data: () => ({
       items: [
-        { icon: 'mdi-calendar-clock', text: 'Attendance', link: '/attendances' },
-        { icon: 'mdi-file-document-box', text: 'Tech Blog', link: '/tech-blog' },
-        { icon: 'mdi-calendar-month', text: 'Schedule', link: '/schedules' },
-        { icon: 'mdi-settings', text: 'Settings', link: '/staffs' },
-        // { icon: 'mdi-content-copy', text: 'Duplicates', link: '/' },
-        // {
-        //   icon: 'mdi-chevron-up',
-        //   'icon-alt': 'mdi-chevron-down',
-        //   text: 'Labels',
-        //   model: true,
-        //   children: [
-        //     { icon: 'mdi-plus', text: 'Create label', link: '/' },
-        //   ],
-        // },
-        // {
-        //   icon: 'mdi-chevron-up',
-        //   'icon-alt': 'mdi-chevron-down',
-        //   text: 'More',
-        //   model: false,
-        //   children: [
-        //     { text: 'Import', link: '/' },
-        //     { text: 'Export', link: '/' },
-        //     { text: 'Print', link: '/' },
-        //     { text: 'Undo changes', link: '/' },
-        //     { text: 'Other contacts', link: '/' },
-        //   ],
-        // },
-        // { icon: 'mdi-message', text: 'Send feedback', link: '/' },
-        // { icon: 'mdi-cellphone-link', text: 'App downloads', link: '/' },
-        // { icon: 'mdi-keyboard', text: 'Go to the old version', link: '/' },
-        // { icon: 'mdi-help-circle', text: 'Help', link: '/' },
+        { icon: 'mdi-calendar-clock', text: '月報', link: '/attendances' },
+        { icon: 'mdi-file-document-box', text: '技術ブログ', link: '/tech-blog' },
+        { icon: 'mdi-calendar-month', text: 'スケジュール管理', link: '/schedules' },
+        { icon: 'mdi-account-card-details', text: '基本情報', link: '/' },
+      ],
+      adminItems: [
+        { icon: 'mdi-settings', text: '社員管理', link: '/staffs' },
       ],
     }),
     methods: {
     },
+    // 以下、ライフサイクル系処理
+    beforeCreate: function() {
+    },
+    created: function() {
+    },
+    beforeMount: function() {
+    },
+    mounted: function() {
+      this.items[3].link = `/staffs/${ this.loginStaffId }`;
+    },
+    beforeUpdate: function() {
+    },
+    updated: function() {
+    },
+    beforeDestroy: function() {
+    },
+    destroyed: function() {
+    }
   }
 </script>
 <style scoped lang="scss">

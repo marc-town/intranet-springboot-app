@@ -64,19 +64,14 @@
         this.setDeleteDialog(true);
       },
       doneRegist: function() {
-        this.reload();
+        this.fetchData();
       },
       doneDelete: function() {
-        this.reload();
+        this.fetchData();
       },
       isOwnAccount: function(id) {
         return id === this.authStaffId;
       },
-      getColor: function(value) {
-        if (this.isAdmin(value)) return 'red';
-        else if (this.isMiddle(value)) return 'primary';
-        else if (this.isUser(value)) return '';
-      }
     },
     created: function() {
       this.initialize()

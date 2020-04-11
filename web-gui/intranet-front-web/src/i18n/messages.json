@@ -1,6 +1,21 @@
 {
   "ja": {
     "title": "Graham Solution",
+    "attendances": {
+      "regularWorkingDays": "稼働日数",
+      "regularWorkingTime": "所定労働時間",
+      "customerResidentTime": "客先常駐時間",
+      "totalWorkingTime": "総労働時間",
+      "totalNightTime": "総深夜勤務時間",
+      "totalOverTime": "総残業時間",
+      "modal": {
+        "submit": {
+          "title": "勤怠情報提出",
+          "cancel": "CANCEL",
+          "submit": "提出"
+        }
+      }
+    },
     "staffs": {
       "staff_list": {
         "title": "社員一覧"

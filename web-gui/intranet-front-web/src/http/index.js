@@ -37,33 +37,39 @@ axios.interceptors.response.use(
     return response;
   },
   err => {
-    // クライアントエラー時の処理
-    if (err.response.status === 400) {
-      alert(`output by interceptors: ${JSON.stringify(err)}`);
-      store.dispatch('error/setErrorDialog', true);
-    // 認証エラー時の処理
-    } else if (err.response.status === 401) {
-      alert(`output by interceptors: ${JSON.stringify(err)}`);
-      router.push('/login')
-    // 認可エラー時の処理
-    } else if (err.response.status === 403) {
-      alert(`output by interceptors: ${JSON.stringify(err)}`);
-      router.push('/error')  
-    // NotFound時の処理
-    } else if (err.response.status === 404) {
-      alert(`output by interceptors: ${JSON.stringify(err)}`);
-      router.push('/error')
-    // システムエラー時の処理
-    } else if (err.response.status === 500) {
-      alert(`output by interceptors: ${JSON.stringify(err)}`);
-      const error = {
-        'errorDialog': true,
-        'status': err.response.status,
-        'code': 'Internal Server Error',
-        'message': err.message
-      };
-      store.dispatch('error/setErrorDialog', error);
+    let path = '/error';
+    let error = {};
+    switch (err.response.status) {
+      case 400:
+        break;
+      case 401:
+        path = '/login';
+        router.push(path);
+        break;
+      // 認可エラー時の処理
+      case 403:
+        router.push(path);
+        break;
+      // NotFound時の処理
+      case 404:
+        router.push(path);
+        break;
+      // MethodNotAllow時の処理
+      case 405:
+        router.push(path);
+        break;
+      // システムエラー時の処理
+      case 500:
+        error = {
+          'errorDialog': true,
+          'status': err.response.status,
+          'code': 'Internal Server Error',
+          'message': err.message
+        };
+        store.dispatch('error/setErrorDialog', error);
+        break;
     }
+    
     return Promise.reject(err)
   });
 

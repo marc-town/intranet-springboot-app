@@ -18,6 +18,8 @@
           loginId: '',
           password: ''
         },
+        error: false,
+        errorMessage: ''
       }
     },
     mixins: [],
@@ -52,7 +54,10 @@
               alert(Object.values(res.data.errors).join("\n"))
             }
           }).catch(err => {
-            alert(err)
+            if (err.response.status === 401) {
+              this.error = true;
+              this.errorMessage = 'ログインIDまたはパスワードが間違っています';
+            }
             this.loading = false
           })
         }

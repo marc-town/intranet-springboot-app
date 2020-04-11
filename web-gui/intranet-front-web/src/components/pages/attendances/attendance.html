@@ -1,8 +1,63 @@
 <div class=attendance>
   <v-card>
-    <v-card-title>
-      勤怠連絡
-    </v-card-title>
+    <v-card-title>勤怠連絡</v-card-title>
+    <v-toolbar flat color="white">
+      <v-toolbar-title>{{ currentMonth }}月</v-toolbar-title>
+      <v-spacer />
+      <v-btn
+        text small color="primary"
+        @click="changeYearMonth(preYear, `01`)">
+        <<{{ preYear }}
+      </v-btn>
+      <v-spacer />
+      <v-btn
+        v-for="(month, index) in months"
+        :key="index"
+        :disabled="isCurrentMonth(month)"
+        text small color="primary"
+        @click="changeYearMonth(currentYear, month)"
+        >{{ month }}
+      </v-btn>
+      <v-spacer />
+      <v-btn
+        text small color="primary"
+        @click="changeYearMonth(nextYear, `01`)">
+        {{ nextYear }}>>
+      </v-btn>
+      <v-spacer />
+      <v-btn
+        color="primary"
+        dark class="mb-2"
+        @click="onSave">
+        保存
+      </v-btn>
+      <v-btn
+        color="primary"
+        dark class="mb-2"
+        @click="onSubmit">
+        提出
+      </v-btn>
+    </v-toolbar>
+    <v-toolbar flat color="white">
+      <v-spacer />
+      <table style="width: 70%; text-align: center;">
+        <tr>
+          <th>{{ $t( "attendances.regularWorkingDays" ) }}</th>
+          <th>{{ $t( "attendances.regularWorkingTime" ) }}</th>
+          <th>{{ $t( "attendances.totalWorkingTime" ) }}</th>
+          <th>{{ $t( "attendances.totalNightTime" ) }}</th>
+          <th>{{ $t( "attendances.totalOverTime" ) }}</th>
+        </tr>
+        <tr>
+          <td>{{ summary.regularWorkingDays }}</td>
+          <td>{{ summary.regularWorkingTime }}</td>
+          <td>{{ summary.totalWorkingTime }}</td>
+          <td>{{ summary.totalNightTime }}</td>
+          <td>{{ summary.totalOverTime }}</td>
+        </tr>
+      </table>
+      <v-spacer />
+    </v-toolbar>
     <v-data-table
       :headers="headers"
       :items="attendances"
@@ -11,45 +66,6 @@
       :loading="loading"
       class="elevation-1"
     >
-      <template v-slot:top>
-        <v-toolbar flat color="white">
-          <v-toolbar-title>{{ currentMonth }}月</v-toolbar-title>
-          <v-spacer />
-          <v-btn
-            text small color="primary" 
-            @click="changeYearMonth(preYear, `01`)">
-            <<{{ preYear }}
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            v-for="(month, index) in months"
-            :key="index"
-            :disabled="isCurrentMonth(month)"
-            text small color="primary"
-            @click="changeYearMonth(currentYear, month)"
-            >{{ month }}
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            text small color="primary"
-            @click="changeYearMonth(nextYear, `01`)">
-            {{ nextYear }}>>
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            dark class="mb-2"
-            @click="onSave">
-            保存
-          </v-btn>
-          <!-- <v-btn
-            color="primary"
-            dark class="mb-2"
-            @click="onSubmit">
-            提出
-          </v-btn> -->
-        </v-toolbar>
-      </template>
       <template v-slot:body="{ items }">
         <tbody>
           <tr
@@ -59,23 +75,33 @@
           >
             <td>{{ item.day }}</td>
             <td :style="{color: (isHoliday(item.day) ? getDayColor(item.day) : '' ) }">{{ getDate(item.day) }}</td>
-            <td><input type="text" v-model="item.startTime" style="width: 35px;"></td>
-            <td><input type="text" v-model="item.endTime" style="width: 35px;"></td>
-            <td><input type="text" v-model="item.restTime" style="width: 20px;"></td>
+            <td><v-text-field v-model="item.startTime" class="attendance-tbl-textfield-middle body-2" hide-details dense outlined/></td>
+            <td><v-text-field v-model="item.endTime"  class="attendance-tbl-textfield-middle body-2" hide-details dense outlined/></td>
+            <td><v-text-field v-model="item.restTime" class="attendance-tbl-textfield-small body-2" hide-details dense outlined/></td>
             <td>
-              <select v-model="item.absenceTypeId">
-                <option v-for="type in absenceTypes" v-bind:value="type.id">{{ type.name }}</option>
-              </select>
+              <v-select
+              v-model="item.absenceTypeId"
+              :items="absenceTypes"
+              label="欠勤"
+              item-text="name"
+              item-value="id"
+              hide-details
+              dense
+              outlined
+            ></v-select>
             </td>
-            <td><input type="text" v-model="item.absenceReason" style="width: 70px;"></td>
-            <td>{{ getWorkingTime(item.startTime, item.endTime, item.restTime) }}</td>
-            <td>{{ getNightTime(item.startTime, item.endTime, item.restTime) }}</td>
-            <td><input type="text" v-model="item.operatingExpenses" style="width: 70px;"></td>
-            <td><input type="text" v-model="item.section" style="width: 70px;"></td>
-            <td><input type="text" v-model="item.remarks" style="width: 70px;"></td>
+            <td><v-text-field v-model="item.absenceReason" class="attendance-tbl-textfield-large body-2" hide-details dense outlined/></td>
+            <td v-model="item.workingTime" v-bind:value="setWorkingTime(index, item.startTime, item.endTime, item.restTime)">{{ item.workingTime }}</td>
+            <td v-model="item.nightTime" v-bind:value="setNightTime(index, item.startTime, item.endTime, item.restTime)">{{ item.nightTime }}</td>
+            <td><v-text-field v-model="item.operatingExpenses" class="attendance-tbl-textfield-large body-2" hide-details dense outlined/></td>
+            <td><v-text-field v-model="item.section" class="attendance-tbl-textfield-large body-2" hide-details dense outlined/></td>
+            <td><v-text-field v-model="item.remarks" class="attendance-tbl-textfield-large body-2" hide-details dense outlined/></td>
           </tr>
         </tbody>
       </template>
     </v-data-table>
   </v-card>
+
+  <!-- モーダル定義 -->
+  <submit-dialog></submit-dialog>
 </div>
