@@ -33,7 +33,7 @@ public class StaffController {
 	@Autowired
 	private StaffService staffService;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(StaffService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StaffController.class);
 	
 	/**
 	 * 社員一覧取得（管理者専用）
@@ -87,7 +87,8 @@ public class StaffController {
 	@ResponseBody
 	@GetMapping("/{staffId}/basic_info")
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	public StaffBasicInfoResponseForm findStaffBasicInfo(@PathVariable("staffId") int staffId) {
+	public StaffBasicInfoResponseForm findStaffBasicInfo(
+			@PathVariable("staffId") int staffId) {
 		StaffBasicInfoResponseForm basicInfo = staffService.findStaffBasicInfo(staffId);
 		return basicInfo;
 	}
@@ -101,8 +102,9 @@ public class StaffController {
 	@ResponseBody
 	@PutMapping("/{staffId}/basic_info")
 	@PreAuthorize("hasRole('ADMIN')")
-	public void updateStaffDetailInfo(@RequestBody StaffBasicInfoRequestForm request,
-			@PathVariable("staffId") int staffId) {
+	public void updateStaffDetailInfo(
+			@PathVariable("staffId") int staffId,
+			@RequestBody StaffBasicInfoRequestForm request) {
 		
 		LOGGER.info("START update staff_basic_info with staff_id = {} and request {}", staffId, request);
 		staffService.updateStaffBasicInfo(staffId, request);

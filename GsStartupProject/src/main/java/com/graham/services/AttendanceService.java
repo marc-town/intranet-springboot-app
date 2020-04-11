@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.graham.domain.model.AttendanceEntity;
 import com.graham.domain.repositorys.AttendanceRepository;
 import com.graham.interfaces.request.AttendanceRequestForm;
+import com.graham.interfaces.request.AttendanceSubmitRequestForm;
 import com.graham.interfaces.response.AttendanceResponseForm;
 
 /**
@@ -48,9 +49,9 @@ public class AttendanceService {
 	/**
 	 * 指定された年月日の勤怠情報を更新する
 	 * 
-	 * @param staffId
-	 * @param yearMonth
-	 * @param requests
+	 * @param staffId 社員ID
+	 * @param yearMonth 対象年月
+	 * @param requests 勤怠情報
 	 */
 	public void updateAttendance(int staffId, String yearMonth, List<AttendanceRequestForm> requests) {
 		
@@ -85,5 +86,23 @@ public class AttendanceService {
 				attendanceRepository.updateAttendance(staffId, yearMonth, day, startTime, endTime, restTime, absenceTypeId, absenceReason, workingTime, nightTime, operatingExpenses, section, remarks);				
 			}
 		}
+	}
+	
+	/**
+	 * 対象月の勤怠情報をファイル出力する
+	 * 
+	 * @param staffId 社員ID
+	 * @param yearMonth 対象年月
+	 * @param requests 勤怠概要
+	 */
+	public void exportAttendance(int staffId, String yearMonth, AttendanceSubmitRequestForm request) {
+		
+		LOGGER.info("called AttendanceService.exportAttendance staffId = {}, yearMonth = {}, requestBody = {}", staffId, yearMonth, request);
+		
+		// DBに勤怠概要を登録する
+		// insert into m_attendance
+		
+		// export
+
 	}
 }

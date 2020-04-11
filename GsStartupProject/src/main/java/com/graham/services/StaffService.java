@@ -176,7 +176,7 @@ public class StaffService {
 	}
 
 	/**
-	 * 社員基本情報 を更新する
+	 * 社員基本情報を更新する
 	 * 
 	 * @param staffId  社員ID
 	 * @param request 社員基本情報
@@ -186,18 +186,22 @@ public class StaffService {
 		String name = request.getName();
 		String nameKana = request.getNameKana();
 		String enteredDate = request.getEnteredDate();
-		int staffTypeId = request.getStaffTypeId();
+		Integer roleId = request.getRole();
 		String birthday = request.getBirthday();
 		String telephoneNumber = request.getTelephoneNumber();
 		int departmentId = request.getDepartmentId();
 		int positionId = request.getPositionId();
 		int gradeId = request.getGradeId();
 
-		// 社員詳細情報 を更新する
+		// 社員詳細情報を更新する
 		LOGGER.info("start staffService.updateStaffBasicInfo.updateBasicInfo");
 		staffBasicInfoRepository.updateBasicInfo(
-				name, nameKana, enteredDate, staffTypeId, birthday,
+				name, nameKana, enteredDate, birthday,
 				telephoneNumber,departmentId,positionId,gradeId,staffId);
+		
+		// 社員と権限の紐付きを更新する
+		LOGGER.info("start staffService.updateStaffBasicInfo.updateStaffRole");
+		roleRepository.updateStaffRole(staffId, roleId);
 	}
 	
 	/**

@@ -10,6 +10,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import com.graham.common.GrahamHttpStatus;
 import com.graham.exception.GrahamError;
 import com.graham.exception.GrahamException;
 import com.graham.interfaces.request.AttendanceRequestForm;
+import com.graham.interfaces.request.AttendanceSubmitRequestForm;
 import com.graham.interfaces.response.AttendanceResponseForm;
 import com.graham.services.AttendanceService;
 import com.graham.services.StaffService;
@@ -67,6 +69,25 @@ public class AttendanceController {
 		AttendanceResponseForm attendances = attendanceService.attendanceIndex(staffId, yearMonth);
 		LOGGER.info("SUCCESS get attendance list");
 		return attendances;
+	}
+	
+	/**
+	 * 勤怠情報提出（当月分の勤怠情報をファイル出力する）
+	 * 
+	 * @param staffId
+	 * @param yearMonth
+	 * @param requests
+	 */
+	@PostMapping("/{staffId}/submit")
+	@ResponseBody
+	public void submit(
+			@PathVariable("staffId") int staffId,
+			@RequestParam("yearMonth") String yearMonth,
+			@RequestBody AttendanceSubmitRequestForm request) {
+		
+		LOGGER.info("BEGIN AttendanceController submit staffId: {}, yearMonth: {}, request: {}", staffId, yearMonth, request);
+		attendanceService.exportAttendance(staffId, yearMonth, request);
+		LOGGER.info("SUCCESS update attendance");
 	}
 	
 	@PutMapping("/{staffId}")

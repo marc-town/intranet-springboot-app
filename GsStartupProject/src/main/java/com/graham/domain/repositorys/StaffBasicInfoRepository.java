@@ -16,18 +16,39 @@ import com.graham.domain.model.StaffBasicInfoEntity;
 @Transactional //途中でメソッドが異常終了した時に処理を中断して前の状態に戻す
 public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEntity, Integer> {
 	
+	// 社員IDで検索用クエリ
+	final String FIND_ONE = "SELECT\n" + 
+			"  sbi.staff_basic_info_id AS staff_basic_info_id,\n" + 
+			"  sbi.staff_id AS staff_id,\n" + 
+			"  sbi.name AS name,\n" + 
+			"  sbi.name_kana AS name_kana,\n" + 
+			"  sbi.entered_date AS entered_date,\n" + 
+			"  sbi.birthday AS birthday,\n" + 
+			"  sbi.telephone_number AS telephone_number,\n" + 
+			"  d.department_name AS department,\n" + 
+			"  p.position_name AS position,\n" + 
+			"  g.grade_name AS grade,\n" + 
+			"  r.role_name AS role\n" + 
+			"FROM\n" + 
+			"  m_staff_basic_info sbi\n" + 
+			"  INNER JOIN c_staff_role sr ON sbi.staff_id = sr.staff_id\n" + 
+			"  INNER JOIN m_role r ON sr.role_id = r.role_id\n" + 
+			"  LEFT OUTER JOIN m_department d ON sbi.department_id = d.department_id\n" + 
+			"  LEFT OUTER JOIN m_position p ON sbi.position_id = p.position_id\n" + 
+			"  LEFT OUTER JOIN m_grade g ON sbi.grade_id = g.grade_id\n" + 
+			"WHERE sbi.staff_id = ?1";
+	
 	// 基本情報更新用クエリー
 	final String UPDATE = "update m_staff_basic_info set "
 			+ "name = ?1, "
 			+ "name_kana = ?2, "
 			+ "entered_date = ?3, "
-			+ "staff_type_id = ?4, "
-			+ "birthday = ?5, "
-			+ "telephone_number = ?6, "
-			+ "department_id = ?7, "
-			+ "position_id = ?8, "
-			+ "grade_id = ?9 "
-			+ "where staff_id = ?10";
+			+ "birthday = ?4, "
+			+ "telephone_number = ?5, "
+			+ "department_id = ?6, "
+			+ "position_id = ?7, "
+			+ "grade_id = ?8 "
+			+ "where staff_id = ?9";
 
 	// 基本情報登録用クエリー
 	final String INSERT = "INSERT INTO\n" + 
@@ -46,6 +67,7 @@ public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEn
 	 * @param staffId 社員ID
 	 * @return staff 社員基本情報
 	 */
+	@Query(value = FIND_ONE, nativeQuery = true)
 	public StaffBasicInfoEntity findByStaffId(Integer staffId);
 	
 	/**
@@ -65,7 +87,6 @@ public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEn
 	 * 
 	 * @param nameKana 名前
 	 * @param enteredDate なまえ
-	 * @param staffTypeId 社員種別
 	 * @param birthday 誕生日
 	 * @param telephoneNumber 電話番号
 	 * @param departmentId 部署ID
@@ -80,7 +101,6 @@ public interface StaffBasicInfoRepository extends JpaRepository<StaffBasicInfoEn
 			String name,
 			String nameKana,
 			String enteredDate,
-			Integer staffTypeId,
 			String birthday,
 			String telephoneNumber,
 			Integer departmentId,
